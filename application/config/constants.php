@@ -43,17 +43,8 @@ define('DOC_ROOT_PROFILE_IMG',  "./uploads/profile_images/");
 define('DOC_ROOT_CATEGORY_IMG',  "./uploads/category_images/");
 
 define('ADMIN',	'admin');
-define('DEAL_USER',	'deal_user');
-define('DEAL_CATEGORY',	'deal_category');
-define('DEAL_DEALER',	'deal_dealer');
-define('DEAL_BUYOUT',	'deal_buyout');
-define('DEAL_DETAIL',	'deal_detail');
-define('DEAL_FAV',	'deal_fav');
-define('DEAL_LINKS',	'deal_links');
-define('DEAL_MAP_TAGS',	'deal_map_tags');
-define('DEAL_TAGS',	'deal_tags');
-define('DEAL_OFFER',	'deal_offer');
-define('DEAL_USER_ADDRESS',    'deal_user_address');
+define('USER',	'user');
+define('CATEGORY',	'deal_category');
 
 
 define('FROM_EMAIL', 'nirav.ce.2008@gmail.com');
