@@ -1,4 +1,4 @@
-<body class="skin-blue">
+<body class="skin-purple">
     <!-- header logo: style can be found in header.less -->
    <header class="header">
             <a class="logo" href="<?=base_url()?>">
@@ -20,7 +20,7 @@
                         <li class="dropdown user user-menu">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span><?=$this->user_session['uname']?> <i class="caret"></i></span>
+                                <span><?=$this->user_session['name']?> <i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu" style="min-width: 200px;">
                                 <!-- Menu Footer-->

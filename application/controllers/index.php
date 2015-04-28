@@ -29,31 +29,24 @@ class Index extends CI_Controller {
 			}
 
 			if ($e_flag == 0) {
-				$where = array('du_email' => $post['userid'],
-								'du_password' => sha1($post['password']),
-								'du_role !=' => 'u'
-							 );
-				$user = $this->common_model->selectData(DEAL_USER, '*', $where);
+				$where = array('email' => $post['userid'],
+								'password' => sha1($post['password'])
+							);
+
+				$user = $this->common_model->selectData(USER, '*', $where);
 				if (count($user) > 0) {
 					# create session
-					$data = array('id' => $user[0]->du_autoid,
-									'uname' => $user[0]->du_uname,
-									'contact' => $user[0]->du_contact,
-									'email' => $user[0]->du_email,
-									'role' => $user[0]->du_role,
-									'create_date' => $user[0]->du_createdate
-								);
-					if($data['role'] == 'd')
-					{
-						$where = array('de_userid'=>$data['id']);
-						$dealer_info = $this->common_model->selectData(DEAL_DEALER, '*', $where);
-						$data['dealer_info'] = $dealer_info[0];
-					}
+					$data = array('id' => $user[0]->id,
+									'name' => $user[0]->name,
+									'email' => $user[0]->email,
+									'role' => $user[0]->role,
+								 );
+				
 					$this->session->set_userdata('user_session',$data);
 
 					redirect('dashboard');
 				}else{
-					$error['invalid_login'] = "Invalid userid or password";
+					$error['invalid_login'] = "Invalid email or password";
 				}
 			}
 
@@ -87,17 +80,17 @@ class Index extends CI_Controller {
 			}
 
 			if ($e_flag == 0) {
-				$where = array('du_email' => trim($post['email']));
-				$user = $this->common_model->selectData(DEAL_USER, '*', $where);
+				$where = array('email' => trim($post['email']));
+				$user = $this->common_model->selectData(USER, '*', $where);
 				if (count($user) > 0) {
 
 					$newpassword = random_string('alnum', 8);
-					$data = array('du_password' => sha1($newpassword));
-					$upid = $this->common_model->updateData(DEAL_USER,$data,$where);
+					$data = array('password' => sha1($newpassword));
+					$upid = $this->common_model->updateData(USER,$data,$where);
 
-					$emailTpl = $this->load->view('email_templates/template', array('email'=>'admin_forgot_password','username'=>$user[0]->du_uname,'password'=>$newpassword), true);
+					$emailTpl = $this->load->view('email_templates/template', array('email'=>'admin_forgot_password','username'=>$user[0]->name,'password'=>$newpassword), true);
 
-					$ret = sendEmail($user[0]->du_email, SUBJECT_LOGIN_INFO, $emailTpl, FROM_EMAIL, FROM_NAME);
+					$ret = sendEmail($user[0]->email, SUBJECT_LOGIN_INFO, $emailTpl, FROM_EMAIL, FROM_NAME);
 					if ($ret) {
 						$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Login details sent successfully.'
