@@ -39,7 +39,7 @@ class Index extends CI_Controller {
 					$data = array('id' => $user[0]->id,
 									'name' => $user[0]->name,
 									'email' => $user[0]->email,
-									'role' => $user[0]->du_role,
+									'role' => $user[0]->role,
 								 );
 				
 					$this->session->set_userdata('user_session',$data);

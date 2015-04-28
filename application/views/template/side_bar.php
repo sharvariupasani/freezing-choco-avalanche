@@ -8,7 +8,7 @@
                 <img alt="User Image" class="img-circle" src="img/avatar3.png">
             </div> -->
             <div class="pull-left info">
-                <p>Hello, <?php echo $this->user_session['uname'];?></p>
+                <p>Hello, <?php echo $this->user_session['name'];?></p>
 
                 <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
             </div>
