@@ -26,24 +26,23 @@ class Users extends CI_Controller {
 		$post = $this->input->post();
 
 		$columns = array(
-			array( 'db' => 'du_uname', 'dt' => 0 ),
-			array( 'db' => 'du_role',  'dt' => 1 ),
-			array( 'db' => 'du_contact',  'dt' => 2 ),
-			array( 'db' => 'du_email',  'dt' => 3 ),
-			array('db'        => 'du_createdate',
-					'dt'        => 4,
+			array( 'db' => 'name', 'dt' => 0 ),
+			array( 'db' => 'role',  'dt' => 1 ),
+			array( 'db' => 'email',  'dt' => 2 ),
+			array('db'        => 'creation_date',
+					'dt'        => 3,
 					'formatter' => function( $d, $row ) {
 						return date( 'jS M y', strtotime($d));
 					}
 			),
-			array( 'db' => 'du_autoid',
-					'dt' => 5,
+			array( 'db' => 'id',
+					'dt' => 4,
 					'formatter' => function( $d, $row ) {
 						return '<a href="'.site_url('/users/edit/'.$d).'" class="fa fa-edit"></a> <a href="javascript:void(0);" onclick="delete_user('.$d.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);
-		echo json_encode( SSP::simple( $post, DEAL_USER, "du_autoid", $columns ) );exit;
+		echo json_encode( SSP::simple( $post, USER, "id", $columns ) );exit;
 	}
 
 	public function add()
@@ -59,7 +58,7 @@ class Users extends CI_Controller {
 				$e_flag=1;
 			}
 			else{
-				$is_unique_email = $this->common_model->isUnique(DEAL_USER, 'du_email', trim($post['email']));
+				$is_unique_email = $this->common_model->isUnique(USER, 'email', trim($post['email']));
 				if (!$is_unique_email) {
 					$error['email'] = 'Email already exists.';
 					$e_flag=1;
@@ -72,10 +71,6 @@ class Users extends CI_Controller {
 			}
 			if(trim($post['role']) == ''){
 				$error['role'] = 'Please select role.';
-				$e_flag=1;
-			}
-			if(trim($post['contact']) == ''){
-				$error['contact'] = 'Please enter contact number.';
 				$e_flag=1;
 			}
 			
@@ -98,15 +93,13 @@ class Users extends CI_Controller {
 			}
 
 			if ($e_flag == 0) {
-				$data = array('du_uname' => $post['user_name'],
-								'du_role' => $post['role'],
-								'du_contact' => $post['contact'],
-								'du_email' => $post['email'],
-								'du_password' => sha1(trim($post['password'])),
-								'du_createdate' => date('Y-m-d H:i:s')
-							);
+				$data = array('name' => $post['user_name'],
+								'role' => $post['role'],
+								'email' => $post['email'],
+								'password' => sha1(trim($post['password'])),
+							  );
 				
-				$ret = $this->common_model->insertData(DEAL_USER, $data);
+				$ret = $this->common_model->insertData(USER, $data);
 
 				if ($ret > 0) {
 					$flash_arr = array('flash_type' => 'success',
@@ -132,7 +125,7 @@ class Users extends CI_Controller {
 			redirect('users');
 		}
 
-		$where = 'du_autoid = '.$id;
+		$where = 'id = '.$id;
 
 		$post = $this->input->post();
 		if ($post) {
@@ -145,7 +138,7 @@ class Users extends CI_Controller {
 				$e_flag=1;
 			}
 			else{
-				$is_unique_email = $this->common_model->isUnique(DEAL_USER, 'du_email', trim($post['email']),"du_autoid <> ". $id);
+				$is_unique_email = $this->common_model->isUnique(USER, 'email', trim($post['email']),"id <> ". $id);
 				if (!$is_unique_email) {
 					$error['email'] = 'Email already exists.';
 					$e_flag=1;
@@ -158,10 +151,6 @@ class Users extends CI_Controller {
 			}
 			if(trim($post['role']) == ''){
 				$error['role'] = 'Please select role.';
-				$e_flag=1;
-			}
-			if(trim($post['contact']) == ''){
-				$error['contact'] = 'Please enter contact number.';
 				$e_flag=1;
 			}
 			$psFlas = false;
@@ -178,14 +167,13 @@ class Users extends CI_Controller {
 			}
 
 			if ($e_flag == 0) {
-				$data = array('du_uname' => $post['user_name'],
-								'du_role' => $post['role'],
-								'du_contact' => $post['contact'],
-								'du_email' => $post['email']
+				$data = array('name' => $post['user_name'],
+								'role' => $post['role'],
+								'email' => $post['email']
 							);
 				if($psFlas)
-					$data['du_password'] = sha1(trim($post['password']));
-				$ret = $this->common_model->updateData(DEAL_USER, $data, $where);
+					$data['password'] = sha1(trim($post['password']));
+				$ret = $this->common_model->updateData(USER, $data, $where);
 
 				if ($ret > 0) {
 					$flash_arr = array('flash_type' => 'success',
@@ -201,7 +189,7 @@ class Users extends CI_Controller {
 			}
 			$data['error_msg'] = $error;
 		}
-		$data['user'] = $user = $this->common_model->selectData(DEAL_USER, '*', $where);
+		$data['user'] = $user = $this->common_model->selectData(USER, '*', $where);
 
 		if (empty($user)) {
 			redirect('users');
@@ -216,7 +204,7 @@ class Users extends CI_Controller {
 		$post = $this->input->post();
 
 		if ($post) {
-			$ret = $this->common_model->deleteData(DEAL_USER, array('du_autoid' => $post['id'] ));
+			$ret = $this->common_model->deleteData(USER, array('id' => $post['id'] ));
 			if ($ret > 0) {
 				echo "success";
 				#echo success_msg_box('User deleted successfully.');;

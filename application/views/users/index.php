@@ -30,7 +30,6 @@
 								<tr>
 									<th>Name</th>
 									<th>Role</th>
-									<th>Contact</th>
 									<th>Email</th>
 									<th>Created At</th>
 									<th>Action</th>
@@ -41,7 +40,6 @@
 									<th>Name</th>
 									<th>Role</th>
 									<th>Contact</th>
-									<th>Email</th>
 									<th>Created At</th>
 									<th>Action</th>
 								</tr>

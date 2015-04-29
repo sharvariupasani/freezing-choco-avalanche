@@ -4064,3 +4064,8 @@ Gradient Background colors
     white-space: normal!important;
   }
 }
+
+.btn.btn-default{
+	position: relative;
+    z-index: 1;
+}
