@@ -3,7 +3,7 @@
 	<head>
 		<?php $this->load->view('template/head');?>
 	</head>
-	<body class="skin-blue">
+	<body class="skin-purple">
 		<div class="wrapper">
 			<header class="main-header">
 				<?php $this->load->view('template/header');?>
@@ -13,7 +13,7 @@
 			</aside>
 			<div class="content-wrapper" style="min-height: 918px;">
 				<?php $this->load->view($this->router->fetch_class()."/".$view);?>
-			<div>
+			</div>
 			<footer class="main-footer">
 				<?php $this->load->view('template/footer');?>
 			</footer>

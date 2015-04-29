@@ -5,13 +5,13 @@
             <!-- Header Navbar: style can be found in header.less -->
             <nav role="navigation" class="navbar navbar-static-top">
                 <!-- Sidebar toggle button-->
-                <a role="button" data-toggle="offcanvas" class="navbar-btn sidebar-toggle" href="#">
+                <a role="button" data-toggle="offcanvas" class="sidebar-toggle" href="#">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <div class="navbar-right">
+                <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
