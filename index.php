@@ -26,13 +26,13 @@
  * Different environments will require different levels of error reporting.
  * By default development will show errors but testing and live will hide them.*/
  
-// Enviroment Variables
+// Enviroment Variables 
 if (defined('ENVIRONMENT'))
 {
 	switch (ENVIRONMENT)
 	{
 		case 'development':
-			error_reporting(E_ALL);
+			error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 		break;
 	
 		case 'testing':
