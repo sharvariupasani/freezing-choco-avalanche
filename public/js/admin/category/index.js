@@ -15,32 +15,6 @@ $(document).ready(function() {
 		]
 	} );
 
-	$("body").delegate(".deal-category-status","click",function(e){
-		e.preventDefault();
-		var r = confirm("Are you sure you want to change status?");
-		if (!r) {
-			return false;
-		}
-		flag = ($(this).hasClass("active"))?0:1;
-		var url = admin_path()+'category/categorystatusupdate/';
-		var param = {id:$(this).data("dc_catid"),flag:flag};
-		var span =$(this);
-		$.post(url,param,function(e){
-			if (e == "1")
-			{
-				if(flag)
-				{	
-					$(span).addClass("active").removeClass("inactive");
-					$(span).attr('title',"active").attr("atl","active")
-				}
-				else
-				{
-					$(span).addClass("inactive").removeClass("active");
-					$(span).attr('title',"inactive").attr("atl","inactive")
-				}
-			}
-		})
-	});
 } );
 
 

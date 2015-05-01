@@ -25,25 +25,16 @@ class Category extends CI_Controller {
 		$post = $this->input->post();
 		$columns = array();
 		$columns = array(
-			array( 'db' => 'dc_catname', 'dt' => 0 ),
-			array( 'db' => 'dc_catdetails',  'dt' => 1 ),
-			array(
-				'db'        => 'dc_createdate',
-				'dt'        => 2,
-				'formatter' => function( $d, $row ) {
-					return date( 'jS M y', strtotime($d));
-				}
-			),
-			array( 'db' => 'CONCAT(dc_catid,"|",dc_status)',
-					'dt' => 3,
-					'formatter' => function( $d, $row ) {
-						list($id,$status) = explode("|",$d);
-						$status = ($status == "1")?"active":"inactive";
-						return '<a href="'.site_url('/category/edit/'.$id).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_category('.$id.')" class="fa fa-trash-o"></a> / <a href="javascript:void(0);" data-dc_catid="'.$id.'" class="fa fa-eye deal-category-status '.$status.'" title="'.$status.'" alt="'.$status.'"></a>';
+			array( 'db' => 'name', 'dt' => 0 ),
+			array( 'db' => 'description',  'dt' => 1 ),
+			array( 'db' => 'id',
+					'dt' => 2,
+					'formatter' => function( $e, $row ) {
+						return '<a href="'.site_url('/category/edit/'.$e).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_category('.$e.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);
-		echo json_encode( SSP::simple( $post, DEAL_CATEGORY, "dc_catid", $columns ) );exit;
+		echo json_encode( SSP::simple( $post, CATEGORY, "id", $columns ) );exit;
 	}
 
 	public function add()
@@ -54,46 +45,17 @@ class Category extends CI_Controller {
 			$error = array();
 			$e_flag=0;
 
-			if(trim($post['dc_catname']) == ''){
-				$error['dc_catname'] = 'Please enter category name.';
+			if(trim($post['name']) == ''){
+				$error['name'] = 'Please enter category name.';
 				$e_flag=1;
 			}
-			if(trim($post['dc_catdetails']) == ''){
-				$error['dc_catdetails'] = 'Please enter category detail.';
-				$e_flag=1;
-			}
-
-			if ($_FILES['category_picture']['error'] > 0) {
-				$error['category_picture'] = 'Error in image upload.';
-				$e_flag=1;
-			}
-
-			if ($_FILES['category_picture']['error'] == 0) {
-				$config['overwrite'] = TRUE;
-				$config['upload_path'] = DOC_ROOT_CATEGORY_IMG;
-				$config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
-
-				$img_arr = explode('.',$_FILES['category_picture']['name']);
-				$img_arr = array_reverse($img_arr);
-
-				$config['file_name'] = $post['dc_catimg'] = time()."_img.".$img_arr[0];
-
-				$this->load->library('upload', $config);
-
-				if ( ! $this->upload->do_upload("category_picture"))
-				{
-					$error['category_picture'] = $this->upload->display_errors();
-					$e_flag=1;
-				}
-			}
+		
 
 			if ($e_flag == 0) {
-				$data = array('dc_catname' => $post['dc_catname'],
-								'dc_catdetails' => $post['dc_catdetails'],
-								'dc_catimg' => $post['dc_catimg'],
-								'dc_status' => $post['dc_status']
+				$data = array('name' => $post['name'],
+								'description' => $post['description']
 							);
-				$ret = $this->common_model->insertData(DEAL_CATEGORY, $data);
+				$ret = $this->common_model->insertData(CATEGORY, $data);
 
 				if ($ret > 0) {
 					$flash_arr = array('flash_type' => 'success',
@@ -121,59 +83,23 @@ class Category extends CI_Controller {
 			redirect('category');
 		}
 
-		$where = 'dc_catid = '.$id;
+		$where = 'id = '.$id;
 
 		$post = $this->input->post();
 		if ($post) {
 
 			$error = array();
 			$e_flag=0;
-			if(trim($post['dc_catname']) == ''){
-				$error['dc_catname'] = 'Please enter category name.';
+			if(trim($post['name']) == ''){
+				$error['name'] = 'Please enter category name.';
 				$e_flag=1;
 			}
-			if(trim($post['dc_catdetails']) == ''){
-				$error['dc_catdetails'] = 'Please enter category detail.';
-				$e_flag=1;
-			}
-			/*if ($_FILES['category_picture']['error'] > 0) {
-				$error['category_picture'] = 'Error in image upload.';
-				$e_flag=1;
-			}*/
-
-			if ($_FILES['category_picture']['error'] == 0) {
-				$config['overwrite'] = TRUE;
-				$config['upload_path'] = DOC_ROOT_CATEGORY_IMG;
-				$config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
-
-				$img_arr = explode('.',$_FILES['category_picture']['name']);
-				$img_arr = array_reverse($img_arr);
-
-				$config['file_name'] = $post['dc_catimg'] = time()."_img.".$img_arr[0];
-
-				$this->load->library('upload', $config);
-
-				if ( ! $this->upload->do_upload("category_picture"))
-				{
-					$error['category_picture'] = $this->upload->display_errors();
-					$e_flag=1;
-				}
-				else
-				{
-					$category = $this->common_model->selectData(DEAL_CATEGORY, '*', $where);
-					if ($category[0]->dc_catimg != "")
-						unlink(DOC_ROOT_CATEGORY_IMG.$category[0]->dc_catimg);
-				}
-			}
-
+			
 			if ($e_flag == 0) {
-				$data = array('dc_catname' => $post['dc_catname'],
-								'dc_catdetails' => $post['dc_catdetails'],
-								'dc_status' => $post['dc_status']
+				$data = array('name' => $post['name'],
+								'description' => $post['description']
 							);
-				if (isset($post['dc_catimg']))
-					$data['dc_catimg'] = $post['dc_catimg'];
-				$ret = $this->common_model->updateData(DEAL_CATEGORY, $data, $where);
+				$ret = $this->common_model->updateData(CATEGORY, $data, $where);
 
 				if ($ret > 0) {
 					$flash_arr = array('flash_type' => 'success',
@@ -192,7 +118,7 @@ class Category extends CI_Controller {
 
 		}
 
-		$data['category'] = $category = $this->common_model->selectData(DEAL_CATEGORY, '*', $where);
+		$data['category'] = $category = $this->common_model->selectData(CATEGORY, '*', $where);
 
 		if (empty($category)) {
 			redirect('category');
@@ -207,7 +133,7 @@ class Category extends CI_Controller {
 		$post = $this->input->post();
 
 		if ($post) {
-			$ret = $this->common_model->deleteData(DEAL_CATEGORY, array('dc_catid' => $post['id'] ));
+			$ret = $this->common_model->deleteData(CATEGORY, array('id' => $post['id'] ));
 			if ($ret > 0) {
 				echo "success";
 				#echo success_msg_box('Category deleted successfully.');
@@ -219,17 +145,4 @@ class Category extends CI_Controller {
 		}
 	}
 
-	public function categorystatusupdate()
-	{
-		$post = $this->input->post();
-
-		$where = array();
-		$where['dc_catid'] = $post['id'];
-
-		$data = array();
-		$data['dc_status'] = ($post['flag']=="1")?"1":"0";
-
-		$ret = $this->common_model->updateData(DEAL_CATEGORY, $data, $where);
-		echo $ret;exit;
-	}
 }
