@@ -44,7 +44,7 @@ define('DOC_ROOT_CATEGORY_IMG',  "./uploads/category_images/");
 
 define('ADMIN',	'admin');
 define('USER',	'user');
-define('CATEGORY',	'deal_category');
+define('CATEGORY',	'category');
 
 
 define('FROM_EMAIL', 'nirav.ce.2008@gmail.com');

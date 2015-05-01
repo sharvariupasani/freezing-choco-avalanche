@@ -30,7 +30,6 @@
 								<tr>
 									<th>Name</th>
 									<th>Detail</th>
-									<th>Created At</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -38,7 +37,6 @@
 								<tr>
 									<th>Name</th>
 									<th>Detail</th>
-									<th>Created At</th>
 									<th>Action</th>
 								</tr>
 							</tfoot>

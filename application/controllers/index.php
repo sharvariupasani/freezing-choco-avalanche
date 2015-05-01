@@ -43,6 +43,12 @@ class Index extends CI_Controller {
 								 );
 				
 					$this->session->set_userdata('user_session',$data);
+					
+					if(isset($post['remember_me']))
+					{
+						setcookie('uname',$post['userid'],time() + (86400 * 365));
+						setcookie('password',$post['password'],time() + (86400 * 365));
+					}
 
 					redirect('dashboard');
 				}else{
