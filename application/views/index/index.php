@@ -51,7 +51,7 @@
                         <?php
                             }
                         ?>
-                        <input type="text" name="userid" class="form-control allow-enter" placeholder="Email"/>
+                        <input type="text" name="userid" class="form-control allow-enter" placeholder="Email" value='<?php if(isset($_COOKIE['uname'])) echo $_COOKIE['uname']; ?>'/>
                     </div>
                     <div class="form-group <?=(@$error_msg['password'] != '')?'has-error':'' ?>">
                         <?php
@@ -61,13 +61,13 @@
                         <?php
                             }
                         ?>
-                        <input type="password" name="password" class="form-control allow-enter" placeholder="Password"/>
+                        <input type="password" name="password" class="form-control allow-enter" placeholder="Password" value="<?php if(isset($_COOKIE['password'])) echo $_COOKIE['password']; ?>"/>
                     </div>
 					<div class="row">
 					<div class="col-xs-8">    
 					  <div class="icheck">
 						<label>
-						  <input type="checkbox"> Remember Me
+						  <input type="checkbox" id='chkRemember' name='remember_me'> Remember Me
 						</label>
 					  </div>                        
 					</div><!-- /.col -->
@@ -81,7 +81,7 @@
     </div><!-- /.login-box -->
 
     <!-- jQuery 2.0.2 -->
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="<?=public_path()?>js/jquery.2.0.2.min.js"></script>
 		<!-- Bootstrap -->
 		<script src="<?=public_path()?>js/bootstrap.min.js" type="text/javascript"></script>
 		<!-- AdminLTE App -->
