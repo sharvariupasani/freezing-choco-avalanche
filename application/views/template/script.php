@@ -68,4 +68,3 @@
     <?php } ?>
 
     <script src="<?=public_path()?>js/AdminLTE/app.js" type="text/javascript"></script>
-    <script src="<?=public_path()?>js/AdminLTE/demo.js" type="text/javascript"></script>
