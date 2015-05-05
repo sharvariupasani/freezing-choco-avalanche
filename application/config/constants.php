@@ -38,13 +38,14 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 
 #custom constants
-define('DOC_ROOT',	$_SERVER["DOCUMENT_ROOT"]."/turnt-octo-wallhack/");
+define('DOC_ROOT',	$_SERVER["DOCUMENT_ROOT"]."/freezing-octo-weight/");
 define('DOC_ROOT_PROFILE_IMG',  "./uploads/profile_images/");
 define('DOC_ROOT_CATEGORY_IMG',  "./uploads/category_images/");
 
 define('ADMIN',	'admin');
 define('USER',	'user');
 define('CATEGORY',	'category');
+define('PRODUCT',	'product');
 
 
 define('FROM_EMAIL', 'nirav.ce.2008@gmail.com');

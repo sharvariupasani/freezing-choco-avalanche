@@ -74,6 +74,18 @@
             <?php
                 }
             ?>
+			
+			<?php
+                if (@in_array("product", @array_keys(config_item('user_role')[$this->user_session['role']])) || $this->user_session['role'] == 'a') {
+            ?>
+                <li class="<?=get_active_tab("product")?>">
+                    <a href="<?=base_url()."product"?>">
+                        <i class="fa fa-dashboard"></i> <span>Product</span>
+                    </a>
+                </li>
+            <?php
+                }
+            ?>
 
 
             <?php
