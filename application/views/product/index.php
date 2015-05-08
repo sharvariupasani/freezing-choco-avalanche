@@ -28,7 +28,7 @@
 						<table id="productTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-									<!--th>Category</th-->
+									<th>Category</th>
 									<th>Brand</th>
 									<th>Name</th>
 									<th>Description</th>
@@ -39,7 +39,7 @@
 							</thead>
 							<tfoot>
 								<tr>
-									<!--th>Category</th-->
+									<th>Category</th>
 									<th>Brand</th>
 									<th>Name</th>
 									<th>Description</th>

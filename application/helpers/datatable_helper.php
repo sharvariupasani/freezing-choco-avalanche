@@ -187,9 +187,9 @@ class SSP {
 		$bindings = array();
 		$model = SSP::get_model();
 
-		$fields = SSP::pluck($columns, 'db');
+		$fields = SSP::pluck_db($columns);
 		$model->db->select("SQL_CALC_FOUND_ROWS ".$primaryKey, FALSE);
-		$model->db->select($fields);
+		$model->db->select($fields, FALSE);
 		$model->db->from($table);
 
 		foreach($join as $j)
@@ -216,16 +216,16 @@ class SSP {
 		$model->db->limit($limit, $rows);
 
 		$query = $model->db->get();
-
 		$cquery = $model->db->query('SELECT FOUND_ROWS() AS `Count`');
 
 		$recordsFiltered = $cquery->row()->Count;
 		$data = $query->result_array();
+		//print_r($data);exit;
 		$query->free_result();
-		
 		$model->db->select($primaryKey);
 		$model->db->from($table);
 		$query = $model->db->get();
+		//print_r($query);exit;
 		$recordsTotal = $query->num_rows();
 		$query->free_result();
 		
@@ -352,6 +352,20 @@ class SSP {
 	 *  @param  string $prop Property to read
 	 *  @return array        Array of property values
 	 */
+	static function pluck_db($a)
+	{
+		$out = array();
+
+		for ( $i=0, $len=count($a) ; $i<$len ; $i++ ) {
+			if (isset($a[$i]['alias']))
+				$out[] = $a[$i]['alias'];
+			else
+				$out[] = $a[$i]['db'];
+		}
+
+		return $out;
+	}
+	
 	static function pluck ( $a, $prop )
 	{
 		$out = array();

@@ -47,6 +47,11 @@ define('USER',	'user');
 define('CATEGORY',	'category');
 define('PRODUCT',	'product');
 
+define('ADMIN_A',	'admin as a');
+define('USER_U',	'user as u');
+define('CATEGORY_C',	'category as c');
+define('PRODUCT_P',	'product as p');
+
 
 define('FROM_EMAIL', 'nirav.ce.2008@gmail.com');
 define('FROM_NAME', 'djangodeals.com');
