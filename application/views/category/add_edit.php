@@ -6,27 +6,29 @@
 </section>
 <section class="content">
 	<div class="row">
+		<div class="col-md-12">
+			<?php
+				if (@$flash_msg != "") {
+			?>
+				<div id="flash_msg"><?=$flash_msg?></div>
+			<?php
+				}
+			?>
+
+			<?php
+				if (@$error_msg != "") {
+			?>
+				<div id="error_msg" class='alert alert-warning alert-dismissable'>
+						<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+						<h4><i class="icon fa fa-warning"></i>Alert!</h4>
+						<?=$error_msg?>
+				</div>
+			<?php
+				}
+			?>
+		</div>
     	<div class="col-md-6">
     		<div class="box-body">
-                <?php
-                    if (@$flash_msg != "") {
-                ?>
-                    <div id="flash_msg"><?=$flash_msg?></div>
-                <?php
-                    }
-                ?>
-
-				<?php
-                    if (@$error_msg != "") {
-                ?>
-                    <div id="error_msg" class='alert alert-warning alert-dismissable'>
-							<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
-							<h4><i class="icon fa fa-warning"></i>Alert!</h4>
-							<?=$error_msg?>
-					</div>
-                <?php
-                    }
-                ?>
                 <form role="form" action="" method="post" id='category_form' name='category_form' enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Category Name:</label>

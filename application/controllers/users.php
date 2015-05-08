@@ -72,47 +72,6 @@ class Users extends CI_Controller {
 								)
 			);
 			
-			/*
-			if(!valid_email(trim($post['email'])) && trim($post['email']) == ""){
-				$error['email'] = 'Please enter valid email.';
-				$e_flag=1;
-			}
-			else{
-				$is_unique_email = $this->common_model->isUnique(USER, 'email', trim($post['email']));
-				if (!$is_unique_email) {
-					$error['email'] = 'Email already exists.';
-					$e_flag=1;
-				}
-			}
-
-			if(trim($post['user_name']) == ''){
-				$error['user_name'] = 'Please enter user name.';
-				$e_flag=1;
-			}
-			if(trim($post['role']) == ''){
-				$error['role'] = 'Please select role.';
-				$e_flag=1;
-			}
-			
-			
-			if (trim($post['password']) != "") {
-				if($post['password'] == $post['re_password'])
-				{
-					$psFlas = true;
-				}
-				else
-				{
-					$error['password'] = 'Password field does not match.';
-					$e_flag=1;
-				}
-			}
-			else
-			{
-				$error['password'] = 'Please enter password.';
-				$e_flag=1;
-			}
-				
-			if ($e_flag == 0) {*/
 			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['user_name'],
 								'role' => $post['role'],
@@ -150,8 +109,17 @@ class Users extends CI_Controller {
 
 		$post = $this->input->post();
 		if ($post) {
+
+			$original_email = $this->common_model->selectData(USER, 'email', $where);
+			
+			if($post['email'] != $original_email[0]->email) {
+			   $is_unique =  '|is_unique['.USER.'.email]';
+			} else {
+			   $is_unique =  '';
+			}
+
 			$this->form_validation->set_rules('email', 'Email address', 
-									'trim|required|valid_email|is_unique['.USER.'.email]',
+									'trim|required|valid_email'.$is_unique,
 									array(
 										"required"=>"Please enter %s.",
 										"valid_email"=>"Please enter valid %s.",
@@ -171,43 +139,6 @@ class Users extends CI_Controller {
 				);
 				$psFlas = true;
 			}
-				
-			#pr($post);
-			/*$error = array();
-			$e_flag=0;
-
-			if(!valid_email(trim($post['email'])) && trim($post['email']) == ""){
-				$error['email'] = 'Please enter valid email.';
-				$e_flag=1;
-			}
-			else{
-				$is_unique_email = $this->common_model->isUnique(USER, 'email', trim($post['email']),"id <> ". $id);
-				if (!$is_unique_email) {
-					$error['email'] = 'Email already exists.';
-					$e_flag=1;
-				}
-			}
-
-			if(trim($post['user_name']) == ''){
-				$error['user_name'] = 'Please enter user name.';
-				$e_flag=1;
-			}
-			if(trim($post['role']) == ''){
-				$error['role'] = 'Please select role.';
-				$e_flag=1;
-			}
-			$psFlas = false;
-			if (trim($post['password']) != "") {
-				if($post['password'] == $post['re_password'])
-				{
-					$psFlas = true;
-				}
-				else
-				{
-					$error['password'] = 'Password field does not match.';
-					$e_flag=1;
-				}
-			}*/
 
 			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['user_name'],
