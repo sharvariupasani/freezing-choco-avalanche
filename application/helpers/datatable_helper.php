@@ -9,16 +9,18 @@ class SSP {
 
 			for ( $j=0, $jen=count($columns) ; $j<$jen ; $j++ ) {
 				$column = $columns[$j];
+				$clmName = (isset( $column['coloumn_name'] ))?$column['coloumn_name']:$column['db'];
+				$pos = strpos($clmName, ".");
+				if ($pos !== false)
+				{
+					$clmName = substr($clmName, $pos+1);
+				}
 
-				// Is there a formatter?
 				if ( isset( $column['formatter'] ) ) {
-					$row[ $column['dt'] ] = $column['formatter']( $data[$i][ $column['db'] ], $data[$i] );
+					$row[ $column['dt'] ] = $column['formatter']( $data[$i][ $clmName ], $data[$i] );
 				}
 				else {
-					if(isset( $column['coloumn_name'] ))
-						$row[ $column['dt'] ] = $data[$i][ $columns[$j]['coloumn_name'] ];
-					else
-						$row[ $column['dt'] ] = $data[$i][ $columns[$j]['db'] ];
+						$row[ $column['dt'] ] = $data[$i][ $clmName ];
 				}
 			}
 	
@@ -127,9 +129,9 @@ class SSP {
 
 				if ( $requestColumn['searchable'] == 'true' ) {
 					if(isset($column['coloumn_name']))
-						$globalSearch[] = "`".$column['coloumn_name']."` LIKE ".'"%'.$str.'%"';
+						$globalSearch[] = $column['coloumn_name']." LIKE ".'"%'.$str.'%"';
 					else
-						$globalSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
+						$globalSearch[] = $column['db']." LIKE ".'"%'.$str.'%"';
 				}
 			}
 		}
@@ -145,9 +147,9 @@ class SSP {
 			if ( $requestColumn['searchable'] == 'true' &&
 			 $str != '' ) {
 				if(isset($column['coloumn_name']))
-					$columnSearch[] = "`".$column['coloumn_name']."` LIKE ".'"%'.$str.'%"';
+					$columnSearch[] = $column['coloumn_name']." LIKE ".'"%'.$str.'%"';
 				else
-					$columnSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
+					$columnSearch[] = $column['db']." LIKE ".'"%'.$str.'%"';
 			}
 		}
 
