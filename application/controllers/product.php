@@ -49,36 +49,15 @@ class Product extends CI_Controller {
 	{
 		$post = $this->input->post();
 		if ($post) {
-			#pr($post);
-			$error = array();
-			$e_flag=0;
+			$this->load->library('form_validation');
 
-			if(trim($post['name']) == ''){
-				$error['name'] = 'Please enter Product Name.';
-				$e_flag=1;
-			}
-			
-			if(trim($post['category']) == ''){
-				$error['category'] = 'Please select Product Category!';
-				$e_flag=1;
-			}
-			
-			if(trim($post['description']) == ''){
-				$error['description'] = 'Please enter some Description!';
-				$e_flag=1;
-			}
-			
-			if(trim($post['brand']) == ''){
-				$error['brand'] = 'Please enter Brand Name!';
-				$e_flag=1;
-			}
-			
-			if(trim($post['price']) == ''){
-				$error['price'] = 'Please enter Product Price!';
-				$e_flag=1;
-			}
-		
-			if ($e_flag == 0) {
+			$this->form_validation->set_rules('name', 'Product Name', 'trim|required');
+			$this->form_validation->set_rules('category', 'Product Category', 'trim|required');
+			$this->form_validation->set_rules('description', 'Product Description', 'trim|required');
+			$this->form_validation->set_rules('brand', 'Product Brand', 'trim|required');
+			$this->form_validation->set_rules('price', 'Product Price', 'trim|required');
+
+			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['name'],
 							'description' => $post['description'],
 							'price' => $post['price'],
@@ -100,7 +79,7 @@ class Product extends CI_Controller {
 				$this->session->set_flashdata($flash_arr);
 				redirect("product");
 			}
-			$data['error_msg'] = $error;
+			$data['error_msg'] = validation_errors();
 		}
 		$data['category'] = $category = $this->common_model->selectData(CATEGORY, '*');
 		$data['view'] = "add_edit";
@@ -118,35 +97,15 @@ class Product extends CI_Controller {
 
 		$post = $this->input->post();
 		if ($post) {
+			$this->load->library('form_validation');
 
-			$error = array();
-			$e_flag=0;
-			if(trim($post['name']) == ''){
-				$error['name'] = 'Please enter product name.';
-				$e_flag=1;
-			}
-						
-			if(trim($post['category']) == ''){
-				$error['category'] = 'Please select a Category.';
-				$e_flag=1;
-			}
-			
-			if(trim($post['description']) == ''){
-				$error['description'] = 'Please enter some Description';
-				$e_flag=1;
-			}
-			
-			if(trim($post['brand']) == ''){
-				$error['brand'] = 'Please enter Brand Name';
-				$e_flag=1;
-			}
-			
-			if(trim($post['price']) == ''){
-				$error['price'] = 'Please enter Product Price';
-				$e_flag=1;
-			}
-			
-			if ($e_flag == 0) {
+			$this->form_validation->set_rules('name', 'Product Name', 'trim|required');
+			$this->form_validation->set_rules('category', 'Product Category', 'trim|required');
+			$this->form_validation->set_rules('description', 'Product Description', 'trim|required');
+			$this->form_validation->set_rules('brand', 'Product Brand', 'trim|required');
+			$this->form_validation->set_rules('price', 'Product Price', 'trim|required');
+
+			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['name'],
 							'description' => $post['description'],
 							'price' => $post['price'],
@@ -168,7 +127,7 @@ class Product extends CI_Controller {
 				$this->session->set_flashdata($flash_arr);
 				redirect("product");
 			}
-			$data['error_msg'] = $error;
+			$data['error_msg'] = validation_errors();
 
 		}
 

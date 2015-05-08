@@ -125,7 +125,6 @@ class common_model extends CI_Model{
 		$query = $this->db->get();
 		$data = $query->num_rows();
 		$query->free_result();
-
 		return ($data > 0)?FALSE:TRUE;
 	}
 

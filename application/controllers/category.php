@@ -42,16 +42,10 @@ class Category extends CI_Controller {
 		$post = $this->input->post();
 		if ($post) {
 			#pr($post);
-			$error = array();
-			$e_flag=0;
-
-			if(trim($post['name']) == ''){
-				$error['name'] = 'Please enter category name.';
-				$e_flag=1;
-			}
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('category', 'Product Category', 'trim|required');
 		
-
-			if ($e_flag == 0) {
+			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['name'],
 								'description' => $post['description']
 							);
@@ -70,7 +64,7 @@ class Category extends CI_Controller {
 				$this->session->set_flashdata($flash_arr);
 				redirect("category");
 			}
-			$data['error_msg'] = $error;
+			$data['error_msg'] = validation_errors();
 		}
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
@@ -87,15 +81,10 @@ class Category extends CI_Controller {
 
 		$post = $this->input->post();
 		if ($post) {
-
-			$error = array();
-			$e_flag=0;
-			if(trim($post['name']) == ''){
-				$error['name'] = 'Please enter category name.';
-				$e_flag=1;
-			}
-			
-			if ($e_flag == 0) {
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('category', 'Product Category', 'trim|required');
+		
+		if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['name'],
 								'description' => $post['description']
 							);
@@ -114,7 +103,7 @@ class Category extends CI_Controller {
 				$this->session->set_flashdata($flash_arr);
 				redirect("category");
 			}
-			$data['error_msg'] = $error;
+			$data['error_msg'] = validation_errors();
 
 		}
 
