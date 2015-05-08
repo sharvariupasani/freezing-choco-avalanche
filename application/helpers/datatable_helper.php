@@ -9,12 +9,17 @@ class SSP {
 
 			for ( $j=0, $jen=count($columns) ; $j<$jen ; $j++ ) {
 				$column = $columns[$j];
-				$clmName = (isset( $column['coloumn_name'] ))?$column['coloumn_name']:$column['db'];
-				$pos = strpos($clmName, ".");
-				if ($pos !== false)
+				if(!isset($column['alias']))
 				{
-					$clmName = substr($clmName, $pos+1);
+					$clmName = (isset( $column['coloumn_name'] ))?$column['coloumn_name']:$column['db'];
+					$pos = strpos($clmName, ".");
+					if ($pos !== false)
+					{
+						$clmName = substr($clmName, $pos+1);
+					}
 				}
+				else 
+					$clmName = $column['alias'];
 
 				if ( isset( $column['formatter'] ) ) {
 					$row[ $column['dt'] ] = $column['formatter']( $data[$i][ $clmName ], $data[$i] );
@@ -360,11 +365,10 @@ class SSP {
 
 		for ( $i=0, $len=count($a) ; $i<$len ; $i++ ) {
 			if (isset($a[$i]['alias']))
-				$out[] = $a[$i]['alias'];
+				$out[] = $a[$i]['db']." as ".$a[$i]['alias'];
 			else
 				$out[] = $a[$i]['db'];
 		}
-
 		return $out;
 	}
 	
