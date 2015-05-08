@@ -25,7 +25,7 @@ class Product extends CI_Controller {
 		$post = $this->input->post();
 		$columns = array();
 		$columns = array(
-			array( 'alias' => 'c.name as cat_name','db' => 'c.name', 'dt' => 0 ),
+			array( 'alias' => 'cat_name','db' => 'c.name', 'dt' => 0 ),
 			array( 'db' => 'p.brand',  'dt' => 1 ),
 			array( 'db' => 'p.name',  'dt' => 2 ),
 			array( 'db' => 'p.description',  'dt' => 3 ),
