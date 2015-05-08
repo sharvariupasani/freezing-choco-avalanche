@@ -25,20 +25,24 @@ class Product extends CI_Controller {
 		$post = $this->input->post();
 		$columns = array();
 		$columns = array(
-			//array( 'db' => 'cat_id', 'dt' => 0 ),
-			array( 'db' => 'brand',  'dt' => 0 ),
-			array( 'db' => 'name',  'dt' => 1 ),
-			array( 'db' => 'description',  'dt' => 2 ),
-			array( 'db' => 'stock_onhand',  'dt' => 3 ),
-			array( 'db' => 'price',  'dt' => 4 ),
-			array( 'db' => 'id',
-					'dt' => 5,
+			array( 'alias' => 'c.name as cat_name','db' => 'c.name', 'dt' => 0 ),
+			array( 'db' => 'p.brand',  'dt' => 1 ),
+			array( 'db' => 'p.name',  'dt' => 2 ),
+			array( 'db' => 'p.description',  'dt' => 3 ),
+			array( 'db' => 'p.stock_onhand',  'dt' => 4 ),
+			array( 'db' => 'p.price',  'dt' => 5 ),
+			array( 'db' => 'p.id',
+					'dt' => 6,
 					'formatter' => function( $e, $row ) {
 						return '<a href="'.site_url('/product/edit/'.$e).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_product('.$e.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);
-		echo json_encode( SSP::simple( $post, PRODUCT, "id", $columns ) );exit;
+		
+		$join = array();
+		$join[] = array(CATEGORY_C,'p.cat_id = c.id');
+		
+		echo json_encode( SSP::simple( $post, PRODUCT_P, "p.id", $columns,$join ) );exit;
 	}
 
 	public function add()
@@ -98,7 +102,7 @@ class Product extends CI_Controller {
 			}
 			$data['error_msg'] = $error;
 		}
-		$data['category'] = $product = $this->common_model->selectData(CATEGORY, '*', $where);
+		$data['category'] = $category = $this->common_model->selectData(CATEGORY, '*', $where);
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
 	}
@@ -169,7 +173,7 @@ class Product extends CI_Controller {
 		}
 
 		$data['product'] = $product = $this->common_model->selectData(PRODUCT, '*', $where);
-		$data['category'] = $product = $this->common_model->selectData(CATEGORY, '*', $where);
+		$data['category'] = $category = $this->common_model->selectData(CATEGORY, '*', $where);
 
 		if (empty($product)) {
 			redirect('product');
