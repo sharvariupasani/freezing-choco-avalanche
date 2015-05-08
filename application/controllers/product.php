@@ -102,7 +102,7 @@ class Product extends CI_Controller {
 			}
 			$data['error_msg'] = $error;
 		}
-		$data['category'] = $category = $this->common_model->selectData(CATEGORY, '*', $where);
+		$data['category'] = $category = $this->common_model->selectData(CATEGORY, '*');
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
 	}
@@ -173,7 +173,7 @@ class Product extends CI_Controller {
 		}
 
 		$data['product'] = $product = $this->common_model->selectData(PRODUCT, '*', $where);
-		$data['category'] = $category = $this->common_model->selectData(CATEGORY, '*', $where);
+		$data['category'] = $category = $this->common_model->selectData(CATEGORY);
 
 		if (empty($product)) {
 			redirect('product');
