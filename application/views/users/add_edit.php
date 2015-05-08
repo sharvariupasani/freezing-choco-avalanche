@@ -17,6 +17,19 @@
                 <?php
                     }
                 ?>
+
+				<?php
+                    if (@$error_msg != "") {
+                ?>
+                    <div id="error_msg" class='alert alert-warning alert-dismissable'>
+							<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+							<h4><i class="icon fa fa-warning"></i>Alert!</h4>
+							<?=$error_msg?>
+					</div>
+                <?php
+                    }
+                ?>
+
                 <form id='user_form' name='user_form' role="form" action="" method="post">
                     <div class="form-group <?=(@$error_msg['user_name'] != '')?'has-error':'' ?>">
                         <?php

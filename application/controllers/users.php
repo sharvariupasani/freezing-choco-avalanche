@@ -53,6 +53,26 @@ class Users extends CI_Controller {
 			$error = array();
 			$e_flag=0;
 
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('email', 'Email address', 
+									'trim|required|valid_email|is_unique['.USER.'.email]',
+									array(
+										"required"=>"Please enter %s.",
+										"valid_email"=>"Please enter valid %s.",
+										"is_unique"=>"%s is already exists."
+									)
+			);
+
+			$this->form_validation->set_rules('user_name', 'User Name', 'trim|required');
+			$this->form_validation->set_rules('role', 'Role', 'trim|required');
+			$this->form_validation->set_rules('password', 'Password', 'trim|required');
+			$this->form_validation->set_rules('re_password', 'Password Confirmation', 'trim|required|matches[password]',
+								array(
+									"matches"=>"%s field does not match."
+								)
+			);
+			
+			/*
 			if(!valid_email(trim($post['email'])) && trim($post['email']) == ""){
 				$error['email'] = 'Please enter valid email.';
 				$e_flag=1;
@@ -91,8 +111,9 @@ class Users extends CI_Controller {
 				$error['password'] = 'Please enter password.';
 				$e_flag=1;
 			}
-
-			if ($e_flag == 0) {
+				
+			if ($e_flag == 0) {*/
+			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['user_name'],
 								'role' => $post['role'],
 								'email' => $post['email'],
@@ -113,7 +134,7 @@ class Users extends CI_Controller {
 				$this->session->set_flashdata($flash_arr);
 				redirect("users");
 			}
-			$data['error_msg'] = $error;
+			$data['error_msg'] = validation_errors();//$error;
 		}
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
@@ -129,8 +150,30 @@ class Users extends CI_Controller {
 
 		$post = $this->input->post();
 		if ($post) {
+			$this->form_validation->set_rules('email', 'Email address', 
+									'trim|required|valid_email|is_unique['.USER.'.email]',
+									array(
+										"required"=>"Please enter %s.",
+										"valid_email"=>"Please enter valid %s.",
+										"is_unique"=>"%s is already exists."
+									)
+			);
+
+			$this->form_validation->set_rules('user_name', 'User Name', 'trim|required');
+			$this->form_validation->set_rules('role', 'Role', 'trim|required');
+			
+			if (trim($post['password']) != "") {
+				$this->form_validation->set_rules('password', 'Password', 'trim|required');
+				$this->form_validation->set_rules('re_password', 'Password Confirmation', 'trim|required|matches[password]',
+								array(
+									"matches"=>"%s field does not match."
+								)
+				);
+				$psFlas = true;
+			}
+				
 			#pr($post);
-			$error = array();
+			/*$error = array();
 			$e_flag=0;
 
 			if(!valid_email(trim($post['email'])) && trim($post['email']) == ""){
@@ -164,9 +207,9 @@ class Users extends CI_Controller {
 					$error['password'] = 'Password field does not match.';
 					$e_flag=1;
 				}
-			}
+			}*/
 
-			if ($e_flag == 0) {
+			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['user_name'],
 								'role' => $post['role'],
 								'email' => $post['email']
@@ -187,7 +230,7 @@ class Users extends CI_Controller {
 				$this->session->set_flashdata($flash_arr);
 				redirect("users");
 			}
-			$data['error_msg'] = $error;
+			$data['error_msg'] = validation_errors();
 		}
 		$data['user'] = $user = $this->common_model->selectData(USER, '*', $where);
 
