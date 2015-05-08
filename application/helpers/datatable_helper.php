@@ -35,28 +35,6 @@ class SSP {
 		return $out;
 	}
 
-
-	/**
-	 * Paging
-	 *
-	 * Construct the LIMIT clause for server-side processing SQL query
-	 *
-	 *  @param  array $request Data sent to server by DataTables
-	 *  @param  array $columns Column information array
-	 *  @return string SQL limit clause
-	 */
-	static function limit ( $request, $columns )
-	{
-		$limit = '';
-
-		if ( isset($request['start']) && $request['length'] != -1 ) {
-			$limit = "LIMIT ".intval($request['start']).", ".intval($request['length']);
-		}
-
-		return $limit;
-	}
-
-
 	/**
 	 * Ordering
 	 *
@@ -95,13 +73,10 @@ class SSP {
 						$orderBy[] = $column['db'].'||'.$dir;
 				}
 			}
-
-			//$order = 'ORDER BY '.implode(', ', $orderBy);
 		}
 
 		return $orderBy;
 	}
-
 
 	/**
 	 * Searching / Filtering
@@ -114,8 +89,6 @@ class SSP {
 	 *
 	 *  @param  array $request Data sent to server by DataTables
 	 *  @param  array $columns Column information array
-	 *  @param  array $bindings Array of values for PDO bindings, used in the
-	 *    sql_exec() function
 	 *  @return string SQL where clause
 	 */
 	static function filter ( $request, $columns)
@@ -264,93 +237,6 @@ class SSP {
 		return $model;
 	}
 
-
-	/**
-	 * Execute an SQL query on the database
-	 *
-	 * @param  resource $db  Database handler
-	 * @param  array    $bindings Array of PDO binding values from bind() to be
-	 *   used for safely escaping strings. Note that this can be given as the
-	 *   SQL query string if no bindings are required.
-	 * @param  string   $sql SQL query to execute.
-	 * @return array         Result from the query (all rows)
-	 */
-	static function sql_exec ( $db, $bindings, $sql=null )
-	{
-		// Argument shifting
-		if ( $sql === null ) {
-			$sql = $bindings;
-		}
-
-		$stmt = $db->prepare( $sql );
-		//echo $sql;
-
-		// Bind parameters
-		if ( is_array( $bindings ) ) {
-			for ( $i=0, $ien=count($bindings) ; $i<$ien ; $i++ ) {
-				$binding = $bindings[$i];
-				$stmt->bindValue( $binding['key'], $binding['val'], $binding['type'] );
-			}
-		}
-
-		// Execute
-		try {
-			$stmt->execute();
-		}
-		catch (PDOException $e) {
-			SSP::fatal( "An SQL error occurred: ".$e->getMessage() );
-		}
-
-		// Return all
-		return $stmt->fetchAll();
-	}
-
-
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 * Internal methods
-	 */
-
-	/**
-	 * Throw a fatal error.
-	 *
-	 * This writes out an error message in a JSON string which DataTables will
-	 * see and show to the user in the browser.
-	 *
-	 * @param  string $msg Message to send to the client
-	 */
-	static function fatal ( $msg )
-	{
-		echo json_encode( array( 
-			"error" => $msg
-		) );
-
-		exit(0);
-	}
-
-	/**
-	 * Create a PDO binding key which can be used for escaping variables safely
-	 * when executing a query with sql_exec()
-	 *
-	 * @param  array &$a    Array of bindings
-	 * @param  *      $val  Value to bind
-	 * @param  int    $type PDO field type
-	 * @return string       Bound key to be used in the SQL where this parameter
-	 *   would be used.
-	 */
-	static function bind ( &$a, $val, $type )
-	{
-		$key = ':binding_'.count( $a );
-
-		$a[] = array(
-			'key' => $key,
-			'val' => $val,
-			'type' => $type
-		);
-
-		return $key;
-	}
-
-
 	/**
 	 * Pull a particular property from each assoc. array in a numeric array, 
 	 * returning and array of the property values from each item.
@@ -383,4 +269,3 @@ class SSP {
 		return $out;
 	}
 }
-
