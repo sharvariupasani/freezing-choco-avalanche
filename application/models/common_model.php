@@ -80,10 +80,15 @@ class common_model extends CI_Model{
 	| general function to update data
 	|
 	*/
-	public function updateData($table, $data, $where)
+	public function updateData($table, $data, $where, $flag =true)
 	{
 		$this->db->where($where);
-		if($this->db->update($table, $data)){
+		
+		foreach ($data as $key=>$val) {
+			$this->db->set($key, $val, $flag);
+		}
+
+		if($this->db->update($table)){
 			return 1;
 		}else{
 			return 0;
