@@ -12,14 +12,6 @@
             </div>
         </div>
         <!-- search form -->
-        <?php /*<form class="sidebar-form" method="get" action="#">
-            <div class="input-group">
-                <input type="text" placeholder="Search..." class="form-control" name="q">
-                <span class="input-group-btn">
-                    <button class="btn btn-flat" id="search-btn" name="seach" type="submit"><i class="fa fa-search"></i></button>
-                </span>
-            </div>
-        </form>*/ ?>
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
@@ -35,9 +27,32 @@
 			<?php
                 }
             ?>
-
+		
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-th"></i>
+					<span>Inventory</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu" style="display: none;">
+					<li><a href="<?=base_url()."category"?>"><i class="fa fa-circle-o"></i>Category</a>
+					<li><a href="<?=base_url()."product"?>"><i class="fa fa-circle-o"></i>Product</a>
+					<li><a href="<?=base_url()."purchase"?>"><i class="fa fa-circle-o"></i>Purchase</a>
+				</ul>
+			</li>
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-book"></i>
+					<span>Billing</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu" style="display: none;">
+					<li><a href="<?=base_url()."takein"?>"><i class="fa fa-circle-o"></i>Take In</a>
+					<li><a href="<?=base_url()."bill"?>"><i class="fa fa-circle-o"></i>Bill</a>
+				</ul>
+			</li>
+			
             <?php
-
                 if (@in_array("users",@array_keys(config_item('user_role')[$this->user_session['role']] ) ) || $this->user_session['role'] == 'a') {
             ?>
                 <li class="<?=get_active_tab("users")?>">
@@ -48,59 +63,6 @@
             <?php
                 }
             ?>
-
-
-            <?php
-                if (@in_array("dealer", @array_keys(config_item('user_role')[$this->user_session['role']])) || $this->user_session['role'] == 'a') {
-            ?>
-                <li class="<?=get_active_tab("dealer")?>">
-    				<a href="<?=base_url()."dealer"?>">
-                        <i class="fa fa-dashboard"></i> <span>Dealer</span>
-                    </a>
-                </li>
-			<?php
-                }
-            ?>
-
-
-            <?php
-                if (@in_array("category", @array_keys(config_item('user_role')[$this->user_session['role']])) || $this->user_session['role'] == 'a') {
-            ?>
-                <li class="<?=get_active_tab("category")?>">
-                    <a href="<?=base_url()."category"?>">
-                        <i class="fa fa-dashboard"></i> <span>Category</span>
-                    </a>
-                </li>
-            <?php
-                }
-            ?>
-			
-			<?php
-                if (@in_array("product", @array_keys(config_item('user_role')[$this->user_session['role']])) || $this->user_session['role'] == 'a') {
-            ?>
-                <li class="<?=get_active_tab("product")?>">
-                    <a href="<?=base_url()."product"?>">
-                        <i class="fa fa-dashboard"></i> <span>Product</span>
-                    </a>
-                </li>
-            <?php
-                }
-            ?>
-
-
-            <?php
-                if (@in_array("deal", @array_keys(config_item('user_role')[$this->user_session['role']])) || $this->user_session['role'] == 'a') {
-            ?>
-                <li class="<?=get_active_tab("deal")?>">
-    				<a href="<?=base_url()."deal"?>">
-                        <i class="fa fa-th"></i> <span>Deal</span>
-                    </a>
-                </li>
-            <?php
-                }
-            ?>
-
-
         </ul>
     </section>
     <!-- /.sidebar -->

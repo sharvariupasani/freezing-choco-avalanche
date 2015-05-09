@@ -28,6 +28,7 @@
 			?>
 		</div>
     	<div class="col-md-6">
+			<div class='box box-solid'>
     		<div class="box-body">
                 <form role="form" action="" method="post" id='category_form' name='category_form' enctype="multipart/form-data">
                     <div class="form-group">
@@ -46,5 +47,6 @@
                 </form>
             </div>
     	</div>
+		</div>
     </div>
 </section>

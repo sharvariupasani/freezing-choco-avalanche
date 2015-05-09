@@ -1,6 +1,6 @@
 <section class="content-header">
     <h1>
-        Product
+        Purchase
         <small> <?=($this->router->fetch_method() == 'add')?'Add Product':'Edit Product'?></small>
     </h1>
 </section>
@@ -19,7 +19,7 @@
 				if (@$error_msg != "") {
 			?>
 				<div id="error_msg" class='alert alert-warning alert-dismissable'>
-						<button class="close" aria-hidden="true" data-dismiss="alert" type="button">Ã—</button>
+						<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
 						<h4><i class="icon fa fa-warning"></i>Alert!</h4>
 						<?=$error_msg?>
 				</div>

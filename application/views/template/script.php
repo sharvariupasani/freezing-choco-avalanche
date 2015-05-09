@@ -52,11 +52,10 @@
 		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine-en.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/admin/<?=$this->router->fetch_class()?>/add_edit.js" type="text/javascript"></script>
 	<?php }?>
-	<script src="<?=public_path()?>js/admin/<?=$this->router->fetch_class()?>/index.js" type="text/javascript"></script>
-    
-	<?php if ($this->router->fetch_class() == "dealer" && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
-		<script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false&libraries=places'></script>
-		<script src="<?=public_path()?>js/plugins/location/locationpicker.jquery.js" type="text/javascript"></script>
+	    
+	<?php if ($this->router->fetch_class() == "product" && in_array($this->router->fetch_method(), array("index"))) { ?>
+		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine.js" type="text/javascript"></script>
+		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine-en.js" type="text/javascript"></script>
     <?php } ?>
 
 	<?php if ($this->router->fetch_class() == "deal" && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
@@ -66,5 +65,7 @@
 		<script src="<?=public_path()?>js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/daterangepicker/datepicker.js" type="text/javascript"></script>
     <?php } ?>
+
+	<script src="<?=public_path()?>js/admin/<?=$this->router->fetch_class()?>/index.js" type="text/javascript"></script>
 
     <script src="<?=public_path()?>js/AdminLTE/app.js" type="text/javascript"></script>

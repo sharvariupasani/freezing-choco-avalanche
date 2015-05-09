@@ -521,3 +521,76 @@ $.AdminLTE.boxWidget = {
     });
   };
 }(jQuery));
+
+
+// Generic form callback
+window.submitForm = function(form, callbacks) {
+    var self = this;
+    this.$form = $(form);
+	if ($form.data('validate') && !$form.validationEngine('validate'))
+		return false;
+
+    this.$indicator = $(form).find('.indicator');
+    this.setMessage = function(text, type, delay) {
+        self.$form.find('.response').each(function () {
+            var isError = type == 'error' ? true : false;
+            $(this).text(text);
+            $(this).toggleClass('alert-danger', isError)
+                .toggleClass('alert-success', !isError)
+                .stop(true, true)
+                .fadeIn(100);
+            if (delay) {
+                $(this).delay(delay).fadeOut(200);
+            }
+        });
+    }
+    this.$indicator.addClass('loading');
+    $.ajax({
+        type: 'POST',
+        url: $form.attr('action'),
+        data: $form.serialize(),
+        dataType: 'json',
+        // TODO: Make this better with a custom callbacks
+        success: function(res) {
+			console.log(res);
+            self.setMessage(res.message, res.status);
+            // TODO: Make this better
+
+            if (res.status == 'success'){
+				if ($form.data('refresh')) {
+					window.location = '/';
+				}
+				if ($form.data('success')) {
+					$form.trigger('success')
+				}
+			}
+        },
+        error: function(res) {
+            self.setMessage('A server error has occured.', 'error');
+        },
+        complete: function() {
+            self.$indicator.removeClass('loading');
+            // Clear some inputs
+            $form.find('[data-clear="true"]').val('');
+        }
+    })
+}
+
+// Setup validators
+$(function() {
+    $('form.ajax').each(function() {
+        $(this).on('submit',function(e){
+			e.preventDefault();
+			window.submitForm(this);
+		})
+    });
+});
+
+function resetForm(form)
+{
+		$(form).find('input').val("");
+		$(form).find('select').each(function(e){
+			$(e).val($(e).find("option:first").val());
+		});
+		$(form).validationEngine('hideAll');
+}

@@ -31,6 +31,7 @@
 		</div>
 
     	<div class="col-md-6">
+			<div class='box box-solid'>
     		<div class="box-body">
                 <form id='user_form' name='user_form' role="form" action="" method="post">
                     <div class="form-group">
@@ -64,6 +65,7 @@
                         <button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>
                     </div>
                 </form>
+            </div>
             </div>
     	</div>
     </div>
