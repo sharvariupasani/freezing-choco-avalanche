@@ -34,7 +34,13 @@ class Product extends CI_Controller {
 			array( 'db' => 'p.id',
 					'dt' => 6,
 					'formatter' => function( $e, $row ) {
-						return '<a href="'.site_url('/product/edit/'.$e).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_product('.$e.')" class="fa fa-trash-o"></a>';
+						return '<a href="'.site_url('/product/edit/'.$e).'" class="fa fa-edit"></a> /
+									  <a href="javascript:void(0);" onclick="manage_stock_modal(\'plus\','.$e.')" class="fa fa-plus"></a> /
+									  <a href="javascript:void(0);" onclick="manage_stock_modal(\'minus\','.$e.')" class="fa fa-minus"></a> /
+									  <a href="javascript:void(0);" onclick="stock_history('.$e.')" class="fa fa-table"></a> /
+									  <a href="'.site_url('/product/edit/'.$e).'" class="fa fa-eye"></a> /
+									  <a href="javascript:void(0);" onclick="delete_product('.$e.')" class="fa fa-trash-o"></a>
+									  ';
 					}
 			),
 		);

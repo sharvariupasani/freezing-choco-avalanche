@@ -55,3 +55,53 @@
     	</div>
     </div>
 </section>
+
+
+<div id="modals">
+    <div id="add-purchase" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="ajax form-horizontal" action='<?=base_url()."purchase/add"?>' method='post' data-success="true" data-validate="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Add Purchase</h4>
+                    </div>
+                    <div class="modal-body">
+						<div class="form-group">
+                            <label class="control-label col-sm-4">Operation</label>
+                            <div class="col-sm-7">
+                                <select name='op' id='op' class='form-control validate[required]'>
+									<option value='plus'>Plus</option>
+									<option value='minus'>Minus</option>
+								</select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4">Quantity</label>
+                            <div class="col-sm-7">
+                                <input class="validate[required,custom[integer]] form-control" placeholder="Quantity" name="qty" type="text" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4">Vender</label>
+                            <div class="col-sm-7">
+                                <input class="validate[required] form-control" placeholder="Vender Name" name="vender" type="text" />
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label class="control-label col-sm-4">Description</label>
+                            <div class="col-sm-7">
+                                <input class="form-control" placeholder="Purchase Note" name="description" type="description" /> 
+                            </div>
+                        </div>
+                        <p class="response" style=""></p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type='hidden' name='product_id' id='product_id' />
+						<button id="submit" class="btn btn-primary btn-flat" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

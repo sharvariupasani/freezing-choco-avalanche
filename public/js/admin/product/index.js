@@ -15,6 +15,15 @@ $(document).ready(function() {
 		]
 	} );
 
+	$('#add-purchase form').validationEngine();
+	
+	$('#add-purchase form').on('success',function(e){
+		console.log(e);
+		$('#add-purchase').modal('toggle');
+		oTable.fnClearTable(0);
+		oTable.fnDraw();
+		$("#flash_msg").html(success_msg_box ('Product deleted successfully.'));
+	});
 } );
 
 
@@ -37,4 +46,12 @@ function delete_product (del_id) {
 			}
 		}
 	});
+}
+
+function manage_stock_modal(op,id)
+{
+	resetForm($('#add-purchase form'));
+	$('#op').val(op);
+	$('#product_id').val(id);
+	$('#add-purchase').modal()
 }
