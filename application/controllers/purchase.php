@@ -80,33 +80,45 @@ class Purchase extends CI_Controller {
 
 			$this->form_validation->set_rules('op', 'Opration', 'trim|required');
 			$this->form_validation->set_rules('qty', 'Quantity', 'trim|required|integer');
-			$this->form_validation->set_rules('vender', 'Vender', 'trim|required');
+			$this->form_validation->set_rules('vendor', 'Vendor', 'trim|required');
 			$this->form_validation->set_rules('product_id', 'Product Id', 'trim|required|integer');
-			var $res = array();
+			$res = array();
 			if ($this->form_validation->run() !== false) {
+					$qty = abs($post['qty']);
+					$qty = ($post['op'] == 'plus')?$qty:(-1 * $qty);
 					$data = array();
 					$data['p_id'] = trim($post['product_id']);
-					$data['quantity'] = trim($post['qty']);
-					$data['vender'] = trim($post['vender']);
+					$data['quantity'] = trim($qty);
+					$data['vendor'] = trim($post['vendor']);
 					$data['description'] = trim($post['description']);
 					$ret = $this->common_model->insertData(PURCHASE, $data);
 					if($ret > 0)
 					{
-						$flash_arr = array('status' => 'success',
+						$where = array("id"=>$post['product_id']);
+						$data = array("stock_onhand"=>"stock_onhand + $qty");
+						$ret = $this->common_model->updateData(PRODUCT,$data,$where,false);
+						if ($ret)
+						{
+							$res = array('status' => 'success',
 										'message' => 'Product purchase added successfully.'
-									);
+							);
+						}else
+						{
+							$res = array('status' => 'error',
+										'message' => 'Please remove purchase record and try again later.'
+							);
+						}
 					}
 					else
 					{
-						$flash_arr = array('status' => 'success',
+						$res = array('status' => 'success',
 										'message' => 'Error occured.'
 									);
 					}
 			}
 			else
 			{
-				$res['status'] = "error";
-				$res['message'] = validation_errors();
+				$res= array('status' => "error","message" => validation_errors());
 			}
 			echo json_encode($res);
 		}

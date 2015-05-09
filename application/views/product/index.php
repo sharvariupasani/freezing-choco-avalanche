@@ -83,9 +83,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-4">Vender</label>
+                            <label class="control-label col-sm-4">Vendor</label>
                             <div class="col-sm-7">
-                                <input class="validate[required] form-control" placeholder="Vender Name" name="vender" type="text" />
+                                <input class="validate[required] form-control" placeholder="Vendor Name" name="vendor" type="text" />
                             </div>
                         </div>
 						<div class="form-group">
