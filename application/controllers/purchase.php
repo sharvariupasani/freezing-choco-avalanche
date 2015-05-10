@@ -29,47 +29,35 @@ class Purchase extends CI_Controller {
 		$post = $this->input->post();
 		$columns = array();
 		$columns = array(
-			array( 'db' => 'dd_name', 'dt' => 0 ),
-			array( 'db' => 'dd_description',  'dt' => 1 ),
-			array( 'db' => 'dd_originalprice',  'dt' => 2 ),
-			array( 'db' => 'dd_discount',  'dt' => 3 ),
-			array( 'db' => 'dd_listprice',  'dt' => 4 ),
+			array( 'alias' => 'cat_name','db' => 'c.name', 'dt' => 0 ),
+			array( 'db' => 'p.brand',  'dt' => 1 ),
+			array( 'db' => 'p.name',  'dt' => 2 ),
+			array( 'db' => 'pp.vendor',  'dt' => 3 ),
+			array( 'db' => 'pp.quantity',  'dt' => 4 ),
+			array( 'db' => 'pp.description',  'dt' => 5 ),
 			array(
-				'db'        => 'dd_startdate',
-				'dt'        => 5,
-				'formatter' => function( $d, $row ) {
-					return date( 'jS M y', strtotime($d));
-				}
-			),
-			array(
-				'db'        => 'dd_expiredate',
+				'db'        => 'pp.purchase_date',
 				'dt'        => 6,
 				'formatter' => function( $d, $row ) {
 					return date( 'jS M y', strtotime($d));
 				}
 			),
-			array( 'db' => 'dd_status',  'dt' => 7 ),
-			array( 'db' => '(select count(*) from deal_buyout where db_dealid=dd_autoid) as db_buycount',  'dt' => 8 ,'coloumn_name'=>'db_buycount'),
-			array( 'db' => 'dd_autoid',
-					'dt' => 9,
+			array( 'db' => 'pp.id',
+					'dt' => 7,
 					'formatter' => function( $d, $row ) {
 						if ($this->user_session['role'] == 'd')
 						return '<i class="fa fa-edit"></i> / <i class="fa fa-trash-o"></i>';
 						else
-						return '<a href="'.site_url('/deal/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_deal('.$d.')" class="fa fa-trash-o"></a>';
+						return '<a href="'.site_url('/purchase/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_purchase('.$d.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);
 
-		$custom_where = array();
-		if($this->user_session['role'] == 'd') {
-			if(!$this->user_session['dealer_info'])
-				$custom_where = array('dd_dealerid'=>0);
-			else
-				$custom_where = array('dd_dealerid'=>$this->user_session['dealer_info']->de_autoid);
-		}
+		$join = array();
+		$join[] = array(PRODUCT_P,'p.id = pp.p_id');
+		$join[] = array(CATEGORY_C,'p.cat_id = c.id');
 
-		echo json_encode( SSP::simple( $post, DEAL_DETAIL, "dd_autoid", $columns ,array(),$custom_where ));exit;
+		echo json_encode( SSP::simple( $post, PURCHASE_PP, "pp.id", $columns ,$join));exit;
 	}
 
 	public function add()
@@ -126,11 +114,58 @@ class Purchase extends CI_Controller {
 
 	public function edit($id)
 	{
+		$post = $this->input->post();
+		if ($post) {
+
+		}
+
+		$data['purchase'] = $purchase = $this->common_model->selectData(PURCHASE, '*', $where);
 		
+
+		if (empty($purchase)) {
+			redirect('purchase');
+		}
+		$data['view'] = "add_edit";
+		$this->load->view('content', $data);
 	}
 
 	public function delete()
 	{
+		$post = $this->input->post();
+
+		if ($post) {
+			$res = array();
+
+			$purchase = $this->common_model->selectData(PURCHASE,"*", array('id' => $post['id'] ));
+			$purchase = $purchase[0];
+			$qty = $purchase->quantity;
+			$qty = -1 * $qty; // to add/remove from stock_onhand from product table.
+			
+			$where = array("id"=>$purchase->p_id);
+			$data = array("stock_onhand"=>"stock_onhand + $qty");
+			$ret = $this->common_model->updateData(PRODUCT,$data,$where,false);
+			if ($ret)
+			{
+				$ret = $this->common_model->deleteData(PURCHASE, array('id' => $post['id'] ));
+				if ($ret > 0) {
+					$res = array('status' => 'success',
+							'message' => 'Purchase removed successfully.'
+					);
+
+				}else{
+					$res = array('status' => 'error',
+							'message' => 'Please remove purchase record and try again later.'
+							);
+				}
+				
+			}else
+			{
+				$res = array('status' => 'error',
+							'message' => 'Please remove purchase record and try again later.'
+				);
+			}
+			echo json_encode($res);exit;
+		}
 	
 	}
 }
