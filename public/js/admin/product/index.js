@@ -22,7 +22,7 @@ $(document).ready(function() {
 		$('#add-purchase').modal('toggle');
 		oTable.fnClearTable(0);
 		oTable.fnDraw();
-		$("#flash_msg").html(success_msg_box ('Product deleted successfully.'));
+		$("#flash_msg").html(success_msg_box ('Product purchase updated successfully.'));
 	});
 } );
 

@@ -25,15 +25,16 @@
 						<h3 class="box-title">Purchase list</h3>                                    
 					</div><!-- /.box-header -->
 					<div class="box-body table-responsive">
-						<table id="productTable" class="table table-bordered table-striped">
+						<table id="purchaseTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
 									<th>Category</th>
 									<th>Brand</th>
 									<th>Name</th>
-									<th>Description</th>
-									<th>On-hand Stock</th>
-									<th>Price</th>
+									<th>Vendor</th>
+									<th>Qty</th>
+									<th>Note</th>
+									<th>Date</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -42,9 +43,10 @@
 									<th>Category</th>
 									<th>Brand</th>
 									<th>Name</th>
-									<th>Description</th>
-									<th>On-hand Stock</th>
-									<th>Price</th>
+									<th>Vendor</th>
+									<th>Qty</th>
+									<th>Note</th>
+									<th>Date</th>
 									<th>Action</th>
 								</tr>
 							</tfoot>
