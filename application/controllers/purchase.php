@@ -24,7 +24,7 @@ class Purchase extends CI_Controller {
 		$this->load->view('content', $data);
 	}
 
-	public function ajax_list($limit=0)
+	public function ajax_list($id="")
 	{
 		$post = $this->input->post();
 		$columns = array();
@@ -55,8 +55,12 @@ class Purchase extends CI_Controller {
 		$join = array();
 		$join[] = array(PRODUCT_P,'p.id = pp.p_id');
 		$join[] = array(CATEGORY_C,'p.cat_id = c.id');
-
-		echo json_encode( SSP::simple( $post, PURCHASE_PP, "pp.id", $columns ,$join));exit;
+		
+		$where = "";
+		if ($id != "")
+			$where= "pp.p_id =".$id;
+		
+		echo json_encode( SSP::simple( $post, PURCHASE_PP, "pp.id", $columns ,$join,$where));exit;
 	}
 
 	public function add()
