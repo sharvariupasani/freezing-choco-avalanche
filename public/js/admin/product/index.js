@@ -57,13 +57,18 @@ function manage_stock_modal(op,id)
 	$('#add-purchase').modal()
 }
 
-function stock_history(op,id)
+function stock_history(id)
 {
+	if (typeof(hTable) != "undefined")
+	{
+		hTable.fnDestroy();
+	}
+
 	hTable = $('#productPurchaseTable').dataTable( {
 		"processing": true,
 		"serverSide": true,
 		"ajax": {
-			"url": admin_path ()+'purchase/ajax_list/',
+			"url": admin_path ()+'purchase/ajax_list/'+id,
 			"type": "POST"
 		},
 		aoColumnDefs: [
