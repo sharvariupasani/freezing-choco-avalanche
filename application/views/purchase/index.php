@@ -17,8 +17,6 @@
 					}
 				?>
 			</div>	
-    		<a class="btn btn-default pull-right" href="<?=base_url()."product/add"?>">
-            <i class="fa fa-plus"></i>&nbsp;Add Purchase</a>
             <div id="list">
 				<div class="box">
 					<div class="box-header">

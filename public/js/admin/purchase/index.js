@@ -17,23 +17,22 @@ $(document).ready(function() {
 } );
 
 
-function delete_purchase (del_id) {
+function delete_purchase (del_id,flag) {
 	var r = confirm("Are you sure you want to delete?");
 	if (!r) {
 		return false;
 	}
-	$.ajax({
-		type: 'post',
-		url: admin_path()+'purchase/delete',
-		data: 'id='+del_id,
-		success: function (data) {
-			if (data == "success") {
+	var url = admin_path()+'purchase/delete';
+	flag = (typeof(flag)!="undefined")?flag:"";
+	var data = {id:del_id,flag:flag};
+	$.post(admin_path()+'purchase/delete', data,function(data){
+		data  = JSON.parse(data);
+		if (data.status == "success") {
 				oTable.fnClearTable(0);
 				oTable.fnDraw();
-				$("#flash_msg").html(success_msg_box ('Purchase deleted successfully.'));
+				$("#flash_msg").html(success_msg_box (data.message));
 			}else{
 				$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
 			}
-		}
-	});
+	})
 }
