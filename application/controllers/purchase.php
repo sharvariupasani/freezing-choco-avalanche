@@ -45,10 +45,9 @@ class Purchase extends CI_Controller {
 			array( 'db' => 'pp.id',
 					'dt' => 7,
 					'formatter' => function( $d, $row ) {
-						if ($this->user_session['role'] == 'd')
-						return '<i class="fa fa-edit"></i> / <i class="fa fa-trash-o"></i>';
-						else
-						return '<a href="'.site_url('/purchase/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_purchase('.$d.')" class="fa fa-trash-o"></a>';
+						return '<a href="'.site_url('/purchase/edit/'.$d).'" class="fa fa-edit"></a> / 
+									  <a href="javascript:void(0);" onclick="delete_purchase('.$d.',true)" class="fa fa-trash-o"></a> /
+									  <a href="javascript:void(0);" onclick="delete_purchase('.$d.')" class="fa fa-times"></a>';
 					}
 			),
 		);
@@ -114,17 +113,73 @@ class Purchase extends CI_Controller {
 
 	public function edit($id)
 	{
+		if ($id == "" || $id <= 0) {
+			redirect('product');
+		}
+		$where = 'id = '.$id;
+
 		$post = $this->input->post();
 		if ($post) {
+			$this->load->library('form_validation');
 
+			$this->form_validation->set_rules('op', 'Opration', 'trim|required');
+			$this->form_validation->set_rules('qty', 'Quantity', 'trim|required|integer');
+			$this->form_validation->set_rules('vendor', 'Vendor', 'trim|required');
+
+			$res = array();
+			if ($this->form_validation->run() !== false) {
+				$old_purchase = $this->common_model->selectData(PURCHASE, '*', $where);
+
+				if (count($old_purchase) < 1) {
+					redirect('purchase');
+				}
+
+				$old_qty = $old_purchase[0]->quantity;
+				$qty = $post['qty'];
+				if ($old_qty != $qty)
+				{
+					$ret = $this->common_model->selectData(PRODUCT,"stock_onhand",array("id"=>$old_purchase[0]->p_id));
+					$stock_onhand = $ret[0]->stock_onhand;
+					/* revert old qty from stock on hand */
+					$old_qty = -1 * $old_qty;
+					$stock_onhand = $stock_onhand + $old_qty;
+					
+					/* add new qty to stock on hand */
+					$qty = ($post['op'] == 'plus')?$qty:(-1 * $qty);
+					$stock_onhand = $stock_onhand + $qty;
+					
+					$data = array("stock_onhand"=>$stock_onhand);
+					$ret = $this->common_model->updateData(PRODUCT,$data,array("id"=>$old_purchase[0]->p_id));
+				}
+				
+				$data = array();
+				$data['quantity'] = trim($qty);
+				$data['vendor'] = trim($post['vendor']);
+				$data['description'] = trim($post['description']);
+				$ret = $this->common_model->updateData(PURCHASE, $data,$where);
+				if ($ret > 0) {
+					$flash_arr = array('flash_type' => 'success',
+										'flash_msg' => 'Purchase updated successfully.'
+									);
+
+				}else{
+					$flash_arr = array('flash_type' => 'error',
+										'flash_msg' => 'An error occurred while processing.'
+									);
+				}
+				$this->session->set_flashdata($flash_arr);
+				redirect("purchase");
+			}
+			else
+				$data['error_msg'] = validation_errors();
 		}
 
-		$data['purchase'] = $purchase = $this->common_model->selectData(PURCHASE, '*', $where);
-		
+		$data['purchase'] = $purchase = $this->common_model->getPurchaseById($id);	
 
 		if (empty($purchase)) {
 			redirect('purchase');
 		}
+		
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
 	}
@@ -135,15 +190,20 @@ class Purchase extends CI_Controller {
 
 		if ($post) {
 			$res = array();
+			if ($post['flag'] != "")
+			{
+				$purchase = $this->common_model->selectData(PURCHASE,"*", array('id' => $post['id'] ));
+				$purchase = $purchase[0];
+				$qty = $purchase->quantity;
+				$qty = -1 * $qty; // to add/remove from stock_onhand from product table.
+				
+				$where = array("id"=>$purchase->p_id);
+				$data = array("stock_onhand"=>"stock_onhand + $qty");
+				$ret = $this->common_model->updateData(PRODUCT,$data,$where,false);
+			}
+			else 
+				$ret = true;
 
-			$purchase = $this->common_model->selectData(PURCHASE,"*", array('id' => $post['id'] ));
-			$purchase = $purchase[0];
-			$qty = $purchase->quantity;
-			$qty = -1 * $qty; // to add/remove from stock_onhand from product table.
-			
-			$where = array("id"=>$purchase->p_id);
-			$data = array("stock_onhand"=>"stock_onhand + $qty");
-			$ret = $this->common_model->updateData(PRODUCT,$data,$where,false);
 			if ($ret)
 			{
 				$ret = $this->common_model->deleteData(PURCHASE, array('id' => $post['id'] ));

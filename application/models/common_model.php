@@ -134,18 +134,18 @@ class common_model extends CI_Model{
 	}
 
 
-	public function deleteTags($de_autoid,$tag_ids)
+	public function getPurchaseById($id)
 	{
-		$this->db->where_in('dm_dtid', $de_autoid);
-		$this->db->where(array('dm_ddid'=>$tag_ids));
-		$del = $this->db->delete(DEAL_MAP_TAGS);
-		if($del){
-			$delqry = "DELETE FROM deal_tags WHERE dt_autoid IN (".implode(",",$de_autoid).") AND (SELECT IF (COUNT(*)=0,1,0) FROM deal_map_tags WHERE dm_dtid = dt_autoid)";
-			$this->db->query($delqry);
-			return 1;
-		}else{
-			return 0;
-		}
+		$this->db->select("*,c.name as cat_name,p.description as p_description,c.description as c_description,pp.description as pp_description");
+		$this->db->from(PURCHASE_PP);
+		$this->db->join(PRODUCT_P, "p.id = pp.p_id");
+		$this->db->join(CATEGORY_C, "p.cat_id = c.id");
+		$this->db->where(array("pp.id"=>$id));
+
+		$query = $this->db->get();
+		$purchase = $query->result();
+		$query->free_result();
+		return ($purchase);
 	}
 
 	public function getDealTags($dd_autoid)

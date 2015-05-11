@@ -104,4 +104,43 @@
             </div>
         </div>
     </div>
+
+	 <div id="show-purchase" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+					<div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Purchase history</h4>
+                    </div>
+					<div class="modal-body">
+						<table id="productPurchaseTable" class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>Category</th>
+									<th>Brand</th>
+									<th>Name</th>
+									<th>Vendor</th>
+									<th>Qty</th>
+									<th>Note</th>
+									<th>Date</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>Category</th>
+									<th>Brand</th>
+									<th>Name</th>
+									<th>Vendor</th>
+									<th>Qty</th>
+									<th>Note</th>
+									<th>Date</th>
+									<th>Action</th>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+			</div>
+		</div>
+	</div>
 </div>

@@ -33,37 +33,40 @@
                 <form role="form" action="" method="post" id='product_form' name='product_form' enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Category</label>
-						<select name="category" id="category" class="form-control">
-							<option value="">Select</option>
-							<?php
-							foreach($category as $cat) {
-								$selected = "";
-								if($cat->id == $product[0]->cat_id) $selected  = "selected";
-							?>
-							<option value="<?=$cat->id?>" <?=$selected?>><?=$cat->name?> </option>
-							<?php } ?>
-						</select>
-                        <!--<input type="text" placeholder="Enter ..." class="form-control validate[required]" name="name" id="name" value="<?//@$category[0]->name?>" -->
+						<label class="form-control"><?=@$purchase[0]->cat_name?></label>
                     </div>
 					
 					<div class="form-group">
                         <label>Brand Name:</label>
-                        <input type="text" placeholder="E.g., LG, SONY" class="form-control validate[required]" name="brand" id="brand" value="<?=@$product[0]->brand?>" >
+						<label class="form-control"><?=@$purchase[0]->brand?></label>
                     </div>
 					
 					<div class="form-group">
-                        <label>Product Name:</label>
-                        <input type="text" placeholder=" E.g., D335" class="form-control validate[required]" name="name" id="name" value="<?=@$product[0]->name?>" >
+                        <label>Product Name</label>
+                        <label class="form-control"><?=@$purchase[0]->name?></label>
                     </div>
 					
 					<div class="form-group">
-                        <label>Product Price:</label>
-                         (Rs.)<input type="text" placeholder="E.g., 10000" class="form-control validate[required,custom[integer]]" name="price" id="price" value="<?=@$product[0]->price?>" >
+                        <label>Operation</label>
+                        <select name='op' id='op' class='form-control validate[required]'>
+								<option value='plus' <?=(@$purchase[0]->quantity > 0)?"selecter='selected'":""?>>Plus</option>
+								<option value='minus'  <?=(@$purchase[0]->quantity > 0)?"":"selecter='selected'"?>>Minus</option>
+						 </select>
                     </div>
 						
 					<div class="form-group">
-                        <label>Product Detail:</label>
-                        <textarea type="text" placeholder="Eg., Color, Size" class="form-control validate[required]" name="description" id="description"><?=@$product[0]->description?></textarea>
+                        <label>Quantity</label>
+                        <input class="validate[required,custom[integer]] form-control" placeholder="Quantity" name="qty" type="text" value="<?=@$purchase[0]->quantity?>" />
+                    </div>
+
+					<div class="form-group">
+                        <label>Vendor</label>
+                        <input class="validate[required] form-control" placeholder="Vendor Name" name="vendor" type="text"  value='<?=@$purchase[0]->vendor?>'/>
+                    </div>
+
+					<div class="form-group">
+                        <label>Description</label>
+                        <input class="form-control" placeholder="Purchase Note" name="description" type="description" value='<?=@$purchase[0]->pp_description?>'/> 
                     </div>
 					
                     <div class="form-group">

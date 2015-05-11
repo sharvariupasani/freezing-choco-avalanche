@@ -593,4 +593,17 @@ function resetForm(form)
 			$(e).val($(e).find("option:first").val());
 		});
 		$(form).validationEngine('hideAll');
+		$(form).find('.response').html("");
 }
+
+$(document).ready(function(){
+	var path = location.pathname;
+	var li_a = $(".sidebar-menu a[href*='"+path+"']");
+	li_a.closest("li").addClass("active");
+	if (li_a.closest(".treeview-menu").length>0)
+	{
+		li_a.closest(".treeview-menu").show();
+		li_a.closest(".treeview").addClass("active");
+	}
+
+})

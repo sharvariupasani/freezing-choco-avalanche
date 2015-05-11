@@ -1,4 +1,5 @@
 var oTable;
+var hTable;
 $(document).ready(function() {
 	oTable = $('#productTable').dataTable( {
 		"processing": true,
@@ -54,4 +55,23 @@ function manage_stock_modal(op,id)
 	$('#op').val(op);
 	$('#product_id').val(id);
 	$('#add-purchase').modal()
+}
+
+function stock_history(op,id)
+{
+	hTable = $('#productPurchaseTable').dataTable( {
+		"processing": true,
+		"serverSide": true,
+		"ajax": {
+			"url": admin_path ()+'purchase/ajax_list/',
+			"type": "POST"
+		},
+		aoColumnDefs: [
+		  {
+			 bSortable: false,
+			 aTargets: [ -1 ]
+		  }
+		]
+	} );
+	$('#show-purchase').modal();
 }
