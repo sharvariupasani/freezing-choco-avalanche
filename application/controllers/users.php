@@ -71,13 +71,23 @@ class Users extends CI_Controller {
 									"matches"=>"%s field does not match."
 								)
 			);
+			if ($post['role'] == "d")
+			{
+				$this->form_validation->set_rules('cust_id', 'Customer', 'trim|required');
+			}
 			
 			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['user_name'],
 								'role' => $post['role'],
 								'email' => $post['email'],
 								'password' => sha1(trim($post['password'])),
+								'cust_id' => NULL
 							  );
+
+				if ($post['role'] == "d")
+				{
+					$data["cust_id"] = $post["cust_id"];
+				}
 				
 				$ret = $this->common_model->insertData(USER, $data);
 
@@ -140,13 +150,25 @@ class Users extends CI_Controller {
 				$psFlas = true;
 			}
 
+			if ($post['role'] == "d")
+			{
+				$this->form_validation->set_rules('cust_id', 'Customer', 'trim|required');
+			}
+	
 			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['user_name'],
 								'role' => $post['role'],
-								'email' => $post['email']
+								'email' => $post['email'],
+								'cust_id' => NULL
 							);
 				if($psFlas)
 					$data['password'] = sha1(trim($post['password']));
+				
+				if ($post['role'] == "d")
+				{
+					$data["cust_id"] = $post["cust_id"];
+				}
+
 				$ret = $this->common_model->updateData(USER, $data, $where);
 
 				if ($ret > 0) {
@@ -164,6 +186,17 @@ class Users extends CI_Controller {
 			$data['error_msg'] = validation_errors();
 		}
 		$data['user'] = $user = $this->common_model->selectData(USER, '*', $where);
+
+		if ($user[0]->role == "d"){
+			$db = $this->common_model->db;
+			$db->select('CONCAT(c_fname," ",c_lname,"(",c_phone,")") as customer,c_id',false);
+			$db->from(CUSTOMER);
+			$db->where(array("c_id"=>$user[0]->cust_id));
+			$query = $db->get();
+			$customer = $query->result();
+			$query->free_result();
+			$data['customer'] = $customer[0];
+		}
 
 		if (empty($user)) {
 			redirect('users');

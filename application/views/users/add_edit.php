@@ -53,6 +53,13 @@
                             <option value="d" <?=(@$user[0]->role == 'd')?'selected':''?> >Dealer</option>
                         </select>
                     </div>
+
+					<div class="form-group" id="dealer" style='display:none;'>
+                        <label>Customer:</label>
+                        <input type="text" placeholder="customer" class="form-control" name="customer" id="customer" value="<?=@$customer->customer?>">
+                        <input type="hidden" placeholder="customer" class="form-control" name="cust_id" id="cust_id" value="<?=@$customer->c_id?>">
+                    </div>
+
 					<div class="form-group">
                         <label>Password:</label>
                         <input type="password" placeholder="Password" class="form-control validate[minSize[5],maxSize[15]]" name="password" id="password">

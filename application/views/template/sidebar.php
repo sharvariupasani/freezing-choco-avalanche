@@ -51,6 +51,18 @@
 					<li><a href="<?=base_url()."bill"?>"><i class="fa fa-circle-o"></i>Bill</a>
 				</ul>
 			</li>
+
+			<?php
+                if (@in_array("customer",@array_keys(config_item('user_role')[$this->user_session['role']] ) ) || $this->user_session['role'] == 'a') {
+            ?>
+                <li class="<?=get_active_tab("customer")?>">
+                    <a href="<?=base_url()."customer"?>">
+                        <i class="fa fa-dashboard"></i> <span>Customers</span>
+                    </a>
+                </li>
+            <?php
+                }
+            ?>
 			
             <?php
                 if (@in_array("users",@array_keys(config_item('user_role')[$this->user_session['role']] ) ) || $this->user_session['role'] == 'a') {
