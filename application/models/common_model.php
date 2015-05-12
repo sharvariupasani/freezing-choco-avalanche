@@ -172,17 +172,21 @@ class common_model extends CI_Model{
 		}
 	}
 
-	public function getTagAutoSuggest($tag)
+	public function getCustAutoSuggest($tag)
 	{
-		$this->db->select('dt_tag');
-		$this->db->from(DEAL_TAGS);
-		$this->db->like('dt_tag', $tag, 'after');
+		$this->db->select('c_id,c_fname,c_lname,c_phone');
+		$this->db->from(CUSTOMER);
+		$this->db->like('c_fname', $tag, 'after');
+		$this->db->or_like('c_lname', $tag, 'after');
+		$this->db->or_like('c_phone', $tag, 'after');
 		$query = $this->db->get();
-		$tags = $query->result_array();
-		$resTags = array();
-		foreach($tags as $tag)
-			$resTags[] = array($tag['dt_tag'],$tag['dt_tag']);
-		return ($resTags);
+		$customers = $query->result_array();
+		$resCust = array();
+		foreach($customers as $customer)
+			$resCust[] = '{"c_id":"'.$customer['c_id'].'","value":"' . $customer['c_fname']." ".$customer['c_lname']."(".$customer['c_phone'].")" . '","label":"' . $customer['c_fname']." ".$customer['c_lname']."(".$customer['c_phone'].")" . '"}';
+
+		$resCust = '['.implode(",",$resCust).']';
+		return ($resCust);
 	}
 
 	public function getmyfav()
