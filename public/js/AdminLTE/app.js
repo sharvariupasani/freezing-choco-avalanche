@@ -597,6 +597,12 @@ function resetForm(form)
 }
 
 $(document).ready(function(){
+	$('input').iCheck({
+	  checkboxClass: 'icheckbox_square-blue',
+	  radioClass: 'iradio_square-blue',
+	  increaseArea: '20%' // optional
+	});
+
 	var path = location.pathname;
 	var li_a = $(".sidebar-menu a[href*='"+path+"']");
 	li_a.closest("li").addClass("active");
@@ -605,5 +611,4 @@ $(document).ready(function(){
 		li_a.closest(".treeview-menu").show();
 		li_a.closest(".treeview").addClass("active");
 	}
-
 })

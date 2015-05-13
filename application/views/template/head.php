@@ -17,7 +17,7 @@
         <link href="<?=public_path()?>css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
         <!-- Daterange picker -->
         <link href="<?=public_path()?>css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
-
+		
 		<?php if ($this->router->fetch_class() == "users" && in_array($this->router->fetch_method(), array("add","edit"))) {  ?>
 			<link href="<?=public_path()?>css/jQueryUI/jquery-ui-1.10.3.custom.css" rel="stylesheet" type="text/css" />
 		<?php } ?>
@@ -29,6 +29,7 @@
         <!-- Theme style -->
         <link href="<?=public_path()?>css/AdminLTE.css" rel="stylesheet" type="text/css" />
         <link href="<?=public_path()?>css/skins/skin-purple.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?=public_path()?>css/iCheck/square/blue.css" rel="stylesheet" type="text/css" />
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
