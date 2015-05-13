@@ -48,6 +48,7 @@ define('CATEGORY',	'category');
 define('PRODUCT',	'product');
 define('PURCHASE',	'purchase');
 define('CUSTOMER',	'customer');
+define('SERVICE',	'service');
 
 define('ADMIN_A',	'admin as a');
 define('USER_U',	'user as u');

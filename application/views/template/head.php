@@ -19,7 +19,7 @@
         <link href="<?=public_path()?>css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
 		
 		<?php if ($this->router->fetch_class() == "users" && in_array($this->router->fetch_method(), array("add","edit"))) {  ?>
-			<link href="<?=public_path()?>css/jQueryUI/jquery-ui-1.10.3.custom.css" rel="stylesheet" type="text/css" />
+			<link href="<?=public_path()?>css/jQueryUI/autocomplete.css" rel="stylesheet" type="text/css" />
 		<?php } ?>
 
 		<?php if (in_array($this->router->fetch_method(), array("add","edit"))) { ?>
