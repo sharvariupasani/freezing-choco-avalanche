@@ -86,14 +86,6 @@
 		<script src="<?=public_path()?>js/bootstrap.min.js" type="text/javascript"></script>
 		<!-- AdminLTE App -->
 		<script src="<?=public_path()?>js/AdminLTE/app.js" type="text/javascript"></script>
-		 <script>
-		  $(function () {
-			$('input').iCheck({
-			  checkboxClass: 'icheckbox_square-blue',
-			  radioClass: 'iradio_square-blue',
-			  increaseArea: '20%' // optional
-			});
-		  });
-		</script>
+		<script src="<?=public_path()?>js/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
   </body>
 </html>

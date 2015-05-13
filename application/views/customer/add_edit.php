@@ -63,9 +63,10 @@
                         <label >City:</label>
                         <input type="text" placeholder="Enter city" id="city" class="form-control" name="city" value="<?=@$customer[0]->c_city?>" >
                     </div>
-
-					<div class="checkbox">
-                        <label><input type="checkbox" <?=(@$customer[0]->c_type == "dealer")?"checked":""?> name='is_dealer' id='is_dealer'>Is dealer</label>
+					
+					<div class="form-group">
+                        <label >Is dealer:</label>
+                        <input type="checkbox" <?=(@$customer[0]->c_type == "dealer")?"checked":""?> name='is_dealer' id='is_dealer'>
                     </div>
                     
                     <div class="form-group">
