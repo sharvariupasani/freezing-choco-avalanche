@@ -3,18 +3,7 @@ class Takein extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-
-		is_login();
-
 		$this->user_session = $this->session->userdata('user_session');
-
-		if (!@in_array("deal", @array_keys(config_item('user_role')[$this->user_session['role']])) && $this->user_session['role'] != 'a') {
-			redirect("dashboard");
-		}
-
-		/*if (!@in_array($this->router->fetch_method(), @config_item('user_role')[$this->user_session['role']]['deal']) && $this->user_session['role'] != 'a') {
-			redirect("deal");
-		}*/
 	}
 
 	public function index()
@@ -47,14 +36,10 @@ class Takein extends CI_Controller {
 					return date( 'jS M y', strtotime($d));
 				}
 			),
-			array( 'db' => 's_status',  'dt' => 7 ),
 			array( 'db' => 's_id',
-					'dt' => 8,
+					'dt' => 7,
 					'formatter' => function( $d, $row ) {
-						if ($this->user_session['role'] == 'd')
-						return '<i class="fa fa-edit"></i> / <i class="fa fa-trash-o"></i>';
-						else
-						return '<a href="'.site_url('/takein/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_deal('.$d.')" class="fa fa-trash-o"></a>';
+						return '<a href="'.site_url('/takein/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_takein('.$d.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);
@@ -66,6 +51,39 @@ class Takein extends CI_Controller {
 
 	public function add()
 	{
+		$post = $this->input->post();
+		if ($post) {
+			$this->load->library('form_validation');
+
+			$this->form_validation->set_rules('cust_id', 'Customer', 'trim|required');
+			$this->form_validation->set_rules('phonename', 'Mobile Info', 'trim|required');
+			$this->form_validation->set_rules('imei', 'IMEI', 'trim|required');
+			$this->form_validation->set_rules('remark', 'Mobile remark', 'trim|required');
+
+			if ($this->form_validation->run() !== false) {
+				$data = array('s_custid' => $post['cust_id'],
+							's_phonename' => $post['phonename'],
+							's_imei' => $post['imei'],
+							's_remark' => $post['remark'],
+							);
+				$ret = $this->common_model->insertData(SERVICE, $data);
+
+				if ($ret > 0) {
+					$flash_arr = array('flash_type' => 'success',
+										'flash_msg' => 'Takein added successfully.'
+									);
+				}else{
+					$flash_arr = array('flash_type' => 'error',
+										'flash_msg' => 'An error occurred while processing!'
+									);
+
+				}
+				$this->session->set_flashdata($flash_arr);
+				redirect("takein");
+			}
+			$data['error_msg'] = validation_errors();
+		}
+		
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
 	}
@@ -73,16 +91,49 @@ class Takein extends CI_Controller {
 	public function edit($id)
 	{	
 		$data['view'] = "add_edit";
+		$where = "s_id = ".$id;
+		if ($post) {
+			$this->load->library('form_validation');
+
+			$this->form_validation->set_rules('cust_id', 'Customer', 'trim|required');
+			$this->form_validation->set_rules('phonename', 'Mobile Info', 'trim|required');
+			$this->form_validation->set_rules('imei', 'IMEI', 'trim|required');
+			$this->form_validation->set_rules('remark', 'Mobile remark', 'trim|required');
+
+			if ($this->form_validation->run() !== false) {
+				$data = array('s_custid' => $post['custid'],
+							's_phonename' => $post['phonename'],
+							's_imei' => $post['imei'],
+							's_remark' => $post['remark'],
+							);
+				$ret = $this->common_model->updateData(SERVICE, $data,$where);
+
+				if ($ret > 0) {
+					$flash_arr = array('flash_type' => 'success',
+										'flash_msg' => 'Takein added successfully.'
+									);
+				}else{
+					$flash_arr = array('flash_type' => 'error',
+										'flash_msg' => 'An error occurred while processing!'
+									);
+
+				}
+				$this->session->set_flashdata($flash_arr);
+				redirect("takein");
+			}
+			$data['error_msg'] = validation_errors();
+		}
+
+		$data['takein'] = $takein = $this->common_model->selectData(SERVICE, '*',$where);
+		$data['customer'] = $this->common_model->customerTitleById($takein[0]->s_custid);
+		if (empty($takein)) {
+			redirect('takein');
+		}
 		$this->load->view('content', $data);
 	}
 
 	public function delete()
 	{
-		if (!@in_array("delete", @config_item('user_role')[$this->user_session['role']]['deal']) && $this->user_session['role'] != 'a') {
-			echo "redirect";
-			exit;
-		}
-
 		$post = $this->input->post();
 
 		if ($post) {

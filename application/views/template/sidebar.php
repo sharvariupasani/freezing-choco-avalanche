@@ -57,7 +57,7 @@
             ?>
                 <li class="<?=get_active_tab("customer")?>">
                     <a href="<?=base_url()."customer"?>">
-                        <i class="fa fa-dashboard"></i> <span>Customers</span>
+                        <i class="fa fa-users"></i> <span>Customers</span>
                     </a>
                 </li>
             <?php
@@ -69,7 +69,7 @@
             ?>
                 <li class="<?=get_active_tab("users")?>">
                     <a href="<?=base_url()."users"?>">
-                        <i class="fa fa-dashboard"></i> <span>Users</span>
+                        <i class="fa fa-user-md"></i> <span>Users</span>
                     </a>
                 </li>
             <?php

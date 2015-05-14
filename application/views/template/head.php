@@ -17,10 +17,7 @@
         <link href="<?=public_path()?>css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
         <!-- Daterange picker -->
         <link href="<?=public_path()?>css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
-		
-		<?php if ($this->router->fetch_class() == "users" && in_array($this->router->fetch_method(), array("add","edit"))) {  ?>
-			<link href="<?=public_path()?>css/jQueryUI/autocomplete.css" rel="stylesheet" type="text/css" />
-		<?php } ?>
+		<link href="<?=public_path()?>css/jQueryUI/autocomplete.css" rel="stylesheet" type="text/css" />
 
 		<?php if (in_array($this->router->fetch_method(), array("add","edit"))) { ?>
 			<link href="<?=public_path()?>css/validation/validationEngine.css" rel="stylesheet" type="text/css" />

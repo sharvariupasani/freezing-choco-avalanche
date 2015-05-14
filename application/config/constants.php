@@ -53,6 +53,7 @@ define('SERVICE',	'service');
 define('ADMIN_A',	'admin as a');
 define('USER_U',	'user as u');
 define('CATEGORY_C',	'category as c');
+define('PURCHASE_PP',	'purchase as pp');
 define('PRODUCT_P',	'product as p');
 define('CUSTOMER_CU',	'customer as cu');
 

@@ -3,18 +3,7 @@ class Invoice extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-
-		is_login();
-
 		$this->user_session = $this->session->userdata('user_session');
-
-		if (!@in_array("deal", @array_keys(config_item('user_role')[$this->user_session['role']])) && $this->user_session['role'] != 'a') {
-			redirect("dashboard");
-		}
-
-		/*if (!@in_array($this->router->fetch_method(), @config_item('user_role')[$this->user_session['role']]['deal']) && $this->user_session['role'] != 'a') {
-			redirect("deal");
-		}*/
 	}
 
 	public function index()

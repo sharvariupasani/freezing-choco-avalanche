@@ -391,7 +391,17 @@ class common_model extends CI_Model{
 		}
 	}
 
-
+	public function customerTitleById($id)
+	{
+			$db = $this->db;
+			$db->select('CONCAT(c_fname," ",c_lname,"(",c_phone,")") as customer,c_id',false);
+			$db->from(CUSTOMER);
+			$db->where(array("c_id"=>$id));
+			$query = $db->get();
+			$customer = $query->result();
+			$query->free_result();
+			return $customer[0];
+	}
 
 	public function getDealDetailPrint($dealbuyout_id)
 	{
