@@ -13,6 +13,15 @@ class Product extends CI_Controller {
 		$this->load->view('content', $data);
 	}
 
+	public function autocomplete()
+	{
+		$get = $this->input->get();
+		if (!isset($get["term"])) exit;
+		$tag = $get["term"];
+		$tags = $this->common_model->getProductAutoSuggest($tag);
+		echo $tags;exit;
+	}
+
 	public function ajax_list($limit=0)
 	{
 		$post = $this->input->post();

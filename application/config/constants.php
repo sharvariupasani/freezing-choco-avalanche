@@ -49,6 +49,7 @@ define('PRODUCT',	'product');
 define('PURCHASE',	'purchase');
 define('CUSTOMER',	'customer');
 define('SERVICE',	'service');
+define('INVOICE',	'invoice');
 
 define('ADMIN_A',	'admin as a');
 define('USER_U',	'user as u');
@@ -56,6 +57,7 @@ define('CATEGORY_C',	'category as c');
 define('PURCHASE_PP',	'purchase as pp');
 define('PRODUCT_P',	'product as p');
 define('CUSTOMER_CU',	'customer as cu');
+define('INVOICE_I',	'invoice as i');
 
 
 define('FROM_EMAIL', 'nirav.ce.2008@gmail.com');

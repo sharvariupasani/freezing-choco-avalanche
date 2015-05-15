@@ -101,7 +101,7 @@ class Takein extends CI_Controller {
 			$this->form_validation->set_rules('remark', 'Mobile remark', 'trim|required');
 
 			if ($this->form_validation->run() !== false) {
-				$data = array('s_custid' => $post['custid'],
+				$data = array('s_custid' => $post['cust_id'],
 							's_phonename' => $post['phonename'],
 							's_imei' => $post['imei'],
 							's_remark' => $post['remark'],

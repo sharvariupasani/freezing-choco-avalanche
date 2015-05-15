@@ -10,12 +10,6 @@ class Invoice extends CI_Controller {
 	{
 		//pr($this->user_session);
 		$data['view'] = "index";
-		$data['view'] = "print";
-		$data['noheader'] = "1";
-		$data['nosidebar'] = "1";
-		$data['nofooter'] = "1";
-		$data['content_class'] = "invoice";
-		$data['body_class'] = "";
 		$this->load->view('content', $data);
 	}
 
@@ -26,56 +20,78 @@ class Invoice extends CI_Controller {
 		$this->load->view('content', $data);
 	}
 
+	public function printinvoice()
+	{
+		//pr($this->user_session);
+		$data['view'] = "index";
+		$data['view'] = "print";
+		$data['noheader'] = "1";
+		$data['nosidebar'] = "1";
+		$data['nofooter'] = "1";
+		$data['content_class'] = "invoice";
+		$data['body_class'] = "";
+		$this->load->view('content', $data);
+	}
+
 	public function ajax_list($limit=0)
 	{
 		$post = $this->input->post();
 		$columns = array();
 		$columns = array(
-			array( 'db' => 'dd_name', 'dt' => 0 ),
-			array( 'db' => 'dd_description',  'dt' => 1 ),
-			array( 'db' => 'dd_originalprice',  'dt' => 2 ),
-			array( 'db' => 'dd_discount',  'dt' => 3 ),
-			array( 'db' => 'dd_listprice',  'dt' => 4 ),
+			array( 'db' => 'cu.c_fname', 'dt' => 0 ),
+			array( 'db' => 'cu.c_phone',  'dt' => 1 ),
+			array( 'db' => 'i.total',  'dt' => 2 ),
 			array(
-				'db'        => 'dd_startdate',
-				'dt'        => 5,
+				'db'        => 'i.sale_date',
+				'dt'        => 3,
 				'formatter' => function( $d, $row ) {
 					return date( 'jS M y', strtotime($d));
 				}
 			),
-			array(
-				'db'        => 'dd_expiredate',
-				'dt'        => 6,
-				'formatter' => function( $d, $row ) {
-					return date( 'jS M y', strtotime($d));
-				}
-			),
-			array( 'db' => 'dd_status',  'dt' => 7 ),
-			array( 'db' => '(select count(*) from deal_buyout where db_dealid=dd_autoid) as db_buycount',  'dt' => 8 ,'coloumn_name'=>'db_buycount'),
-			array( 'db' => 'dd_autoid',
-					'dt' => 9,
+			array( 'db' => 'i.id',
+					'dt' => 4,
 					'formatter' => function( $d, $row ) {
-						if ($this->user_session['role'] == 'd')
-						return '<i class="fa fa-edit"></i> / <i class="fa fa-trash-o"></i>';
-						else
-						return '<a href="'.site_url('/deal/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_deal('.$d.')" class="fa fa-trash-o"></a>';
+						return '<a href="'.site_url('/invoice/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_invoice('.$d.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);
 
-		$custom_where = array();
-		if($this->user_session['role'] == 'd') {
-			if(!$this->user_session['dealer_info'])
-				$custom_where = array('dd_dealerid'=>0);
-			else
-				$custom_where = array('dd_dealerid'=>$this->user_session['dealer_info']->de_autoid);
-		}
+		$join[] = array(CUSTOMER_CU,"cu.c_id = i.c_id");
 
-		echo json_encode( SSP::simple( $post, DEAL_DETAIL, "dd_autoid", $columns ,array(),$custom_where ));exit;
+		echo json_encode( SSP::simple( $post, INVOICE_I, "i.id", $columns ,$join,$custom_where ));exit;
 	}
 
 	public function add()
 	{
+		$post = $this->input->post();
+		if ($post) {
+			$this->load->library('form_validation');
+
+			$this->form_validation->set_rules('cust_id', 'Customer', 'trim|required');
+			$this->form_validation->set_rules('total', 'Total', 'trim|required');
+
+			if ($this->form_validation->run() !== false) {
+				$data = array(
+							'c_id' => $post['cust_id'],
+							'total' => $post['total']
+							);
+				$ret = $this->common_model->insertData(INVOICE, $data);
+
+				if ($ret > 0) {
+					$flash_arr = array('flash_type' => 'success',
+										'flash_msg' => 'Invoice added successfully.'
+									);
+				}else{
+					$flash_arr = array('flash_type' => 'error',
+										'flash_msg' => 'An error occurred while processing!'
+									);
+
+				}
+				$this->session->set_flashdata($flash_arr);
+				redirect("invoice");
+			}
+			$data['error_msg'] = validation_errors();
+		}
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
 	}
@@ -83,6 +99,40 @@ class Invoice extends CI_Controller {
 	public function edit($id)
 	{	
 		$data['view'] = "add_edit";
+		$where = "id = ".$id;
+		if ($post) {
+			$this->load->library('form_validation');
+
+			$this->form_validation->set_rules('cust_id', 'Customer', 'trim|required');
+			$this->form_validation->set_rules('total', 'Total', 'trim|required');
+
+			if ($this->form_validation->run() !== false) {
+				$data = array('c_id' => $post['cust_id'],
+							'total' => $post['total'],
+							);
+				$ret = $this->common_model->updateData(INVOICE, $data,$where);
+
+				if ($ret > 0) {
+					$flash_arr = array('flash_type' => 'success',
+										'flash_msg' => 'Invoice added successfully.'
+									);
+				}else{
+					$flash_arr = array('flash_type' => 'error',
+										'flash_msg' => 'An error occurred while processing!'
+									);
+
+				}
+				$this->session->set_flashdata($flash_arr);
+				redirect("invoice");
+			}
+			$data['error_msg'] = validation_errors();
+		}
+
+		$data['invoice'] = $invoice= $this->common_model->selectData(INVOICE, '*',$where);
+		$data['customer'] = $this->common_model->customerTitleById($invoice[0]->c_id);
+		if (empty($invoice)) {
+			redirect('invoice');
+		}
 		$this->load->view('content', $data);
 	}
 

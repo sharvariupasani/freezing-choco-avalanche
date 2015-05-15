@@ -189,6 +189,22 @@ class common_model extends CI_Model{
 		return ($resCust);
 	}
 
+	public function getProductAutoSuggest($tag)
+	{
+		$this->db->select('id,name,stock_onhand,price,brand');
+		$this->db->from(PRODUCT);
+		$this->db->like('name', $tag, 'after');
+		$this->db->or_like('brand', $tag, 'after');
+		$query = $this->db->get();
+		$products = $query->result_array();
+		$resPro = array();
+		foreach($products as $product)
+			$resPro[] = '{"p_id":"'.$product['id'].'","label":"' . $product['name']."-".$product['brand']."(".$product['stock_onhand'].")" . '","value":"' . $product['name']."-".$product['brand']. '","price":"'.$product['price'].'","qty":"'.$product['stock_onhand'].'"}';
+
+		$resPro = '['.implode(",",$resPro).']';
+		return ($resPro);
+	}
+
 	public function getmyfav()
 	{
 		$session = $this->session->userdata('front_session');
