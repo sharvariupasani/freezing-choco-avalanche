@@ -62,7 +62,7 @@ $(document).ready(function() {
 		$(this).closest('.'+type+'_div').remove();
 	});
 	
-	$("#sale_date").datepicker({format: 'MM/DD/YYYY'});
+	$("#sale_date").datepicker({format: 'mm/dd/yyyy'});
 
 	$("#save").on("click",function(){
 		$("form").submit();
