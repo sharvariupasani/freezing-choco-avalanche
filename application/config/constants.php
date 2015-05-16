@@ -50,6 +50,7 @@ define('PURCHASE',	'purchase');
 define('CUSTOMER',	'customer');
 define('SERVICE',	'service');
 define('INVOICE',	'invoice');
+define('ORDER',	'order');
 
 define('ADMIN_A',	'admin as a');
 define('USER_U',	'user as u');

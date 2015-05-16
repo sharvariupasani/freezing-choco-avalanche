@@ -53,16 +53,17 @@
 									<div class="col-xs-7 form-group">
 										<label>Product:</label>
 										<input type="text" placeholder="Search product" id="p_name" class="product form-control" value="" >
+										<input type="hidden" id="p_id" value="" name='product[0][p_id]'>
 									</div>
 
 									<div class="col-xs-2 form-group">
 										<label>Qty:</label>
-										<input type="text" placeholder="Enter ..." id="p_qty" class="form-control"  value="" >
+										<input type="text" placeholder="Enter ..." id="p_qty" class="form-control"  value="" name='product[0][p_qty]'>
 									</div>
 
 									<div class="col-xs-2 form-group">
 										<label>Price:</label>
-										<input type="text" placeholder="Enter ..." id="p_price" class="form-control" value="" >
+										<input type="text" placeholder="Enter ..." id="p_price" class="form-control" value="" name='product[0][p_price]'>
 									</div>
 
 									<div class="col-xs-1 form-group">
@@ -85,12 +86,12 @@
 								<div class="row">
 									<div class="col-xs-9 form-group">
 										<label>Service:</label>
-										<input type="text" placeholder="Service detail" id="s_name" class="product form-control" value="" >
+										<input type="text" placeholder="Service detail" id="s_name" class="service form-control" value="" name='service[0][s_name]' >
 									</div>
 
 									<div class="col-xs-2 form-group">
 										<label>Price:</label>
-										<input type="text" placeholder="Rate" id="s_price" class="form-control" value="" >
+										<input type="text" placeholder="Rate" id="s_price" class="form-control" value="" name='service[0][s_price]'>
 									</div>
 
 									<div class="col-xs-1 form-group">
@@ -114,14 +115,32 @@
 					</div>
 					<div class="box-body">
 						<div class="form-group">
-							<label>Total:</label>
-							<input type="text" placeholder="" class="form-control validate[required]" name="total" id="total" value="<?=@$invoice[0]->total?>" >
+							<label>Date </label>
+							<input type='text' name='sale_date' id="sale_date" class='form-control validate[required]'/>
+						</div>
+						<div class="form-group" id='summery'>
+							<table class="table">
+								<tbody>
+									<tr>
+										<th style="width:50%">Subtotal:</th>
+										<td><span>&#8377;</span><span id="subtotal">0</span></td>
+									</tr>
+									<tr>
+										<th>Tax (9.3%)</th>
+										<td><span>&#8377;</span><span id="tax">0</span></td>
+									</tr>
+									<tr>
+										<th>Total:</th>
+										<td><span>&#8377;</span><span id="total">0</span></td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 					<div class='box-footer'>
 						<div class="form-group">
-							<button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>
-							<button class="btn btn-primary btn-flat" type="submit" id="submit">Print</button>
+							<button class="btn btn-primary btn-flat" type="submit" id="save">Save</button>
+							<button class="btn btn-primary btn-flat" type="submit" id="print">Print</button>
 						</div>
 					</div>
 				</div>

@@ -148,30 +148,6 @@ class common_model extends CI_Model{
 		return ($purchase);
 	}
 
-	public function getDealTags($dd_autoid)
-	{
-		$this->db->select("dt_autoid,dt_tag");
-		$this->db->from(DEAL_TAGS);
-		$this->db->join(DEAL_MAP_TAGS, "dm_dtid = dt_autoid");
-		$this->db->where(array("dm_ddid"=>$dd_autoid));
-
-		$query = $this->db->get();
-		$tags = $query->result_array();
-		$query->free_result();
-		return ($tags);
-	}
-
-	public function assingImagesToDeal($deal_id,$image_ids)
-	{
-		$this->db->where_in('dl_autoid',$image_ids);
-		$data = array("dl_ddid"=>$deal_id);
-		if($this->db->update(DEAL_LINKS, $data)){
-			return 1;
-		}else{
-			return 0;
-		}
-	}
-
 	public function getCustAutoSuggest($tag)
 	{
 		$this->db->select('c_id,c_fname,c_lname,c_phone');
@@ -205,208 +181,6 @@ class common_model extends CI_Model{
 		return ($resPro);
 	}
 
-	public function getmyfav()
-	{
-		$session = $this->session->userdata('front_session');
-		$user_id = $session['id'];
-
-		$this->db->select("SQL_CALC_FOUND_ROWS dd_autoid", FALSE);
-		$this->db->select('deal_detail.*,(select dl_url from deal_links where dl_autoid = dd_mainphoto and dl_type="img") as `dd_photourl`');
-		$this->db->from(DEAL_DETAIL);
-		$this->db->join(DEAL_FAV, 'db_dealid = dd_autoid', 'left');
-
-		$this->db->where('dd_status',"published");
-		$this->db->where("dd_startdate <= now()");
-		$this->db->where("dd_expiredate >= now()");
-		$this->db->where(array("df_userid"=>$user_id));
-
-		$query = $this->db->get();
-		$resDeals = $query->result_array();
-
-		$query = $this->db->query('SELECT FOUND_ROWS() AS `Count`');
-		$totalRecordsCount = $query->row()->Count;
-
-		$deals = array();
-		foreach ($resDeals as $deal)
-		{
-			$rec = array();
-			$rec['id'] = $deal['dd_autoid'];
-			$rec['name'] = $deal['dd_name'];
-			$rec['description'] = $deal['dd_description'];
-			$rec['dd_discount'] = $deal['dd_discount'];
-			$rec['dd_originalprice'] = $deal['dd_originalprice'];
-			$rec['dd_listprice'] = $deal['dd_listprice'];
-			$rec['photo'] = base_url()."uploads/".$deal['dd_photourl'];
-			$rec['url'] = base_url()."deals/detail/".$deal['dd_autoid']."/".replace_char($deal['dd_name']);
-			$rec['is_fav'] = 1;
-			$deals[] = $rec;
-		}
-		return (json_encode($deals));
-
-	}
-
-	public function searchDeals($tags,$catid="",$page = 1,$limit = 15,$or=false)
-	{
-		$tags = array_filter(explode(",",$tags));
-
-		$this->db->select("SQL_CALC_FOUND_ROWS dd_autoid", FALSE);
-		$this->db->select('deal_detail.*,(select dl_url from deal_links where dl_autoid = dd_mainphoto and dl_type="img") as `dd_photourl`');
-		$this->db->from(DEAL_DETAIL);
-
-		if (count ($tags) > 0)
-		{
-			$this->db->join(DEAL_MAP_TAGS, 'dd_autoid = dm_ddid', 'left');
-			$this->db->join(DEAL_TAGS, 'dm_dtid = dt_autoid', 'left');
-			$this->db->where_in('dt_tag',$tags);
-			$this->db->group_by('dd_autoid');
-
-			if(!$or)
-				$this->db->having("COUNT(DISTINCT dm_dtid) = ".count($tags));
-		}
-
-		$this->db->where('dd_status',"published");
-		//$this->db->where('dd_originalprice != 0');
-		$this->db->where("dd_startdate <= now()");
-		$this->db->where("dd_expiredate >= now()");
-
-		if ($catid != "")
-			$this->db->where('dd_catid',$catid);
-
-		$start = ($page == 1)?0:$page*$limit;
-		$this->db->limit($limit, $start);
-
-		$query = $this->db->get();
-		$resDeals = $query->result_array();
-
-		$query = $this->db->query('SELECT FOUND_ROWS() AS `Count`');
-		$totalRecordsCount = $query->row()->Count;
-
-		$deals = array();
-		$deals['totalRecordsCount'] = $totalRecordsCount;
-
-		$session = $this->session->userdata('front_session');
-		$favdata = array();
-		$favdata['df_userid'] = $session['id'];
-		$favArray = array();
-		if (isset($session['id']) && $session['id'] !="")
-		{
-			$favData = $this->selectData(DEAL_FAV,"db_dealid", $favdata);
-			foreach ($favData as $fav)
-				$favArray[] = $fav->db_dealid;
-		}
-
-		foreach ($resDeals as $deal)
-		{
-			$rec = array();
-			$rec['id'] = $deal['dd_autoid'];
-			$rec['name'] = $deal['dd_name'];
-			$rec['description'] = $deal['dd_description'];
-			$rec['dd_discount'] = $deal['dd_discount'];
-			$rec['dd_originalprice'] = $deal['dd_originalprice'];
-			$rec['dd_listprice'] = $deal['dd_listprice'];
-			$rec['photo'] = base_url()."uploads/".$deal['dd_photourl'];
-			$rec['url'] = base_url()."deals/detail/".$deal['dd_autoid']."/".replace_char($deal['dd_name']);
-			$rec['is_fav'] = in_array($deal['dd_autoid'],$favArray);
-			$deals[] = $rec;
-		}
-		return (json_encode($deals));
-	}
-
-	public function getDealDetail($id,$offerid="")
-	{
-			$data = array();
-			$this->db->select("*");
-			$this->db->from(DEAL_DETAIL);
-			$this->db->join(DEAL_DEALER, 'de_autoid = dd_dealerid', 'left');
-			$this->db->where('dd_status',"published");
-			$this->db->where("dd_startdate <= now()");
-			$this->db->where("dd_expiredate >= now()");
-			$this->db->where('dd_autoid',$id);
-			$query = $this->db->get();
-			$data['detail'] = $query->result_array();
-
-			if (count($data['detail']) <= 0) {
-				redirect("welcome");
-			}
-
-			$this->db->select("*");
-			$this->db->from(DEAL_LINKS);
-			$this->db->where('dl_ddid',$id);
-			$this->db->order_by("dl_order","ASC");
-			$query = $this->db->get();
-			$data['links'] = $query->result_array();
-
-			$this->db->select("COUNT(*) as `count`");
-			$this->db->from(DEAL_BUYOUT);
-			$this->db->where('db_dealid',$id);
-			$query = $this->db->get();
-			$res = $query->result_array();
-			$data['buycount'] = $res[0]['count'];
-
-			$this->db->select("*");
-			$this->db->from(DEAL_TAGS);
-			$this->db->join(DEAL_MAP_TAGS, 'dm_dtid = dt_autoid', 'left');
-			$this->db->where('dm_ddid',$id);
-			$query = $this->db->get();
-			$data['tags'] = $query->result_array();
-
-			$session = $this->session->userdata('front_session');
-			$data['is_fav'] = 0;
-			if (isset($session['id']) && $session['id'] !="")
-			{
-				$favdata = array();
-				$favdata['df_userid'] = $session['id'];
-				$favdata['db_dealid'] = $id;
-				$data['is_fav'] = $this->selectData(DEAL_FAV,"*", $favdata,"","","","","","rowcount");
-			}
-			if ($offerid != "")
-			{
-				$offer = $this->common_model->selectData(DEAL_OFFER, '*',array("do_ddid"=>$id,"do_autoid"=>$offerid));
-				$data['offers'] = $offer[0];
-			}
-			else
-				$data['offers'] = $this->common_model->selectData(DEAL_OFFER, '*',array("do_ddid"=>$id));
-
-			$catdata =array();
-			$catdata["dc_catid"] = $data['detail'][0]['dd_catid'];
-			$category = $this->selectData(DEAL_CATEGORY, '*',$catdata);
-			$data['category'] = $category[0];
-			return $data;
-	}
-
-	public function getmydeals()
-	{
-		$session = $this->session->userdata('front_session');
-		$user_id = $session['id'];
-
-		$this->db->select("*");
-		$this->db->from(DEAL_BUYOUT);
-		$this->db->join(DEAL_DETAIL, 'db_dealid = dd_autoid', 'left');
-		$this->db->join(DEAL_OFFER, 'do_autoid = db_offerid', 'left');
-		$this->db->join(DEAL_DEALER, 'de_autoid = dd_dealerid', 'left');
-		$this->db->where("db_uid",$user_id);
-		$this->db->order_by("db_date","desc");
-		$query = $this->db->get();
-
-		$myoffers = $query->result_array();
-		return $myoffers;
-	}
-
-	function setImageOrder($imglist,$dealid)
-	{
-		$imglist = json_decode($imglist,1);
-		foreach($imglist as $imgdata)
-		{
-			$where = array();
-			$where['dl_autoid'] = $imgdata['dl_autoid'];
-			$where['dl_ddid'] = $dealid;
-
-			$data = array();
-			$data['dl_order'] = $imgdata['dl_order'];
-			$this->common_model->updateData(DEAL_LINKS, $data, $where);
-		}
-	}
-
 	public function customerTitleById($id)
 	{
 			$db = $this->db;
@@ -419,22 +193,39 @@ class common_model extends CI_Model{
 			return $customer[0];
 	}
 
-	public function getDealDetailPrint($dealbuyout_id)
+	public function updateProductQty($id,$qty,$minus = false)
 	{
-		$this->db->select("*");
-		$this->db->from(DEAL_BUYOUT);
-		$this->db->join(DEAL_DETAIL, 'db_dealid = dd_autoid', 'left');
-		$this->db->join(DEAL_OFFER, 'db_offerid = do_autoid', 'left');
-		$this->db->join(DEAL_DEALER, 'dd_dealerid = de_autoid', 'left');
-		$this->db->join(DEAL_LINKS, 'db_dealid = dl_ddid', 'left');
-		$this->db->where('db_autoid',$dealbuyout_id);
-		$this->db->limit(1);
-		$query = $this->db->get();
+		$ret = $this->selectData(PRODUCT,"stock_onhand",array("id"=>$id));
+		$stock_onhand = $ret[0]->stock_onhand;
+		
+		if ($minus)
+		$qty = (-1 * $qty);
 
-		$data = $query->result();
-		$query->free_result();
+		$stock_onhand = $stock_onhand + $qty;
+		
+		$data = array("stock_onhand"=>$stock_onhand);
+		$ret = $this->updateData(PRODUCT,$data,array("id"=>$id));
+	}
 
-		return $data;
+	public function addProductToOrder($product,$invoice)
+	{
+		$data = array("p_id"=>$product["p_id"],
+								   "order_type"=>"product",
+								   "quantity"=>$product["p_qty"],
+								   "net_price"=>$product["p_price"],
+								   "in_id"=>$invoice);
+		$result = $this->db->insert(ORDER, $data);
+
+		$this->updateProductQty($product["p_id"],$product["p_qty"],true);
+	}
+
+	public function addServiceToOrder($service,$invoice)
+	{
+		$data = array("service_name"=>"s_name",
+									"order_type"=>"service",
+								   "net_price"=>$product["s_price"],
+								   "in_id"=>$invoice);
+		$result = $this->db->insert(ORDER, $data);
 	}
 
 }
