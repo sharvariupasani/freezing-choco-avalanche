@@ -11,6 +11,11 @@ $(document).ready(function(){
 					return true;
 				},
 				minLength: 1,
+				change: function (event, ui) {
+					if (ui.item == null || ui.item == undefined) {
+						$("input#customer").val("");
+					}
+				}
 			});
 		}
 		else

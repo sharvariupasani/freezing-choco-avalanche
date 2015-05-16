@@ -4069,3 +4069,7 @@ Gradient Background colors
 	position: relative;
     z-index: 1;
 }
+
+.form-del{
+	padding:5px 10px 5px 10px;
+}

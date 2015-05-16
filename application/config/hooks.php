@@ -10,7 +10,13 @@
 |
 */
 
-
+$hook['post_controller'] = array(
+        'class' => 'UserAccessManager',
+        'function' => 'checkUserAccess',
+        'filename' => 'UserAccess.php',
+        'filepath' => 'hooks',
+        'params'   => array()
+);
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */

@@ -3,14 +3,7 @@ class Product extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-
-		is_login();
-
 		$this->user_session = $this->session->userdata('user_session');
-
-		if (!@in_array("deal", @array_keys(config_item('user_role')[$this->user_session['role']])) && $this->user_session['role'] != 'a') {
-			redirect("dashboard");
-		}
 	}
 
 	public function index()
@@ -18,6 +11,15 @@ class Product extends CI_Controller {
 		#pr($this->user_session);
 		$data['view'] = "index";
 		$this->load->view('content', $data);
+	}
+
+	public function autocomplete()
+	{
+		$get = $this->input->get();
+		if (!isset($get["term"])) exit;
+		$tag = $get["term"];
+		$tags = $this->common_model->getProductAutoSuggest($tag);
+		echo $tags;exit;
 	}
 
 	public function ajax_list($limit=0)

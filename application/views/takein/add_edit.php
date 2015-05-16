@@ -34,22 +34,23 @@
 	
 					<div class="form-group">
                         <label>Customer:</label>
-                        <input type="text" placeholder="Search using mobile" class="form-control validate[required]" name="customer" id="customer" value="<?=@$takein[0]->brand?>" >
+                        <input type="text" placeholder="Search using mobile" class="form-control validate[required]" name="customer" id="customer" value="<?=@$customer->customer?>" >
+                        <input type="hidden" name="cust_id" id="cust_id" value="<?=@$customer->c_id?>" >
                     </div>
 					
 					<div class="form-group">
                         <label>Mobile Info:</label>
-                        <input type="text" placeholder=" E.g., D335" class="form-control validate[required]" name="phonename" id="phonename" value="<?=@$takein[0]->s_phonename?>" >
+                        <input type="text" placeholder=" E.g., Nokia 3315" class="form-control validate[required]" name="phonename" id="phonename" value="<?=@$takein[0]->s_phonename?>" >
                     </div>
 
 					<div class="form-group">
                         <label>IMEI:</label>
-                        <input type="text" placeholder=" Mobile IMEI" class="form-control validate[required]" name="imei" id="imei" value="<?=@$takein[0]->s_imei?>" >
+                        <input type="text" placeholder="Mobile IMEI 15 digit" class="form-control validate[required,minSize[15],maxSize[15]]" name="imei" id="imei" value="<?=@$takein[0]->s_imei?>" >
                     </div>
 					
 					<div class="form-group">
                         <label>Remark:</label>
-                         <textarea type="text" placeholder="Eg., Color, Size" class="form-control validate[required]" name="remark" id="remark"><?=@$takein[0]->s_remark?></textarea>
+                         <textarea type="text" placeholder="Eg.,Damage note" class="form-control validate[required]" name="remark" id="remark"><?=@$takein[0]->s_remark?></textarea>
                     </div>
 					
                     <div class="form-group">

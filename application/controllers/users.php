@@ -4,14 +4,7 @@ class Users extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-
-		is_login();
-
 		$this->user_session = $this->session->userdata('user_session');
-
-		if (!@in_array("users", @array_keys(config_item('user_role')[$this->user_session['role']])) && $this->user_session['role'] != 'a') {
-			redirect("dashboard");
-		}
 	}
 
 	public function index()
@@ -188,14 +181,7 @@ class Users extends CI_Controller {
 		$data['user'] = $user = $this->common_model->selectData(USER, '*', $where);
 
 		if ($user[0]->role == "d"){
-			$db = $this->common_model->db;
-			$db->select('CONCAT(c_fname," ",c_lname,"(",c_phone,")") as customer,c_id',false);
-			$db->from(CUSTOMER);
-			$db->where(array("c_id"=>$user[0]->cust_id));
-			$query = $db->get();
-			$customer = $query->result();
-			$query->free_result();
-			$data['customer'] = $customer[0];
+			$data['customer'] = $this->common_model->customerTitleById($user[0]->cust_id);
 		}
 
 		if (empty($user)) {

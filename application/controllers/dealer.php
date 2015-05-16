@@ -3,14 +3,7 @@ class Dealer extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-
-		is_login();
-
 		$this->user_session = $this->session->userdata('user_session');
-
-		if (!@in_array("dealer", @array_keys(config_item('user_role')[$this->user_session['role']])) && $this->user_session['role'] != 'a') {
-			redirect("dashboard");
-		}
 	}
 
 	public function index()

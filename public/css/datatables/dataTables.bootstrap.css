@@ -221,3 +221,6 @@ div.DTFC_LeftFootWrapper table {
     border-top: none;
 }
 
+.dataTables_processing{
+	text-align:center;
+}
