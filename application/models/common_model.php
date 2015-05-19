@@ -193,6 +193,29 @@ class common_model extends CI_Model{
 			return $customer[0];
 	}
 
+	public function productDetailByInvoiceId($id)
+	{
+			$db = $this->db;
+			$db->select('o.id,o.p_id,CONCAT(p.name,"-",p.brand) as title,p.stock_onhand,o.quantity,p.price,o.net_price',false);
+			$db->from(ORDER_O);
+			$this->db->join(PRODUCT_P, "p.id = o.p_id");
+			$db->where(array("o.order_type"=>"product","in_id"=>$id));
+			$query = $db->get();
+			$products = $query->result();
+			return $products;
+	}
+
+	public function serviceDetailByInvoiceId($id)
+	{
+			$db = $this->db;
+			$db->select('o.id,o.service_name,o.net_price',false);
+			$db->from(ORDER_O);
+			$db->where(array("o.order_type"=>"service","in_id"=>$id));
+			$query = $db->get();
+			$services = $query->result();
+			return $services;
+	}
+
 	public function updateProductQty($id,$qty,$minus = false)
 	{
 		$ret = $this->selectData(PRODUCT,"stock_onhand",array("id"=>$id));
@@ -221,11 +244,19 @@ class common_model extends CI_Model{
 
 	public function addServiceToOrder($service,$invoice)
 	{
-		$data = array("service_name"=>"s_name",
+		$data = array("service_name"=>$service["s_name"],
 									"order_type"=>"service",
-								   "net_price"=>$product["s_price"],
+								   "net_price"=>$service["s_price"],
 								   "in_id"=>$invoice);
 		$result = $this->db->insert(ORDER, $data);
+	}
+
+	public function updateServiceToOrder($service)
+	{
+		$data = array("service_name"=>$service["s_name"],
+								   "net_price"=>$service["s_price"]);
+
+		$result = $this->updateData(ORDER,$data,array("id"=>$service["s_oid"]));
 	}
 
 }
