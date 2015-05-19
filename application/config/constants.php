@@ -59,6 +59,7 @@ define('PURCHASE_PP',	'purchase as pp');
 define('PRODUCT_P',	'product as p');
 define('CUSTOMER_CU',	'customer as cu');
 define('INVOICE_I',	'invoice as i');
+define('ORDER_O',	'order as o');
 
 
 define('FROM_EMAIL', 'nirav.ce.2008@gmail.com');

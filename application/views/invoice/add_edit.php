@@ -28,8 +28,8 @@
 			?>
 		</div>
 		<div class='col-md-12'>
+		<form role="form" action="" method="post" id='invoice_form' name='product_form' enctype="multipart/form-data">
     	<div class="col-md-8">
-			<form role="form" action="" method="post" id='takein_form' name='product_form' enctype="multipart/form-data">
 				<div class='box box-solid'>
 				<div class='box-header'>
 						<h3 class='box-title'>Customer</h3>
@@ -48,22 +48,25 @@
 							<h3 class='box-title'>Add Product</h3>
 						</div>
 						<div class='box-body'>
+							<?php $i=0; do{ $product = @$products[$i];?>
 							<div class='product_div'>
 								<div class="row">
 									<div class="col-xs-7 form-group">
 										<label>Product:</label>
-										<input type="text" placeholder="Search product" id="p_name" class="product form-control" value="" >
-										<input type="hidden" id="p_id" value="" name='product[0][p_id]'>
+										<input type="text" placeholder="Search product" id="p_name" class="product form-control" value="<?=@$product->title?>" >
+										<input type="hidden" id="p_id" value="<?=@$product->p_id?>" name='product[0][p_id]'>
+										<input type="hidden" id="p_oid" value="<?=@$product->id?>" name='product[0][p_oid]'>
 									</div>
 
 									<div class="col-xs-2 form-group">
 										<label>Qty:</label>
-										<input type="text" placeholder="Enter ..." id="p_qty" class="form-control"  value="" name='product[0][p_qty]'>
+										<input type="text" placeholder="Enter ..." id="p_qty" class="form-control" data-price="<?=@$product->price?>"  
+										data-qty="<?=@$product->stock_onhand?>"value="<?=@$product->quantity?>" name='product[0][p_qty]'>
 									</div>
 
 									<div class="col-xs-2 form-group">
 										<label>Price:</label>
-										<input type="text" placeholder="Enter ..." id="p_price" class="form-control" value="" name='product[0][p_price]'>
+										<input type="text" placeholder="Enter ..." id="p_price" class="form-control" value="<?=@$product->net_price?>" name='product[0][p_price]'>
 									</div>
 
 									<div class="col-xs-1 form-group">
@@ -72,6 +75,7 @@
 									</div>
 								</div>
 							</div>
+							<?php $i++; }while(count(@$products)>$i)?>
 						</div>
 						<div class='box-footer clearfix'>
 							<button class="btn btn-default pull-right addproduct"><i class="fa fa-plus"></i>Add Another Product</button>
@@ -82,16 +86,18 @@
 							<h3 class='box-title'>Add Service</h3>
 						</div>
 						<div class='box-body'>
+							<?php $i=0; do{ $service = @$services[$i];?>
 							<div class='service_div'>
 								<div class="row">
 									<div class="col-xs-9 form-group">
 										<label>Service:</label>
-										<input type="text" placeholder="Service detail" id="s_name" class="service form-control" value="" name='service[0][s_name]' >
+										<input type="text" placeholder="Service detail" id="s_name" class="service form-control" value="<?=@$service->service_name?>" name='service[0][s_name]' >
+										<input type="hidden" id="s_oid" value="<?=@$service->id?>" name='service[0][s_oid]'>
 									</div>
 
 									<div class="col-xs-2 form-group">
 										<label>Price:</label>
-										<input type="text" placeholder="Rate" id="s_price" class="form-control" value="" name='service[0][s_price]'>
+										<input type="text" placeholder="Rate" id="s_price" class="form-control" value="<?=@$service->net_price?>" name='service[0][s_price]'>
 									</div>
 
 									<div class="col-xs-1 form-group">
@@ -100,12 +106,12 @@
 									</div>
 								</div>
 							</div>
+							<?php $i++; }while(count(@$services)>$i)?>
 						</div>
 						<div class='box-footer clearfix'>
 							<button class="btn btn-default pull-right addproduct"><i class="fa fa-plus"></i>Add Another Service</button>
 						</div>
 					</div>
-			</form>
     	</div>
 
 		<div class="col-md-4">
@@ -116,7 +122,7 @@
 					<div class="box-body">
 						<div class="form-group">
 							<label>Date </label>
-							<input type='text' name='sale_date' id="sale_date" class='form-control validate[required]'/>
+							<input type='text' name='sale_date' id="sale_date" class='form-control validate[required]' value="<?=(@$invoice[0]->sale_date != "")?date('m/d/Y', strtotime(@$invoice[0]->sale_date)):"" ?>"/>
 						</div>
 						<div class="form-group" id='summery'>
 							<table class="table">
@@ -145,6 +151,7 @@
 					</div>
 				</div>
 			</div>
+			</form>
 			</div>
     </div>
 </section>

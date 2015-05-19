@@ -93,7 +93,7 @@ class Invoice extends CI_Controller {
 							'c_id' => $post['cust_id'],
 							'amount' => $amount,
 							'total' => $total,
-							'sale_date' => date('Y-m-d', strtotime($sale_date));
+							'sale_date' => date('Y-m-d', strtotime($sale_date))
 							);
 				$ret = $this->common_model->insertData(INVOICE, $data);
 
@@ -136,21 +136,68 @@ class Invoice extends CI_Controller {
 
 	public function edit($id)
 	{	
+		$post = $this->input->post();
 		$data['view'] = "add_edit";
 		$where = "id = ".$id;
 		if ($post) {
 			$this->load->library('form_validation');
 
 			$this->form_validation->set_rules('cust_id', 'Customer', 'trim|required');
-			$this->form_validation->set_rules('total', 'Total', 'trim|required');
+			$this->form_validation->set_rules('sale_date', 'Date', 'trim|required');
 
 			if ($this->form_validation->run() !== false) {
-				$data = array('c_id' => $post['cust_id'],
-							'total' => $post['total'],
+				$products = $post["product"];
+				$services = $post["service"];
+				$sale_date = $post["sale_date"];
+				$total = 0;
+				$amount = 0;
+				$taxRate = 9.3;
+				
+				foreach ($products as $product)
+				{
+					$amount += $product["p_price"];
+				}
+				foreach ($services as $service)
+				{
+					$amount += $service["s_price"];
+				}
+				$tax = $amount * 9.3/100;
+				$total = $amount + $tax;
+
+				$data = array(
+							'c_id' => $post['cust_id'],
+							'amount' => $amount,
+							'total' => $total,
+							'sale_date' => date('Y-m-d', strtotime($sale_date))
 							);
 				$ret = $this->common_model->updateData(INVOICE, $data,$where);
 
 				if ($ret > 0) {
+					// add entry of product in order table
+					if ($products > 0)
+					{
+							foreach ($products as $product)
+							{
+									if(isset($product['p_oid']) && $product['p_oid'] != "")
+										$this->common_model->updateProductToOrder($product);
+									else
+										$this->common_model->addProductToOrder($product,$id);
+							}
+					}
+					
+					// add service to product table.
+					if ($services > 0)
+					{
+							foreach ($services as $service)
+							{
+									if(isset($service['s_oid']) && $service['s_oid'] != "")
+										$this->common_model->updateServiceToOrder($service);
+									else
+										$this->common_model->addServiceToOrder($service,$id);
+							}
+					}
+
+
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Invoice added successfully.'
 									);
@@ -168,6 +215,9 @@ class Invoice extends CI_Controller {
 
 		$data['invoice'] = $invoice= $this->common_model->selectData(INVOICE, '*',$where);
 		$data['customer'] = $this->common_model->customerTitleById($invoice[0]->c_id);
+		$data['products'] = $this->common_model->productDetailByInvoiceId($invoice[0]->id);
+		$data['services'] = $this->common_model->serviceDetailByInvoiceId($invoice[0]->id);
+		
 		if (empty($invoice)) {
 			redirect('invoice');
 		}
@@ -176,15 +226,10 @@ class Invoice extends CI_Controller {
 
 	public function delete()
 	{
-		if (!@in_array("delete", @config_item('user_role')[$this->user_session['role']]['deal']) && $this->user_session['role'] != 'a') {
-			echo "redirect";
-			exit;
-		}
-
 		$post = $this->input->post();
 
 		if ($post) {
-			$ret = $this->common_model->deleteData(DEAL_DETAIL, array('dd_autoid' => $post['id'] ));
+			$ret = $this->common_model->deleteData(INVOICE, array('id' => $post['id'] ));
 			if ($ret > 0) {
 				echo "success";
 				#echo success_msg_box('Deal deleted successfully.');;

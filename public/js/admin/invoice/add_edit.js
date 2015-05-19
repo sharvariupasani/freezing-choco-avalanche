@@ -61,12 +61,18 @@ $(document).ready(function() {
 		}
 		$(this).closest('.'+type+'_div').remove();
 	});
-	
-	$("#sale_date").datepicker({format: 'mm/dd/yyyy'});
+
+	var datepicker = $.fn.datepicker.noConflict();
+    $.fn.btdatepicker = datepicker;  
+	$("#sale_date").btdatepicker({format: 'mm/dd/yyyy'});
+	if ($('#sale_date').val() == "")
+		$('#sale_date').btdatepicker('update', Date());
 
 	$("#save").on("click",function(){
 		$("form").submit();
 	});
+
+	updateTotal();
 });
 
 function productAutocomp(obj){
@@ -76,6 +82,7 @@ function productAutocomp(obj){
 				$row = $(event.target).closest(".row");
 				$row.find("#p_qty").val(1);
 				$row.find("#p_qty").data("price",ui.item.price);
+				$row.find("#p_qty").data("qty",ui.item.qty);
 				$row.find("#p_price").val(ui.item.price);
 				$row.find("#p_id").val(ui.item.p_id);
 				updateTotal();
@@ -95,6 +102,12 @@ function productPriceTracking(obj)
 	$(obj).on("keyup",function(e){
 		var row = $(this).closest(".row");
 		var qty = $(this).val();
+		var stock_onhand  = $(this).data('qty');
+		if (stock_onhand < qty)
+		{
+			alert("Only "+stock_onhand+" qty available.");
+			return false;
+		}
 		var price = qty * $(this).data('price');
 		row.find("#p_price").val(price);
 		updateTotal();
