@@ -149,6 +149,7 @@ class Invoice extends CI_Controller {
 				$products = $post["product"];
 				$services = $post["service"];
 				$sale_date = $post["sale_date"];
+				
 				$total = 0;
 				$amount = 0;
 				$taxRate = 9.3;
@@ -161,9 +162,11 @@ class Invoice extends CI_Controller {
 				{
 					$amount += $service["s_price"];
 				}
-				$tax = $amount * 9.3/100;
+				
+				$tax = ($amount * 9.3)/100;
+				
 				$total = $amount + $tax;
-
+				
 				$data = array(
 							'c_id' => $post['cust_id'],
 							'amount' => $amount,
@@ -178,9 +181,7 @@ class Invoice extends CI_Controller {
 					{
 							foreach ($products as $product)
 							{
-									if(isset($product['p_oid']) && $product['p_oid'] != "")
-										$this->common_model->updateProductToOrder($product);
-									else
+									if(isset($product['p_oid']) && $product['p_oid'] == "")
 										$this->common_model->addProductToOrder($product,$id);
 							}
 					}
@@ -199,7 +200,7 @@ class Invoice extends CI_Controller {
 
 
 					$flash_arr = array('flash_type' => 'success',
-										'flash_msg' => 'Invoice added successfully.'
+										'flash_msg' => 'Bill updated successfully.'
 									);
 				}else{
 					$flash_arr = array('flash_type' => 'error',
@@ -230,6 +231,29 @@ class Invoice extends CI_Controller {
 
 		if ($post) {
 			$ret = $this->common_model->deleteData(INVOICE, array('id' => $post['id'] ));
+			if ($ret > 0) {
+				echo "success";
+				#echo success_msg_box('Deal deleted successfully.');;
+			}else{
+				echo "error";
+				#echo error_msg_box('An error occurred while processing.');
+			}
+		}
+	}
+
+	public function deleteOrder()
+	{
+		$post = $this->input->post();
+
+		if ($post) {
+			$data = $this->common_model->selectData(ORDER, array('id' => $post['id'] ));
+
+			if ($data[0]->order_type == 'product')
+			{
+				$qty = $this->common_model->updateProductQty($data[0]->p_id,$data[0]->quantity);
+			}
+
+			$ret = $this->common_model->deleteData(ORDER, array('id' => $post['id'] ));
 			if ($ret > 0) {
 				echo "success";
 				#echo success_msg_box('Deal deleted successfully.');;

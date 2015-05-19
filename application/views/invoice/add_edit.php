@@ -48,25 +48,27 @@
 							<h3 class='box-title'>Add Product</h3>
 						</div>
 						<div class='box-body'>
-							<?php $i=0; do{ $product = @$products[$i];?>
+							<?php $i=0; do{ $product = @$products[$i];
+							$disable = (@$product->p_id != "")?"disabled":"";
+							?>
 							<div class='product_div'>
 								<div class="row">
 									<div class="col-xs-7 form-group">
 										<label>Product:</label>
-										<input type="text" placeholder="Search product" id="p_name" class="product form-control" value="<?=@$product->title?>" >
-										<input type="hidden" id="p_id" value="<?=@$product->p_id?>" name='product[0][p_id]'>
-										<input type="hidden" id="p_oid" value="<?=@$product->id?>" name='product[0][p_oid]'>
+										<input type="text" placeholder="Search product" id="p_name" class="product form-control" <?=$disable?> value="<?=@$product->title?>" >
+										<input type="hidden" id="p_id" value="<?=@$product->p_id?>" name='product[<?=$i?>][p_id]'>
+										<input type="hidden" id="p_oid" value="<?=@$product->id?>" name='product[<?=$i?>][p_oid]'>
 									</div>
 
 									<div class="col-xs-2 form-group">
 										<label>Qty:</label>
-										<input type="text" placeholder="Enter ..." id="p_qty" class="form-control" data-price="<?=@$product->price?>"  
-										data-qty="<?=@$product->stock_onhand?>"value="<?=@$product->quantity?>" name='product[0][p_qty]'>
+										<input type="text" <?=$disable?> placeholder="Enter ..." id="p_qty" class="form-control" data-price="<?=@$product->price?>"  
+										data-qty="<?=@$product->stock_onhand?>"value="<?=@$product->quantity?>" name='product[<?=$i?>][p_qty]'>
 									</div>
 
 									<div class="col-xs-2 form-group">
 										<label>Price:</label>
-										<input type="text" placeholder="Enter ..." id="p_price" class="form-control" value="<?=@$product->net_price?>" name='product[0][p_price]'>
+										<input type="text" <?=$disable?> placeholder="Enter ..." id="p_price" class="form-control" value="<?=@$product->net_price?>" name='product[<?=$i?>][p_price]'>
 									</div>
 
 									<div class="col-xs-1 form-group">
@@ -91,13 +93,13 @@
 								<div class="row">
 									<div class="col-xs-9 form-group">
 										<label>Service:</label>
-										<input type="text" placeholder="Service detail" id="s_name" class="service form-control" value="<?=@$service->service_name?>" name='service[0][s_name]' >
-										<input type="hidden" id="s_oid" value="<?=@$service->id?>" name='service[0][s_oid]'>
+										<input type="text" placeholder="Service detail" id="s_name" class="service form-control" value="<?=@$service->service_name?>" name='service[<?=$i?>][s_name]' >
+										<input type="hidden" id="s_oid" value="<?=@$service->id?>" name='service[<?=$i?>][s_oid]'>
 									</div>
 
 									<div class="col-xs-2 form-group">
 										<label>Price:</label>
-										<input type="text" placeholder="Rate" id="s_price" class="form-control" value="<?=@$service->net_price?>" name='service[0][s_price]'>
+										<input type="text" placeholder="Rate" id="s_price" class="form-control" value="<?=@$service->net_price?>" name='service[<?=$i?>][s_price]'>
 									</div>
 
 									<div class="col-xs-1 form-group">

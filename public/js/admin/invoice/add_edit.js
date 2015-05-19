@@ -29,6 +29,7 @@ $(document).ready(function() {
 		var type = $(this).closest('.box').attr("type");
 		$clone = $('.'+type+'_div:eq(0)').clone();
 		$clone.find("input").val("");
+		$clone.find("input").prop("disabled",false);
 		
 		var index = $('.'+type+'_div').length;
 
@@ -37,6 +38,7 @@ $(document).ready(function() {
 			$clone.find("#p_id").attr("name","product["+index+"][p_id]");
 			$clone.find("#p_price").attr("name","product["+index+"][p_price]");
 			$clone.find("#p_qty").attr("name","product["+index+"][p_qty]");
+			$clone.find("#p_oid").attr("name","product["+index+"][p_oid]");
 
 			productAutocomp($clone.find("#p_name"));
 			productPriceTracking($clone.find("#p_qty"));
@@ -45,6 +47,7 @@ $(document).ready(function() {
 		{
 			$clone.find("#s_name").attr("name","service["+index+"][s_name]");
 			$clone.find("#s_price").attr("name","service["+index+"][s_price]");
+			$clone.find("#s_oid").attr("name","service["+index+"][s_oid]");
 
 			servicePriceTracking($clone.find("#s_price"));
 		}
@@ -54,12 +57,34 @@ $(document).ready(function() {
 
 	$(document).delegate('.removeproduct,.removeservice','click',function(e){
 		e.preventDefault();
-		var type = $(this).closest('.box').attr("type");
+		var box = $(this).closest('.box');
+		var type = $(box).attr("type");
 		if($('.remove'+type).length <= 1)
 		{
 			return;
 		}
-		$(this).closest('.'+type+'_div').remove();
+
+		var findObj = (type == "service")?"s_oid":"p_oid";
+
+		if($(box).find("#"+findObj).length > 0 && $(box).find("#"+findObj).val() != "")
+		{
+			var url = admin_path()+'invoice/deleteOrder';
+			var param = {id:$(box).find("#"+findObj).val()};
+			$.post(url,param,function(e){
+				if (e == "success") {
+					$(this).closest('.'+type+'_div').remove();
+				}else{
+					$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
+				}
+				updateTotal();
+			});
+		}
+		else
+		{
+			$(this).closest('.'+type+'_div').remove();
+			updateTotal();
+		}
+
 	});
 
 	var datepicker = $.fn.datepicker.noConflict();
@@ -69,6 +94,7 @@ $(document).ready(function() {
 		$('#sale_date').btdatepicker('update', Date());
 
 	$("#save").on("click",function(){
+		$("input").prop("disabled",false);
 		$("form").submit();
 	});
 

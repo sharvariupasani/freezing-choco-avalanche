@@ -251,19 +251,7 @@ class common_model extends CI_Model{
 		$result = $this->db->insert(ORDER, $data);
 	}
 
-	public function updateProductToOrder($product)
-	{
-		$data = array("p_id"=>$product["p_id"],
-								   "order_type"=>"product",
-								   "quantity"=>$product["p_qty"],
-								   "net_price"=>$product["p_price"],
-								   "in_id"=>$invoice);
-		$result = $this->db->insert(ORDER, $data);
-
-		$this->updateProductQty($product["p_id"],$product["p_qty"],true);
-	}
-
-	public function addServiceToOrder($service)
+	public function updateServiceToOrder($service)
 	{
 		$data = array("service_name"=>$service["s_name"],
 								   "net_price"=>$service["s_price"]);
