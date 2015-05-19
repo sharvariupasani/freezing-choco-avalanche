@@ -3,7 +3,6 @@
     <script src="<?=public_path()?>js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/bootstrap.min.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/plugins/jqueryKnob/jquery.knob.js" type="text/javascript"></script>
-    <script src="<?=public_path()?>js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/plugins/datatables/jquery.dataTables.columnFilter.js" type="text/javascript"></script>
@@ -48,6 +47,7 @@
         }
     </script>
 	<?php if (in_array($this->router->fetch_method(), array("add","edit"))) { ?>
+		<script src="<?=public_path()?>js/plugins/daterangepicker/datepicker.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine-en.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/admin/<?=$this->router->fetch_class()?>/add_edit.js" type="text/javascript"></script>

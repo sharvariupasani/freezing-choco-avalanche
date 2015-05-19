@@ -73,6 +73,7 @@ class Invoice extends CI_Controller {
 			if ($this->form_validation->run() !== false) {
 				$products = $post["product"];
 				$services = $post["service"];
+				$sale_date = $post["sale_date"];
 				$total = 0;
 				$amount = 0;
 				$taxRate = 9.3;
@@ -92,7 +93,7 @@ class Invoice extends CI_Controller {
 							'c_id' => $post['cust_id'],
 							'amount' => $amount,
 							'total' => $total,
-						//	'sale_date' => $sale_date
+							'sale_date' => date('Y-m-d', strtotime($sale_date));
 							);
 				$ret = $this->common_model->insertData(INVOICE, $data);
 
