@@ -39,7 +39,7 @@ class Takein extends CI_Controller {
 			array( 'db' => 's_id',
 					'dt' => 7,
 					'formatter' => function( $d, $row ) {
-						return '<a href="'.site_url('/takein/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_takein('.$d.')" class="fa fa-trash-o"></a>';
+						return '<a href="'.site_url('/takein/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_takein('.$d.')" class="fa fa-trash-o"></a> / <a href="javascript:void(0);" onclick="generate_invoice('.$d.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);

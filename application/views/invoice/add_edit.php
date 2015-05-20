@@ -147,6 +147,7 @@
 					</div>
 					<div class='box-footer'>
 						<div class="form-group">
+							<input type="hidden" name="op" id="op" value="">
 							<button class="btn btn-primary btn-flat" type="submit" id="save">Save</button>
 							<button class="btn btn-primary btn-flat" type="submit" id="print">Print</button>
 						</div>
