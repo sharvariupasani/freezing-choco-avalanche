@@ -57,6 +57,7 @@ $(document).ready(function() {
 
 	$(document).delegate('.removeproduct,.removeservice','click',function(e){
 		e.preventDefault();
+		var that = $(this); 
 		var box = $(this).closest('.box');
 		var type = $(box).attr("type");
 		if($('.remove'+type).length <= 1)
@@ -72,7 +73,7 @@ $(document).ready(function() {
 			var param = {id:$(box).find("#"+findObj).val()};
 			$.post(url,param,function(e){
 				if (e == "success") {
-					$(this).closest('.'+type+'_div').remove();
+					$(that).closest('.'+type+'_div').remove();
 				}else{
 					$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
 				}
@@ -93,8 +94,15 @@ $(document).ready(function() {
 	if ($('#sale_date').val() == "")
 		$('#sale_date').btdatepicker('update', Date());
 
-	$("#save").on("click",function(){
+	$("#save").on("click",function(e){
+		e.preventDefault();
 		$("input").prop("disabled",false);
+		$("form").submit();
+	});
+
+	$("#print").on("click",function(e){
+		e.preventDefault();
+		$("#op").val("print");
 		$("form").submit();
 	});
 

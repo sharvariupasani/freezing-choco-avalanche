@@ -20,9 +20,18 @@ class Invoice extends CI_Controller {
 		$this->load->view('content', $data);
 	}
 
-	public function printinvoice()
+	public function printinvoice($id)
 	{
-		//pr($this->user_session);
+		$where = "id = ".$id;
+
+		$data['invoice'] = $invoice= $this->common_model->selectData(INVOICE, '*',$where);
+		$data['customer'] = $this->common_model->customerTitleById($invoice[0]->c_id);
+		$data['products'] = $this->common_model->productDetailByInvoiceId($invoice[0]->id);
+		$data['services'] = $this->common_model->serviceDetailByInvoiceId($invoice[0]->id);
+		
+		if (empty($invoice)) {
+			redirect('invoice');
+		}
 		$data['view'] = "index";
 		$data['view'] = "print";
 		$data['noheader'] = "1";
@@ -202,6 +211,10 @@ class Invoice extends CI_Controller {
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Bill updated successfully.'
 									);
+
+					if ($post['op'] == "print")
+						redirect("invoice/printinvoice/$id");
+
 				}else{
 					$flash_arr = array('flash_type' => 'error',
 										'flash_msg' => 'An error occurred while processing!'
@@ -246,11 +259,10 @@ class Invoice extends CI_Controller {
 		$post = $this->input->post();
 
 		if ($post) {
-			$data = $this->common_model->selectData(ORDER, array('id' => $post['id'] ));
-
+			$data = $this->common_model->selectData(ORDER,"*" ,array('id' => $post['id'] ));
 			if ($data[0]->order_type == 'product')
 			{
-				$qty = $this->common_model->updateProductQty($data[0]->p_id,$data[0]->quantity);
+				$this->common_model->updateProductQty($data[0]->p_id,$data[0]->quantity);
 			}
 
 			$ret = $this->common_model->deleteData(ORDER, array('id' => $post['id'] ));
