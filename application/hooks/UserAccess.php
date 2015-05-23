@@ -1,5 +1,5 @@
 <?php
-require_once ("access.php");
+require_once (BASEPATH."../application/config/access.php");
 
 class UserAccessManager
 {

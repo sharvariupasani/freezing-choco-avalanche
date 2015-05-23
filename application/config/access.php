@@ -74,6 +74,7 @@ $access = array
             "add" => array("a","m"),
             "edit" => array("a","m"),
             "delete" => array("a","m"),
+            "updateStatus" => array("a","m"),
         ),
 
     "users" => array

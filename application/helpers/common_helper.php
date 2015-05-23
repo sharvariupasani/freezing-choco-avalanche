@@ -1,4 +1,5 @@
 <?php
+require_once (BASEPATH."../application/config/access.php");
 
 	function pr($arr, $option="")
 	{
@@ -130,4 +131,22 @@
         $response = curl_exec($ch);
         return $response;
     }
+
+	function hasAccess($class,$method = "index")
+	{
+		global $access;
+		$CI =& get_instance();
+		$user = $CI->session->userdata('user_session');
+		$role = $user['role'];
+		$page= $access[$class][$method]; 
+
+
+		if (!isset($user['role'])) 
+			return false;
+
+		if (!in_array($role,$page))
+			return false;
+
+		return true;
+	}
 ?>

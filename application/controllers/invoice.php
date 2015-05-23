@@ -70,9 +70,17 @@ class Invoice extends CI_Controller {
 			array( 'db' => 'i.id',
 					'dt' => 4,
 					'formatter' => function( $d, $row ) {
-						return '<a href="'.site_url('/invoice/edit/'.$d).'" class="fa fa-edit"></a> / 
-									 <a href="javascript:void(0);" onclick="delete_invoice('.$d.')" class="fa fa-trash-o"></a> / 
-									 <a href="'.site_url('/invoice/getinvoice/'.$d).'" class="fa fa-print"></a>';
+						$op = array();
+						if (hasAccess("invoice","edit"))
+							$op[] = '<a href="'.site_url('/invoice/edit/'.$d).'" class="fa fa-edit"></a>';
+
+						if (hasAccess("invoice","delete"))
+							$op[] = '<a href="javascript:void(0);" onclick="delete_invoice('.$d.')" class="fa fa-trash-o"></a>';
+
+						if (hasAccess("invoice","getinvoice"))
+							$op[] = '<a href="'.site_url('/invoice/getinvoice/'.$d).'" class="fa fa-print"></a>';
+
+						return implode(" / ",$op);
 					}
 			),
 		);

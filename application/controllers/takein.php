@@ -41,21 +41,39 @@ class Takein extends CI_Controller {
 				'dt'        => 7,
 				'formatter' => function( $d, $row ) {
 					list($id,$status) = explode("|",$d);
-					return '<a href="javascript:void(0);" onclick="update_status('.$id.')" class="label '.$status.'">'.$status ."</a>" ;
+					$op = "";
+					if (hasAccess("takein","updateStatus"))
+						$op = '<a href="javascript:void(0);" onclick="update_status('.$id.')" class="label '.$status.'">'.$status ."</a>" ;
+					else
+						$op = '<a href="javascript:void(0);" class="label '.$status.'">'.$status ."</a>" ;
+					return $op;
 				}
 			),
 			array( 'db' => 'CONCAT(s_id,"|",IFNULL(s_invoiceid, ""))',
 					'dt' => 8,
 					'formatter' => function( $d, $row ) {
 						list($id,$invoice_id) = explode("|",$d);
-						$op = "";
-						if ($invoice_id == "")
-							$op = '<a href="'.site_url("/invoice/add/".$id).'" class="fa fa-save" title="Generate bill"></a>';
-						else
-							$op = '<a href="'.site_url("/invoice/edit/".$invoice_id).'" class="fa fa-eye" title="View bill"></a>';
+						
+						$op = array();
+						
+						if (hasAccess("takein","edit"))
+							$op[] = '<a href="'.site_url('/takein/edit/'.$id).'" class="fa fa-edit" title="Edit Takein"></a>';
 
-						return '<a href="'.site_url('/takein/edit/'.$id).'" class="fa fa-edit" title="Edit Takein"></a> / 
-						<a href="javascript:void(0);" onclick="delete_takein('.$id.')" class="fa fa-trash-o" title="Remove Takein"></a> / '.$op;
+						if (hasAccess("takein","delete"))
+							$op[] = '<a href="javascript:void(0);" onclick="delete_takein('.$id.')" class="fa fa-trash-o" title="Remove Takein"></a>';
+						
+						if ($invoice_id == "")
+						{
+							if (hasAccess("invoice","add"))
+								$op[] = '<a href="'.site_url("/invoice/add/".$id).'" class="fa fa-save" title="Generate bill"></a>';
+						}
+						else
+						{
+							if (hasAccess("invoice","edit"))
+								$op[] = '<a href="'.site_url("/invoice/edit/".$invoice_id).'" class="fa fa-eye" title="View bill"></a>';
+						}
+
+						return implode(" / ",$op);				
 					}
 			),
 		);
