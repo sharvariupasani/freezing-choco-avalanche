@@ -148,6 +148,7 @@
 					<div class='box-footer'>
 						<div class="form-group">
 							<input type="hidden" name="op" id="op" value="">
+							<input type="hidden" name="takein_id" id="takein_id" value="<?=@$takein[0]->s_id?>">
 							<button class="btn btn-primary btn-flat" type="submit" id="save">Save</button>
 							<button class="btn btn-primary btn-flat" type="submit" id="print">Print</button>
 						</div>

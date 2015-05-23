@@ -37,7 +37,7 @@ class Category extends CI_Controller {
 		if ($post) {
 			#pr($post);
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('category', 'Product Category', 'trim|required');
+			$this->form_validation->set_rules('name', 'Product Category', 'trim|required');
 		
 			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['name'],
@@ -76,7 +76,7 @@ class Category extends CI_Controller {
 		$post = $this->input->post();
 		if ($post) {
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('category', 'Product Category', 'trim|required');
+		$this->form_validation->set_rules('name', 'Product Category', 'trim|required');
 		
 		if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['name'],

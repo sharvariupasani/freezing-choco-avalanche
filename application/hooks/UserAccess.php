@@ -27,6 +27,10 @@ class UserAccessManager
 		}
 
 		$role = $user['role'];
+		include_once ("access.php");
+		$page= $access[$class][$method]; 
+		if (!in_array($role,$page))
+			redirect(base_url());
     }
 }
 ?>

@@ -37,3 +37,14 @@ function delete_takein (del_id) {
 		}
 	});
 }
+
+function update_status (id) {
+	var url = admin_path()+'takein/updateStatus';
+	var param = {id:id};
+	$.post(url,param,function(data){
+			if (data == "success") {
+				oTable.fnClearTable(0);
+				oTable.fnDraw();
+			}
+	});
+}
