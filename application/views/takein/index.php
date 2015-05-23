@@ -35,6 +35,7 @@
 									<th>Remark</th>
 									<th>In</th>
 									<th>Out</th>
+									<th>Status</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -47,6 +48,7 @@
 									<th>Remark</th>
 									<th>In</th>
 									<th>Out</th>
+									<th>Status</th>
 									<th>Action</th>
 								</tr>
 							</tfoot>

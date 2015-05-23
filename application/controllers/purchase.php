@@ -34,9 +34,17 @@ class Purchase extends CI_Controller {
 			array( 'db' => 'pp.id',
 					'dt' => 7,
 					'formatter' => function( $d, $row ) {
-						return '<a href="'.site_url('/purchase/edit/'.$d).'" class="fa fa-edit"></a> / 
-									  <a href="javascript:void(0);" onclick="delete_purchase('.$d.',true)" class="fa fa-trash-o"></a> /
-									  <a href="javascript:void(0);" onclick="delete_purchase('.$d.')" class="fa fa-times"></a>';
+						$op = array();
+						if (hasAccess("purchase","edit"))
+							$op[] = '<a href="'.site_url('/purchase/edit/'.$d).'" class="fa fa-edit"></a>';
+
+						if (hasAccess("purchase","delete"))
+							$op[] = '<a href="javascript:void(0);" onclick="delete_purchase('.$d.',true)" class="fa fa-trash-o"></a>';
+
+						if (hasAccess("purchase","delete"))
+							$op[] = '<a href="javascript:void(0);" onclick="delete_purchase('.$d.')" class="fa fa-times"></a>';
+
+						return implode(" / ",$op);
 					}
 			),
 		);

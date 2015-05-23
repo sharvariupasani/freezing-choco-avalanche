@@ -43,7 +43,14 @@ class Customer extends CI_Controller {
 			array( 'db' => 'c_id',
 					'dt' => 7,
 					'formatter' => function( $d, $row ) {
-						return '<a href="'.site_url('/customer/edit/'.$d).'" class="fa fa-edit"></a> <a href="javascript:void(0);" onclick="delete_customer('.$d.')" class="fa fa-trash-o"></a>';
+						$op = array();
+						if (hasAccess("customer","edit"))
+							$op[] = '<a href="'.site_url('/customer/edit/'.$d).'" class="fa fa-edit"></a>';
+
+						if (hasAccess("customer","delete"))
+							$op[] = '<a href="javascript:void(0);" onclick="delete_customer('.$d.')" class="fa fa-trash-o"></a>';
+
+						return implode(" / ",$op);
 					}
 			),
 		);

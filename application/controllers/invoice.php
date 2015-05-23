@@ -13,9 +13,19 @@ class Invoice extends CI_Controller {
 		$this->load->view('content', $data);
 	}
 
-	public function getinvoice()
+	public function getinvoice($id)
 	{
-		//pr($this->user_session);
+		$where = "id = ".$id;
+
+		$data['invoice'] = $invoice= $this->common_model->selectData(INVOICE, '*',$where);
+		$data['customer'] = $this->common_model->customerTitleById($invoice[0]->c_id);
+		$data['products'] = $this->common_model->productDetailByInvoiceId($invoice[0]->id);
+		$data['services'] = $this->common_model->serviceDetailByInvoiceId($invoice[0]->id);
+		
+		if (empty($invoice)) {
+			redirect('invoice');
+		}
+
 		$data['view'] = "invoice";
 		$this->load->view('content', $data);
 	}
@@ -60,7 +70,17 @@ class Invoice extends CI_Controller {
 			array( 'db' => 'i.id',
 					'dt' => 4,
 					'formatter' => function( $d, $row ) {
-						return '<a href="'.site_url('/invoice/edit/'.$d).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_invoice('.$d.')" class="fa fa-trash-o"></a>';
+						$op = array();
+						if (hasAccess("invoice","edit"))
+							$op[] = '<a href="'.site_url('/invoice/edit/'.$d).'" class="fa fa-edit"></a>';
+
+						if (hasAccess("invoice","delete"))
+							$op[] = '<a href="javascript:void(0);" onclick="delete_invoice('.$d.')" class="fa fa-trash-o"></a>';
+
+						if (hasAccess("invoice","getinvoice"))
+							$op[] = '<a href="'.site_url('/invoice/getinvoice/'.$d).'" class="fa fa-print"></a>';
+
+						return implode(" / ",$op);
 					}
 			),
 		);
@@ -70,7 +90,7 @@ class Invoice extends CI_Controller {
 		echo json_encode( SSP::simple( $post, INVOICE_I, "i.id", $columns ,$join,$custom_where ));exit;
 	}
 
-	public function add()
+	public function add($id)
 	{
 		$post = $this->input->post();
 		if ($post) {
@@ -125,6 +145,9 @@ class Invoice extends CI_Controller {
 							}
 					}
 
+					if ($post["takein_id"] != "")
+						$this->common_model->updateData(SERVICE, array("s_invoiceid"=>$ret),array("s_id"=>$post["takein_id"]));
+
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Invoice added successfully.'
 									);
@@ -139,6 +162,14 @@ class Invoice extends CI_Controller {
 			}
 			$data['error_msg'] = validation_errors();
 		}
+		
+		if(isset($id) && $id != "")
+		{
+			$data['takein'] = $takein= $this->common_model->selectData(SERVICE, '*',array("s_id"=>$id));
+			$data['customer'] = $this->common_model->customerTitleById($takein[0]->s_custid);
+			$data['services'][0] = (object) array("service_name"=>$takein[0]->s_phonename ."(".$takein[0]->s_imei.") repairing");
+		}
+
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
 	}

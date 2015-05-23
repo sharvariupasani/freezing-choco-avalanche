@@ -24,7 +24,14 @@ class Category extends CI_Controller {
 			array( 'db' => 'id',
 					'dt' => 2,
 					'formatter' => function( $e, $row ) {
-						return '<a href="'.site_url('/category/edit/'.$e).'" class="fa fa-edit"></a> / <a href="javascript:void(0);" onclick="delete_category('.$e.')" class="fa fa-trash-o"></a>';
+						$op = array();
+						if (hasAccess("category","edit"))
+							$op[] = '<a href="'.site_url('/category/edit/'.$e).'" class="fa fa-edit"></a>';
+
+						if (hasAccess("category","delete"))
+							$op[] = '<a href="javascript:void(0);" onclick="delete_category('.$e.')" class="fa fa-trash-o"></a>';
+
+						return implode(" / ",$op);
 					}
 			),
 		);
@@ -37,7 +44,7 @@ class Category extends CI_Controller {
 		if ($post) {
 			#pr($post);
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('category', 'Product Category', 'trim|required');
+			$this->form_validation->set_rules('name', 'Product Category', 'trim|required');
 		
 			if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['name'],
@@ -76,7 +83,7 @@ class Category extends CI_Controller {
 		$post = $this->input->post();
 		if ($post) {
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('category', 'Product Category', 'trim|required');
+		$this->form_validation->set_rules('name', 'Product Category', 'trim|required');
 		
 		if ($this->form_validation->run() !== false) {
 				$data = array('name' => $post['name'],

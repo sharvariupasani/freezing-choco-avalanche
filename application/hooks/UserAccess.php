@@ -1,4 +1,6 @@
 <?php
+require_once (BASEPATH."../application/config/access.php");
+
 class UserAccessManager
 {
     private $CI;
@@ -20,13 +22,27 @@ class UserAccessManager
 		if ($class == "index") return;
 
 		$method = $this->CI->router->fetch_method();
-		$user = $this->CI->session->userdata('user_session');
 
-		if (!isset($user['role'])) {
+		if (!$this->hasAccess($class,$method))
 			redirect(base_url());
-		}
-
-		$role = $user['role'];
     }
+
+	function hasAccess($class,$method)
+	{
+		global $access;
+		$user = $this->CI->session->userdata('user_session');
+		$role = $user['role'];
+		$page= $access[$class][$method]; 
+
+
+		if (!isset($user['role'])) 
+			return false;
+
+		if (!in_array($role,$page))
+			return false;
+
+		return true;
+	}
 }
+
 ?>

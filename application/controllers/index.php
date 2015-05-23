@@ -8,6 +8,9 @@ class Index extends CI_Controller {
 
 	public function index()
 	{
+		//$this->load->library('controllerlist'); // Load the library
+		//$array = $this->controllerlist->getControllers();
+		
 		$session = $this->session->userdata('user_session');
 		#pr($session,1);
 		if (isset($session['id'])) {

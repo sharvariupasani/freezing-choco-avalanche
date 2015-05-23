@@ -31,7 +31,15 @@ class Users extends CI_Controller {
 			array( 'db' => 'id',
 					'dt' => 4,
 					'formatter' => function( $d, $row ) {
-						return '<a href="'.site_url('/users/edit/'.$d).'" class="fa fa-edit"></a> <a href="javascript:void(0);" onclick="delete_user('.$d.')" class="fa fa-trash-o"></a>';
+						$op = array();
+						
+						if (hasAccess("users","edit"))
+							$op[] = '<a href="'.site_url('/users/edit/'.$d).'" class="fa fa-edit"></a> ';
+
+						if (hasAccess("users","delete"))
+							$op[] = '<a href="javascript:void(0);" onclick="delete_user('.$d.')" class="fa fa-trash-o"></a>';
+						
+						return implode(" / ",$op);
 					}
 			),
 		);
