@@ -1,4 +1,5 @@
 <?php
+global $access;
 $access = array
 (
     "category" => array

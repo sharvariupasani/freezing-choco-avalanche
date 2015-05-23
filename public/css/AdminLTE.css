@@ -4074,6 +4074,6 @@ Gradient Background colors
 	padding:5px 10px 5px 10px;
 }
 
-.takein{color:#ff0000}
-.repaired{color:#00ff00}
-.done{color:#000000}
+.takein{background-color:#dd4b39}
+.repaired{background-color:#f0ad4e}
+.done{background-color:#00a65a}

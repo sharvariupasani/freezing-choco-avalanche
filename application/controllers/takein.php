@@ -41,7 +41,7 @@ class Takein extends CI_Controller {
 				'dt'        => 7,
 				'formatter' => function( $d, $row ) {
 					list($id,$status) = explode("|",$d);
-					return '<a href="javascript:void(0);" onclick="update_status('.$id.')" ><i class="fa fa-fw fa-stop '.$status.'"></i>'.$status ."</a>" ;
+					return '<a href="javascript:void(0);" onclick="update_status('.$id.')" class="label '.$status.'">'.$status ."</a>" ;
 				}
 			),
 			array( 'db' => 'CONCAT(s_id,"|",IFNULL(s_invoiceid, ""))',
