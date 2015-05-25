@@ -14,6 +14,22 @@ $(document).ready(function() {
 		  }
 		]
 	} );
+
+	$("#generateBill").on("click",function(){
+		if ($("input[type='checkbox']:checked").length > 0)
+		{
+			takein = Array();
+			$("input[type='checkbox']:checked").each(function(){
+				takein.push($(this).attr("id"));
+			});
+			takein = takein.join("_");
+			location.href = admin_path()+"invoice/add/"+takein;
+		}
+		else
+		{
+			alert("Please select at least one take in to generate bill.");
+		}
+	});
 } );
 
 
@@ -47,4 +63,21 @@ function update_status (id) {
 				oTable.fnDraw();
 			}
 	});
+}
+
+function mergeTakein(obj)
+{
+	var exclass = $(obj).attr('class');
+	console.log($(obj).is(":checked"))
+	if ($(obj).is(":checked"))
+	{
+		$("input[type='checkbox']").not("."+exclass).prop("checked",false).prop("disabled",true);
+	}
+	else
+	{
+		if ($("."+exclass+":checked").length == 0 )
+		{
+			$("input[type='checkbox']").prop("disabled",false);
+		}
+	}
 }
