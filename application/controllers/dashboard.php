@@ -14,51 +14,28 @@ class Dashboard extends CI_Controller {
 		$this->load->view('content', $data);
 	}
 
-	public function deal_list()
+	public function statistics()
 	{
-		$post = $this->input->post();
+		$data = array();
+		$data['customers'] = $this->common_model->getCount(CUSTOMER);
+		$data['takeins'] = $this->common_model->selectData(SERVICE,"s_status AS type,COUNT(s_id) AS cnt","","","","s_status");
+		$data['products'] = $this->common_model->getCount(PRODUCT);
+		$data['invoices'] = $this->common_model->getCount(INVOICE);
 
-		$columns = array(
-			array( 'db' => 'db_uniqueid',  'dt' => 0 ),
-			array( 'db' => 'do_offertitle',  'dt' => 1 ),
-			array( 'db' => 'de_name',  'dt' => 2 ),
-			array( 'db' => 'du_uname',  'dt' => 3 ),
-			array( 'db' => 'dd_validtilldate',  
-					'dt' => 4 ,
-					'formatter' => function( $d, $row ) {
-						return date( 'jS M y', strtotime($d));
-					}
-			),
-			array( 'db' => 'db_amntpaid',  'dt' => 5 ),
-			array('db'        => 'db_date',
-					'dt'        => 6,
-					'formatter' => function( $d, $row ) {
-						return date( 'jS M y', strtotime($d));
-					}
-			),
-			array( 'db' => 'CONCAT(db_autoid,"|",db_dealstatus)',
-					'dt' => 7,
-					'formatter' => function( $d, $row ) {
-						list($id,$status) = explode("|",$d);
-						return '<a href="javascript:void(0);" data-db_autoid="'.$id.'" class="fa fa-eye deal-buy-status '.$status.'"  title="'.$status.'" alt="'.$status.'"></a>';
-					},
-					"sort" => "db_dealstatus"
-			),
-		);
-		$join1 = array(DEAL_USER,'du_autoid = db_uid');
-		$join2 = array(DEAL_DETAIL,'dd_autoid = db_dealid');
-		$join3 = array(DEAL_DEALER,'de_autoid = dd_dealerid');
-		$join4 = array(DEAL_OFFER,'do_autoid = db_offerid');
-		$custom_where = array();
-		
-		if($this->user_session['role'] == 'd') {
-			if(!$this->user_session['dealer_info'])
-				$custom_where = array('dd_dealerid'=>0);
-			else
-				$custom_where = array('dd_dealerid'=>$this->user_session['dealer_info']->de_autoid);
-		}	
-		
-		echo json_encode( SSP::simple( $post, DEAL_BUYOUT, "db_autoid", $columns ,array($join1, $join2, $join3,$join4),$custom_where) );exit;
+		echo json_encode($data);exit;
+	}
 
+	public function latestProduct()
+	{
+		$data = array();
+		$data = $this->common_model->getLatestProducts();
+		echo json_encode($data);exit;
+	}
+
+	public function latestTakein()
+	{
+		$data = array();
+		$data = $this->common_model->getLatestTakeins();
+		echo json_encode($data);exit;
 	}
 }

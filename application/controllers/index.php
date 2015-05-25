@@ -44,6 +44,9 @@ class Index extends CI_Controller {
 									'email' => $user[0]->email,
 									'role' => $user[0]->role,
 								 );
+
+					if ($data['role'] == 'd')
+						$data['cust_id'] =  $user[0]->cust_id;
 				
 					$this->session->set_userdata('user_session',$data);
 					
