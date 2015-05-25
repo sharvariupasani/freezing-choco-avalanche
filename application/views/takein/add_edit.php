@@ -34,7 +34,7 @@
 	
 					<div class="form-group">
                         <label>Customer:</label>
-                        <input type="text" placeholder="Search using mobile" class="form-control validate[required]" name="customer" id="customer" value="<?=@$customer->customer?>" >
+                        <input type="text" placeholder="Search using mobile" class="form-control validate[required]" name="customer" id="customer" value="<?=@$customer->customer?>" <?=($is_dealer)?"disabled":""?>>
                         <input type="hidden" name="cust_id" id="cust_id" value="<?=@$customer->c_id?>" >
                     </div>
 					

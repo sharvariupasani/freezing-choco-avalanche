@@ -38,6 +38,7 @@ class Takein extends CI_Controller {
 			),
 			array(
 				'db'        => 'CONCAT(s_id,"|",IFNULL(s_status, ""))',
+				'sort' => 's_status',
 				'dt'        => 7,
 				'formatter' => function( $d, $row ) {
 					list($id,$status) = explode("|",$d);
@@ -79,6 +80,11 @@ class Takein extends CI_Controller {
 		);
 		
 		$join[] = array(CUSTOMER,"c_id = s_custid");
+		$session = $this->user_session;
+		$custom_where = array();
+
+		if ($session['role'] == 'd')
+			$custom_where = array("c_id"=>$session['cust_id']);
 
 		echo json_encode( SSP::simple( $post, SERVICE, "s_id", $columns ,$join,$custom_where ));exit;
 	}
@@ -86,6 +92,7 @@ class Takein extends CI_Controller {
 	public function add()
 	{
 		$post = $this->input->post();
+		$session = $this->user_session;
 		if ($post) {
 			$this->load->library('form_validation');
 
@@ -93,6 +100,9 @@ class Takein extends CI_Controller {
 			$this->form_validation->set_rules('phonename', 'Mobile Info', 'trim|required');
 			$this->form_validation->set_rules('imei', 'IMEI', 'trim|required');
 			$this->form_validation->set_rules('remark', 'Mobile remark', 'trim|required');
+			
+			if ($session['role'] == 'd')
+				 $post['cust_id'] =  $session['cust_id'];
 
 			if ($this->form_validation->run() !== false) {
 				$data = array('s_custid' => $post['cust_id'],
@@ -119,6 +129,10 @@ class Takein extends CI_Controller {
 			$data['error_msg'] = validation_errors();
 		}
 		
+		$data['is_dealer'] = false;
+		if ($session['role'] == 'd')
+				 $data['is_dealer'] =  true;
+
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
 	}
@@ -127,6 +141,7 @@ class Takein extends CI_Controller {
 	{	
 		$data['view'] = "add_edit";
 		$where = "s_id = ".$id;
+		$session = $this->user_session;
 		if ($post) {
 			$this->load->library('form_validation');
 
@@ -134,6 +149,9 @@ class Takein extends CI_Controller {
 			$this->form_validation->set_rules('phonename', 'Mobile Info', 'trim|required');
 			$this->form_validation->set_rules('imei', 'IMEI', 'trim|required');
 			$this->form_validation->set_rules('remark', 'Mobile remark', 'trim|required');
+			
+			if ($session['role'] == 'd')
+				 $post['cust_id'] =  $session['cust_id'];
 
 			if ($this->form_validation->run() !== false) {
 				$data = array('s_custid' => $post['cust_id'],
@@ -164,6 +182,11 @@ class Takein extends CI_Controller {
 		if (empty($takein)) {
 			redirect('takein');
 		}
+
+		$data['is_dealer'] = false;
+		if ($session['role'] == 'd')
+				 $data['is_dealer'] =  true;
+
 		$this->load->view('content', $data);
 	}
 

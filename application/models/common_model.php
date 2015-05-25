@@ -52,6 +52,11 @@ class common_model extends CI_Model{
 		return $data;
 	}
 
+	public function getCount($table,$where=""){
+		$data = $this->selectData($table, '*', $where, "", "", "", "", "", 'rowcount');
+		return $data;
+	}
+
 
 	/*
 	| -------------------------------------------------------------------
@@ -259,5 +264,30 @@ class common_model extends CI_Model{
 		$result = $this->updateData(ORDER,$data,array("id"=>$service["s_oid"]));
 	}
 
+	public function getLatestProducts()
+	{
+			$db = $this->db;
+			$db->select('c.name as cat_name,p.name,p.brand,p.description,p.creation_date',false);
+			$db->from(PRODUCT_P);
+			$db->join(CATEGORY_C, "p.cat_id = c.id");
+			$db->order_by("creation_date","desc");
+			$db->limit(10);
+			$query = $db->get();
+			$product = $query->result();
+			return $product;	
+	}
+
+	public function getLatestTakeins()
+	{
+			$db = $this->db;
+			$db->select('CONCAT(c_fname," ",c_lname) as name,c_phone,s_imei,s_phonename,s_status',false);
+			$db->from(SERVICE);
+			$db->join(CUSTOMER, "c_id = s_custid");
+			$db->order_by("c_addeddate","desc");
+			$db->limit(10);
+			$query = $db->get();
+			$takein = $query->result();
+			return $takein;	
+	}
 }
 ?>

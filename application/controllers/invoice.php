@@ -146,7 +146,9 @@ class Invoice extends CI_Controller {
 					}
 
 					if ($post["takein_id"] != "")
-						$this->common_model->updateData(SERVICE, array("s_invoiceid"=>$ret),array("s_id"=>$post["takein_id"]));
+					{
+						$this->common_model->updateData(SERVICE, array("s_invoiceid"=>$ret),"s_id IN (".$post["takein_id"].")");
+					}
 
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Invoice added successfully.'
@@ -165,9 +167,14 @@ class Invoice extends CI_Controller {
 		
 		if(isset($id) && $id != "")
 		{
-			$data['takein'] = $takein= $this->common_model->selectData(SERVICE, '*',array("s_id"=>$id));
+			$where = "id IN (".$id.")";
+			$data['takein'] = $takein= $this->common_model->selectData(SERVICE, '*',$where);
 			$data['customer'] = $this->common_model->customerTitleById($takein[0]->s_custid);
-			$data['services'][0] = (object) array("service_name"=>$takein[0]->s_phonename ."(".$takein[0]->s_imei.") repairing");
+			foreach($takein as $i=>$take)
+			{
+				$data['services'][$i] = (object) array("service_name"=>$take->s_phonename ."(".$take->s_imei.") repairing");
+			}
+			$data['takein_id'] = $id;
 		}
 
 		$data['view'] = "add_edit";
@@ -276,6 +283,7 @@ class Invoice extends CI_Controller {
 		if ($post) {
 			$ret = $this->common_model->deleteData(INVOICE, array('id' => $post['id'] ));
 			if ($ret > 0) {
+				$this->common_model->updateData(SERVICE, array("s_invoiceid"=>NULL),array('s_invoiceid' => $post['id'] ));
 				echo "success";
 				#echo success_msg_box('Deal deleted successfully.');;
 			}else{

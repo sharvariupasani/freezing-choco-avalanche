@@ -15,21 +15,10 @@
                     <ul class="nav navbar-nav">
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <a href="<?=base_url()."index/logout"?>">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span><?=$this->user_session['name']?> <i class="caret"></i></span>
+                                <span><?=$this->user_session['name']?> <i class="fa fa-sign-out"></i></span>
                             </a>
-                            <ul class="dropdown-menu" style="min-width: 200px;">
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a class="btn btn-default btn-flat" href="<?=base_url()."profile/edit"?>">Edit Profile</a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a class="btn btn-default btn-flat" href="<?=base_url()."index/logout"?>">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </div>

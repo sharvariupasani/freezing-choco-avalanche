@@ -24,7 +24,15 @@ class UserAccessManager
 		$method = $this->CI->router->fetch_method();
 
 		if (!$this->hasAccess($class,$method))
+	   {
+			$user = $this->CI->session->userdata('user_session');
+			$role = $user['role'];
+
+			if($role == 'd')
+				redirect("takein");
+
 			redirect(base_url());
+	   }	
     }
 
 	function hasAccess($class,$method)
@@ -33,7 +41,6 @@ class UserAccessManager
 		$user = $this->CI->session->userdata('user_session');
 		$role = $user['role'];
 		$page= $access[$class][$method]; 
-
 
 		if (!isset($user['role'])) 
 			return false;
