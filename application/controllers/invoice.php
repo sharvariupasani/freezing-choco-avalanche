@@ -167,7 +167,8 @@ class Invoice extends CI_Controller {
 		
 		if(isset($id) && $id != "")
 		{
-			$where = "id IN (".$id.")";
+			$id = implode(",",explode("_",$id));
+			$where = "s_id IN (".$id.")";
 			$data['takein'] = $takein= $this->common_model->selectData(SERVICE, '*',$where);
 			$data['customer'] = $this->common_model->customerTitleById($takein[0]->s_custid);
 			foreach($takein as $i=>$take)

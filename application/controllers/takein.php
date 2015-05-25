@@ -50,15 +50,17 @@ class Takein extends CI_Controller {
 					return $op;
 				}
 			),
-			array( 'db' => 'CONCAT(s_id,"|",IFNULL(s_invoiceid, ""))',
+			array( 'db' => 'CONCAT(s_id,"|",s_custid,"|",IFNULL(s_invoiceid, ""))',
 					'dt' => 8,
 					'formatter' => function( $d, $row ) {
-						list($id,$invoice_id) = explode("|",$d);
+						list($id,$cust_id,$invoice_id) = explode("|",$d);
 						
 						$op = array();
 						
 						if (hasAccess("takein","edit"))
+						{
 							$op[] = '<a href="'.site_url('/takein/edit/'.$id).'" class="fa fa-edit" title="Edit Takein"></a>';
+						}
 
 						if (hasAccess("takein","delete"))
 							$op[] = '<a href="javascript:void(0);" onclick="delete_takein('.$id.')" class="fa fa-trash-o" title="Remove Takein"></a>';
@@ -66,7 +68,10 @@ class Takein extends CI_Controller {
 						if ($invoice_id == "")
 						{
 							if (hasAccess("invoice","add"))
+							{
 								$op[] = '<a href="'.site_url("/invoice/add/".$id).'" class="fa fa-save" title="Generate bill"></a>';
+								$op[] = '<input type="checkbox" id="'.$id.'" class="'.$cust_id.'" onchange="mergeTakein(this)"></a>';
+							}
 						}
 						else
 						{
@@ -192,7 +197,7 @@ class Takein extends CI_Controller {
 
 	public function updateStatus()
 	{
-		$statusArray = array("takein","repaired","done");
+		$statusArray = array("taken","repaired","done");
 		$post = $this->input->post();
 		if ($post) {
 			$ret = $this->common_model->selectData(SERVICE,"s_status", array('s_id' => $post['id'] ));

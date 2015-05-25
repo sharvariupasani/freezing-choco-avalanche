@@ -1791,6 +1791,7 @@ a:focus {
   background-color: #f4f4f4;
   color: #444;
   border-color: #ddd;
+  margin: 10px 10px 0 0;
 }
 .btn-default:hover,
 .btn-default:active,
@@ -4074,6 +4075,6 @@ Gradient Background colors
 	padding:5px 10px 5px 10px;
 }
 
-.takein{background-color:#dd4b39}
+.taken{background-color:#dd4b39}
 .repaired{background-color:#f0ad4e}
 .done{background-color:#00a65a}
