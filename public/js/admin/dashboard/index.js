@@ -55,7 +55,7 @@ $(document).ready(function() {
 			{
 			var html = '<tr>';
 				  html += '<td>'+e[key].name+'</td>';
-				  html += '<td>'+e[key].contact+'</td>';
+				  html += '<td>'+e[key].c_phone+'</td>';
 				  html += '<td>'+e[key].s_imei+'</td>';
 				  html += '<td>'+e[key].s_phonename+'</td>';
 				  html += '<td><span class="label '+e[key].s_status+'">'+e[key].s_status+'</span></td>';
