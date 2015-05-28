@@ -4,6 +4,12 @@ if (!defined('BASEPATH'))
 /***
  * File: (Codeigniterapp)/libraries/Controllerlist.php
  * 
+ HOW TO USE:
+
+		$this->load->library('controllerlist'); // Load the library
+		$array = $this->controllerlist->getControllers(array("a","m"));
+		file_put_contents(FCPATH."application/config/access_1.php",var_export($array, true));
+
  * A simple library to list al your controllers with their methods.
  * This library will return an array with controllers and methods
  * 
@@ -28,21 +34,23 @@ class ControllerList {
 	 * Array that will hold the controller names and methods
 	 */
 	private $aControllers;
+
+	private $roles;
 	
 	// Construct
 	function __construct() {
 		// Get Codeigniter instance 
 		$this->CI = get_instance();
-		
 		// Get all controllers 
-		$this->setControllers();
 	}
 	
 	/**
 	 * Return all controllers and their methods
 	 * @return array
 	 */
-	public function getControllers() {
+	public function getControllers($roles = array("a")) {
+		$this->roles = $roles;
+		$this->setControllers();
 		return $this->aControllers;
 	}
 	
@@ -79,7 +87,7 @@ class ControllerList {
 					$aUserMethods = array();
 					foreach($aMethods as $method) {
 						if($method != '__construct' && $method != 'get_instance' && $method != $subdircontrollername) {
-							$aUserMethods[] = $method;
+							$aUserMethods[$method] = $this->roles;
 						}
 					}
 					$this->setControllerMethods($subdircontrollername, $aUserMethods);					 					
@@ -100,7 +108,7 @@ class ControllerList {
 				if(is_array($aMethods)){
 					foreach($aMethods as $method) {
 						if($method != '__construct' && $method != 'get_instance' && $method != $controllername) {
-							$aUserMethods[] = $method;
+							$aUserMethods[$method] = $this->roles;
 						}
 					}
 				}
