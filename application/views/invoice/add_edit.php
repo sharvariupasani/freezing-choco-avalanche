@@ -119,7 +119,7 @@
 		<div class="col-md-4">
 				<div class='box box-solid'>
 					<div class='box-header'>
-						<h3 class='box-title'>Summery</h3>
+						<h3 class='box-title'>Summary</h3>
 					</div>
 					<div class="box-body">
 						<div class="form-group">
@@ -148,7 +148,7 @@
 					<div class='box-footer'>
 						<div class="form-group">
 							<input type="hidden" name="op" id="op" value="">
-							<input type="hidden" name="takein_id" id="takein_id" value="<?=@$takein?>">
+							<input type="hidden" name="takein_id" id="takein_id" value="<?=@$takein_id?>">
 							<button class="btn btn-primary btn-flat" type="submit" id="save">Save</button>
 							<button class="btn btn-primary btn-flat" type="submit" id="print">Print</button>
 						</div>

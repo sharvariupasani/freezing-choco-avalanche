@@ -8,45 +8,54 @@
   <!-- Info boxes -->
   <div class="row">
 	<div class="col-md-3 col-sm-6 col-xs-12">
+	<a href="<?=base_url()."cusomer"?>">
 	  <div class="info-box">
-		<span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+		<span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
 		<div class="info-box-content">
 		  <span class="info-box-text">Customers</span>
 		  <span class="info-box-number" id='cust_count'></span>
 		</div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
+	</a>
 	</div><!-- /.col -->
+	
 	<div class="col-md-3 col-sm-6 col-xs-12">
+	<a href="<?=base_url()."product"?>">
 	  <div class="info-box">
-		<span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+		<span class="info-box-icon bg-red"><i class="fa fa-inbox"></i></span>
 		<div class="info-box-content">
 		  <span class="info-box-text">Products</span>
 		  <span class="info-box-number" id='prod_count'></span>
 		</div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
+	</a>
 	</div><!-- /.col -->
-
+	
 	<!-- fix for small devices only -->
 	<div class="clearfix visible-sm-block"></div>
 
 	<div class="col-md-3 col-sm-6 col-xs-12">
+	<a href="<?=base_url()."takein"?>">
 	  <div class="info-box">
-		<span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+		<span class="info-box-icon bg-green"><i class="fa fa-mobile"></i></span>
 		<div class="info-box-content">
 		  <span class="info-box-text">Takeins</span>
 		  <span class="info-box-number" id='tak_count'></span>
 		</div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
+	  </a>
 	</div><!-- /.col -->
 	<div class="col-md-3 col-sm-6 col-xs-12">
+	<a href="<?=base_url()."invoice"?>">
 	  <div class="info-box">
-		<span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+		<span class="info-box-icon bg-yellow"><i class="fa fa-file-text-o"></i></span>
 		<div class="info-box-content">
 		  <span class="info-box-text">Bill Generated</span>
 		  <span class="info-box-number" id='inv_count'></span>
 		</div><!-- /.info-box-content -->
 	  </div><!-- /.info-box -->
 	</div><!-- /.col -->
+	 </a>
   </div><!-- /.row -->
 
   <div class="row">
