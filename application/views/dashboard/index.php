@@ -8,7 +8,7 @@
   <!-- Info boxes -->
   <div class="row">
 	<div class="col-md-3 col-sm-6 col-xs-12">
-	<a href="<?=base_url()."cusomer"?>">
+	<a href="<?=base_url()."customer"?>">
 	  <div class="info-box">
 		<span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
 		<div class="info-box-content">
