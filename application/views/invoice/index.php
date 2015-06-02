@@ -1,6 +1,6 @@
 <section class="content-header">
     <h1>
-        Take In
+        Bill
     </h1>
 </section>
 <section class="content">
@@ -18,11 +18,11 @@
 				?>
 			</div>	
     		<a class="btn btn-default pull-right" href="<?=base_url()."invoice/add"?>">
-            <i class="fa fa-plus"></i>&nbsp;Add Invoice</a>
+            <i class="fa fa-plus"></i>&nbsp;Add Bill</a>
             <div id="list">
 				<div class="box">
 					<div class="box-header">
-						<h3 class="box-title">Take in list</h3>                                    
+						<h3 class="box-title">Bill list</h3>                                    
 					</div><!-- /.box-header -->
 					<div class="box-body table-responsive">
 						<table id="invoiceTable" class="table table-bordered table-striped">
