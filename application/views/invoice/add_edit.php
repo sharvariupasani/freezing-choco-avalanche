@@ -119,7 +119,7 @@
 		<div class="col-md-4">
 				<div class='box box-solid'>
 					<div class='box-header'>
-						<h3 class='box-title'>Summery</h3>
+						<h3 class='box-title'>Summary</h3>
 					</div>
 					<div class="box-body">
 						<div class="form-group">

@@ -2,7 +2,7 @@
     <h1>
         Users
         <small>
-            <?=($this->router->fetch_method() == 'add')?'Add User':'Edit User'?>
+            <?=($this->router->fetch_method() == 'add')?'Add Customer':'Edit Customer'?>
         </small>
     </h1>
 </section>
