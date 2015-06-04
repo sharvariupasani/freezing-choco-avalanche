@@ -9,6 +9,13 @@ class Takein extends CI_Controller {
 	public function index()
 	{
 		$data['view'] = "index";
+		
+		$session = $this->user_session;
+		if ($session['role'] == 'd')
+		{
+			$data['is_dealer'] =  true;
+		}
+
 		$this->load->view('content', $data);
 	}
 
@@ -136,7 +143,10 @@ class Takein extends CI_Controller {
 		
 		$data['is_dealer'] = false;
 		if ($session['role'] == 'd')
-				 $data['is_dealer'] =  true;
+		{
+			$data['customer'] = $this->common_model->customerTitleById($session['cust_id']);
+			$data['is_dealer'] =  true;
+		}
 
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
