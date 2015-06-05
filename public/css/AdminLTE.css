@@ -4078,3 +4078,15 @@ Gradient Background colors
 .taken{background-color:#dd4b39}
 .repaired{background-color:#f0ad4e}
 .done{background-color:#00a65a}
+
+.filter_select .form-control{
+	height:auto;
+	border-color:#FFF;
+	padding:0px 12px;
+}
+
+.filter_text .form-control{
+	height:auto;
+	border-color:#FFF;
+	padding:0px 12px;
+}

@@ -106,17 +106,20 @@ class Takein extends CI_Controller {
 		$post = $this->input->post();
 		$session = $this->user_session;
 		if ($post) {
+
 			$this->load->library('form_validation');
+			$post['remark'] = implode("||",$post['remark']);
 
 			$this->form_validation->set_rules('cust_id', 'Customer', 'trim|required');
 			$this->form_validation->set_rules('phonename', 'Mobile Info', 'trim|required');
 			$this->form_validation->set_rules('imei', 'IMEI', 'trim|required');
-			$this->form_validation->set_rules('remark', 'Mobile remark', 'trim|required');
+			//$this->form_validation->set_rules('remark', 'Mobile remark', 'trim|required');
 			
 			if ($session['role'] == 'd')
 				 $post['cust_id'] =  $session['cust_id'];
 
 			if ($this->form_validation->run() !== false) {
+				
 				$data = array('s_custid' => $post['cust_id'],
 							's_phonename' => $post['phonename'],
 							's_imei' => $post['imei'],
@@ -163,12 +166,14 @@ class Takein extends CI_Controller {
 			$this->form_validation->set_rules('cust_id', 'Customer', 'trim|required');
 			$this->form_validation->set_rules('phonename', 'Mobile Info', 'trim|required');
 			$this->form_validation->set_rules('imei', 'IMEI', 'trim|required');
-			$this->form_validation->set_rules('remark', 'Mobile remark', 'trim|required');
+			//$this->form_validation->set_rules('remark', 'Mobile remark', 'trim|required');
 			
 			if ($session['role'] == 'd')
 				 $post['cust_id'] =  $session['cust_id'];
 
 			if ($this->form_validation->run() !== false) {
+				$post['remark'] = implode("||",$post['remark']);
+
 				$data = array('s_custid' => $post['cust_id'],
 							's_phonename' => $post['phonename'],
 							's_imei' => $post['imei'],

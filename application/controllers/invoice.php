@@ -104,19 +104,25 @@ class Invoice extends CI_Controller {
 				$services = $post["service"];
 				$sale_date = $post["sale_date"];
 				$total = 0;
-				$amount = 0;
-				$taxRate = 9.3;
+				$amountp = 0;
+				$amounts = 0;
+				$vatRate = getSetting("firmvat");
+				$taxRate = getSetting("firmtax");
 				
 				foreach ($products as $product)
 				{
-					$amount += $product["p_price"];
+					$amountp += $product["p_price"];
 				}
+				$vatRateP = ($amountp * $vatRate)/100;
+
 				foreach ($services as $service)
 				{
-					$amount += $service["s_price"];
+					$amounts += $service["s_price"];
 				}
-				$tax = $amount * 9.3/100;
-				$total = $amount + $tax;
+				$taxRateS = ($amounts * $taxRate)/100;
+
+				$total = $vatRateP + $taxRateS;
+				$amount = $amounts + $amountp;
 
 				$data = array(
 							'c_id' => $post['cust_id'],

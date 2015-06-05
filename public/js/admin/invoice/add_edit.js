@@ -157,13 +157,26 @@ function servicePriceTracking(obj)
 
 function updateTotal()
 {
+	var totalP = 0;
+	var totalS = 0;
 	var total = 0;
-	$(".product_div #p_price,.service_div #s_price").each(function(){
-		total += Number($(this).val());
+	$(".product_div #p_price").each(function(){
+		totalP += Number($(this).val());
 	});
+
+	$(".service_div #s_price").each(function(){
+		totalS += Number($(this).val());
+	});
+	
+	total = totalP + totalS;
 	$('#subtotal').html(total);
-	var tax = total * 9.3/100;
+
+	var vatP = (totalP * vatRate)/100;
+	var taxS = (totalS * taxRate)/100;
+	var tax = vatP+taxS;
+
 	tax = Math.round(tax * 100) / 100
+
 	$("#tax").html(tax);
-	$("#total").html(tax+total);
+	$("#total").html(total+tax);
 }

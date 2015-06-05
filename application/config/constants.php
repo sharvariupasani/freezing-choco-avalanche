@@ -51,6 +51,7 @@ define('CUSTOMER',	'customer');
 define('SERVICE',	'service');
 define('INVOICE',	'invoice');
 define('ORDER',	'order');
+define('SETTING',	'settings');
 
 define('ADMIN_A',	'admin as a');
 define('USER_U',	'user as u');

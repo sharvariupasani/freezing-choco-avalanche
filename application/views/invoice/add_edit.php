@@ -159,3 +159,7 @@
 			</div>
     </div>
 </section>
+<script>
+var vatRate = "<?=getSetting('firmvat')?>";
+var taxRate = "<?=getSetting('firmtax')?>";
+</script>

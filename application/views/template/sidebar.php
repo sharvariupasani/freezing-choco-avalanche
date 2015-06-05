@@ -22,6 +22,22 @@
                 </a>
             </li>
 			<?php } ?>
+
+			<?php if (hasAccess("customer")){ ?>
+			<li class="">
+				<a href="<?=base_url()."customer"?>">
+					<i class="fa fa-users"></i> <span>Customers</span>
+				</a>
+			</li>
+			<?php } ?>
+          
+            <?php if (hasAccess("users")){ ?>
+			<li class="">
+				<a href="<?=base_url()."users"?>">
+					<i class="fa fa-user-md"></i> <span>Users</span>
+				</a>
+			</li>
+            <?php } ?>
 			
 			<?php if (hasAccess("category") || hasAccess("product") || hasAccess("purchase")){ ?>
 			<li class="treeview">
@@ -64,19 +80,11 @@
 				</ul>
 			</li>
 			<?php } ?>
-
-			<?php if (hasAccess("customer")){ ?>
+			
+			<?php if (hasAccess("setting")){ ?>
 			<li class="">
-				<a href="<?=base_url()."customer"?>">
-					<i class="fa fa-users"></i> <span>Customers</span>
-				</a>
-			</li>
-			<?php } ?>
-          
-            <?php if (hasAccess("users")){ ?>
-			<li class="">
-				<a href="<?=base_url()."users"?>">
-					<i class="fa fa-user-md"></i> <span>Users</span>
+				<a href="<?=base_url()."setting"?>">
+					<i class="fa fa-wrench"></i> <span>Setting</span>
 				</a>
 			</li>
             <?php } ?>

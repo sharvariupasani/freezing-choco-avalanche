@@ -84,6 +84,11 @@ $access = array
             "add" => array("a","m"),
             "edit" => array("a","m"),
             "delete" => array("a","m"),
+        ),
+
+    "setting" => array
+        (
+            "index" => array("a"),
         )
 );
 ?>

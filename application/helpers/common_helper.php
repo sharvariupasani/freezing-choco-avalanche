@@ -31,14 +31,25 @@ require_once (BASEPATH."../application/config/access.php");
         return base_url()."uploads/category_images/";
     }
 
-	function is_login()
+	function getSetting($var)
 	{
 
 		$CI =& get_instance();
-		$session = $CI->session->userdata('user_session');
-
-		if (!isset($session['id'])) {
-			redirect(base_url());
+		$setting = $CI->session->userdata('setting');
+		if ($setting)
+		{
+			return $setting[$var];
+		}
+		else
+		{
+			$settings = $CI->common_model->selectData(SETTING, '*');
+			$csettings = array();
+			foreach($settings as $setting)
+			{	
+				$csettings[$setting->option_name] = $setting->option_field;
+			}
+			$CI->session->set_userdata('setting',$csettings);
+			return $csettings[$var];
 		}
 	}
 
