@@ -19,8 +19,10 @@
 			</div>	
     		<a class="btn btn-default pull-right" href="<?=base_url()."takein/add"?>">
             <i class="fa fa-plus"></i>&nbsp;Add</a>
+			<?if ($is_dealer) {?>
 			<a class="btn btn-default pull-right" href="javascript:void(0);" id='generateBill'>
             <i class="fa fa-plus"></i>&nbsp;Generate Bill</a>
+			<? }?>
             <div id="list">
 				<div class="box">
 					<div class="box-header">

@@ -3,7 +3,7 @@
         <div class="row">
           <div class="col-xs-12">
             <h2 class="page-header">
-              <i class="fa fa-globe"></i> Zorba Care.
+              <i class="fa fa-globe"></i> <?=getSetting("firmname")?>.
               <small class="pull-right">Date: <?=date("jS M y'",strtotime($invoice[0]->sale_date))?></small>
             </h2>
           </div><!-- /.col -->

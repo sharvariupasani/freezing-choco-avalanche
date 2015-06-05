@@ -10,10 +10,10 @@ $(document).ready(function() {
 		aoColumnDefs: [
 		  {
 			 bSortable: false,
-			 aTargets: [ -1 ]
+			 aTargets: [ -1,-2,2 ]
 		  }
 		]
-	} );
+	} ).columnFilter({sPlaceHolder:"head:after",aoColumns: [null,null,{ type: "text"},null,null,null,null,{ type: "select",values:["done","taken","repaired"] },null]});;
 
 	$("#generateBill").on("click",function(){
 		if ($("input[type='checkbox']:checked").length > 0)

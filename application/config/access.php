@@ -69,9 +69,9 @@ $access = array
 
     "takein" => array
         (
-            "index" => array("a","m"),
-            "ajax_list" => array("a","m"),
-            "add" => array("a","m"),
+            "index" => array("a","m","d"),
+            "ajax_list" => array("a","m","d"),
+            "add" => array("a","m","d"),
             "edit" => array("a","m"),
             "delete" => array("a","m"),
             "updateStatus" => array("a","m"),
@@ -84,6 +84,11 @@ $access = array
             "add" => array("a","m"),
             "edit" => array("a","m"),
             "delete" => array("a","m"),
+        ),
+
+    "setting" => array
+        (
+            "index" => array("a"),
         )
 );
 ?>

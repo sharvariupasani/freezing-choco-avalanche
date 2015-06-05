@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Zorba | Log in</title>
+        <title><?=getSetting("firmname")?> | Log in</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- bootstrap 3.0.2 -->
         <link href="<?=public_path()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -23,7 +23,7 @@
 	<body class="login-page">
     <div class="login-box">
       <div class="login-logo">
-        <a href="#"><b>Zorba</b> Care</a>
+        <a href="#"><b><?=getSetting("firmname")?></b></a>
       </div><!-- /.login-logo -->
       <div class="login-box-body clearfix">
         <p class="login-box-msg">Login</p>

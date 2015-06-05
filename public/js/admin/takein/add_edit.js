@@ -14,4 +14,13 @@ $(document).ready(function() {
 				}
 			}
 	});
+
+	$("#takein_form").on("submit",function(e){
+		var len = $("input[type='checkbox'][name='remark[]']:checked").length;
+		if (len == 0 && $("#remark").val() == "")
+		{
+			e.preventDefault();
+			$("#remark").validationEngine('showPrompt', 'Please select or enter remark.', 'error', true);
+		}
+	})
 });

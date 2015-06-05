@@ -50,7 +50,26 @@
 					
 					<div class="form-group">
                         <label>Remark:</label>
-                         <textarea type="text" placeholder="Eg.,Damage note" class="form-control validate[required]" name="remark" id="remark"><?=@$takein[0]->s_remark?></textarea>
+						<div class='row'>
+						<?php 
+							$s_remarks = @$takein[0]->s_remark;
+							$s_remarks = explode("||",$s_remarks);
+							$remarks = json_decode(getSetting("takein_remark"));
+							foreach ($remarks as $remark)
+							{
+								$checked = "";
+								if (($key = array_search($remark,$s_remarks)) !== false) { 
+									unset($s_remarks[$key]);
+									$checked  = "checked";
+								}
+						?>
+							<div class='col-md-5' style='margin:5px;'>
+								<input type="checkbox" <?=$checked ?> value="<?=$remark?>" name="remark[]">
+								<span style='margin-left:5px;'><?=$remark?></span>
+							</div>
+						<?php }?>
+						</div>
+                         <textarea type="text" placeholder="Eg.,Damage note" class="form-control" name="remark[]" id="remark"><?=implode(",",$s_remarks)?></textarea>
                     </div>
 					
                     <div class="form-group">
