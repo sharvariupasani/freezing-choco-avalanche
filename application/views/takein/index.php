@@ -63,3 +63,34 @@
     	</div>
     </div>
 </section>
+
+<div id="modals">
+    <div id="status-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Authentication</h4>
+                    </div>
+                    <div class="modal-body clearfix">
+						<div class="form-group clearfix">
+                            <label class="control-label col-sm-4">Password</label>
+                            <div class="col-sm-7">
+                                <input class="form-control" placeholder="Password" name="passkey" id='passkey' type="password" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4">Reason</label>
+                            <div class="col-sm-7">
+                                <input class="form-control" placeholder="Reason" name="reason" id='reason' type="text" value="" />
+                            </div>
+                        </div>
+						<p class="response" style=""></p>
+                    </div>
+                    <div class="modal-footer">
+						<button id="rejectbtn" class="btn btn-primary btn-flat" onclick="">Reject</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

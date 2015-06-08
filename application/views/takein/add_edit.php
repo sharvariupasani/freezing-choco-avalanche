@@ -33,6 +33,11 @@
                 <form role="form" action="" method="post" id='takein_form' name='product_form' enctype="multipart/form-data">
 	
 					<div class="form-group">
+                        <label>Takein id:</label>
+                        <input type="text" class="form-control" name="takein_id" id="takein_id" value="<?=(@$takein[0]->s_takeinid)?@$takein[0]->s_takeinid:@$takeinid ?>" disabled>
+                    </div>
+
+					<div class="form-group">
                         <label>Customer:</label>
                         <input type="text" placeholder="Search using mobile" class="form-control validate[required]" name="customer" id="customer" value="<?=@$customer->customer?>" <?=($is_dealer)?"disabled":""?>>
                         <input type="hidden" name="cust_id" id="cust_id" value="<?=@$customer->c_id?>" >
@@ -71,7 +76,6 @@
 						</div>
                          <textarea type="text" placeholder="Eg.,Damage note" class="form-control" name="remark[]" id="remark"><?=implode(",",$s_remarks)?></textarea>
                     </div>
-					
                     <div class="form-group">
                         <button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>
                     </div>

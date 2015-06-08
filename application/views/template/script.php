@@ -53,7 +53,7 @@
 		<script src="<?=public_path()?>js/admin/<?=$this->router->fetch_class()?>/add_edit.js" type="text/javascript"></script>
 	<?php }?>
 	    
-	<?php if ($this->router->fetch_class() == "product" && in_array($this->router->fetch_method(), array("index"))) { ?>
+	<?php if (in_array($this->router->fetch_class(),array("product","takein")) && in_array($this->router->fetch_method(), array("index"))) { ?>
 		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine-en.js" type="text/javascript"></script>
     <?php } ?>

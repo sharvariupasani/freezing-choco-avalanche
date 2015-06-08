@@ -13,7 +13,7 @@ $(document).ready(function() {
 			 aTargets: [ -1,-2,2 ]
 		  }
 		]
-	} ).columnFilter({sPlaceHolder:"head:after",aoColumns: [null,null,{ type: "text"},null,null,null,null,{ type: "select",values:["done","taken","repaired"] },null]});;
+	} ).columnFilter({sPlaceHolder:"head:after",aoColumns: [null,null,{ type: "text"},null,null,null,null,{ type: "select",values:["done","taken","repaired","rejected"] },null]});;
 
 	$("#generateBill").on("click",function(){
 		if ($("input[type='checkbox']:checked").length > 0)
@@ -54,13 +54,43 @@ function delete_takein (del_id) {
 	});
 }
 
-function update_status (id) {
+function update_status_popup(id,status){
+	$("#passkey").val("");
+	$("#reason").val("");
+	$(".response").html("");
+	try{
+	$("#passkey").validationEngine('hideAll');
+	}catch (e){}
+	$("#rejectbtn").attr("onclick","update_status('"+id+"','"+status+"')");
+	$('#status-modal').modal('toggle');
+}
+
+function update_status (id,status) {
 	var url = admin_path()+'takein/updateStatus';
 	var param = {id:id};
+	if (status)
+	{
+		if (status == 'rejected')
+		{
+			if ($("#passkey").val() == '')
+			{
+				$("#passkey").validationEngine('showPrompt', 'Please select password.', 'error', true);
+				return;
+			}
+			param.pass  = $("#passkey").val();
+			param.reason = $("#reason").val();
+		}
+			
+		param.status = status;
+	}
 	$.post(url,param,function(data){
 			if (data == "success") {
 				oTable.fnClearTable(0);
 				oTable.fnDraw();
+				$('#status-modal').modal('hide');
+			}else
+			{
+				$(".response").html("Operation failed.");
 			}
 	});
 }
