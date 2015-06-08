@@ -1633,6 +1633,7 @@ a:focus {
   display: block;
   font-weight: bold;
   font-size: 18px;
+  word-wrap:break-word;
 }
 .progress-description,
 .info-box-text {
