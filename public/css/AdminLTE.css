@@ -4078,6 +4078,7 @@ Gradient Background colors
 .taken{background-color:#dd4b39}
 .repaired{background-color:#f0ad4e}
 .done{background-color:#00a65a}
+.rejected{background-color:#000}
 
 .filter_select .form-control{
 	height:auto;

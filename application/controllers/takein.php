@@ -44,13 +44,14 @@ class Takein extends CI_Controller {
 				}
 			),
 			array(
-				'db'        => 'CONCAT(s_id,"|",IFNULL(s_status, ""))',
+				'db'        => 's_status',
 				'sort' => 's_status',
 				'dt'        => 7,
 				'formatter' => function( $d, $row ) {
-					list($id,$status) = explode("|",$d);
+					$id = $row['s_id'];
+					$status = $d;
 					$op = "";
-					if (hasAccess("takein","updateStatus"))
+					if (hasAccess("takein","updateStatus") && $status !='rejected')
 						$op = '<a href="javascript:void(0);" onclick="update_status('.$id.')" class="label '.$status.'">'.$status ."</a>" ;
 					else
 						$op = '<a href="javascript:void(0);" class="label '.$status.'">'.$status ."</a>" ;
@@ -60,8 +61,10 @@ class Takein extends CI_Controller {
 			array( 'db' => 'CONCAT(s_id,"|",s_custid,"|",IFNULL(s_invoiceid, ""))',
 					'dt' => 8,
 					'formatter' => function( $d, $row ) {
-						list($id,$cust_id,$invoice_id) = explode("|",$d);
 						
+						list($id,$cust_id,$invoice_id) = explode("|",$d);
+						$status = $row['s_status'];
+						//print_r($row);exit;
 						$op = array();
 						
 						if (hasAccess("takein","edit"))
@@ -72,19 +75,25 @@ class Takein extends CI_Controller {
 						if (hasAccess("takein","delete"))
 							$op[] = '<a href="javascript:void(0);" onclick="delete_takein('.$id.')" class="fa fa-trash-o" title="Remove Takein"></a>';
 						
-						if ($invoice_id == "")
+						if ($status != "rejected")
 						{
-							if (hasAccess("invoice","add"))
+							if ($invoice_id == "")
 							{
-								$op[] = '<a href="'.site_url("/invoice/add/".$id).'" class="fa fa-save" title="Generate bill"></a>';
-								$op[] = '<input type="checkbox" id="'.$id.'" class="'.$cust_id.'" onchange="mergeTakein(this)"></a>';
+								if (hasAccess("invoice","add"))
+								{
+									$op[] = '<a href="'.site_url("/invoice/add/".$id).'" class="fa fa-save" title="Generate bill"></a>';
+									$op[] = '<input type="checkbox" id="'.$id.'" class="'.$cust_id.'" onchange="mergeTakein(this)"></a>';
+								}
+							}
+							else
+							{
+								if (hasAccess("invoice","edit"))
+									$op[] = '<a href="'.site_url("/invoice/edit/".$invoice_id).'" class="fa fa-eye" title="View bill"></a>';
 							}
 						}
-						else
-						{
-							if (hasAccess("invoice","edit"))
-								$op[] = '<a href="'.site_url("/invoice/edit/".$invoice_id).'" class="fa fa-eye" title="View bill"></a>';
-						}
+					
+						if (hasAccess("takein","updateStatus") && $status =='taken')
+							$op[] = '<a href="javascript:void(0);" onclick="update_status_popup('.$id.',\'rejected\')" class="fa fa-times-circle"></a>' ;
 
 						return implode(" / ",$op);				
 					}
@@ -125,6 +134,7 @@ class Takein extends CI_Controller {
 							's_imei' => $post['imei'],
 							's_remark' => $post['remark'],
 							's_status' => "taken",
+							's_takeinid' => $post['takein_id'],
 							);
 				$ret = $this->common_model->insertData(SERVICE, $data);
 
@@ -150,6 +160,8 @@ class Takein extends CI_Controller {
 			$data['customer'] = $this->common_model->customerTitleById($session['cust_id']);
 			$data['is_dealer'] =  true;
 		}
+				
+		$data['takeinid'] =  $this->common_model->genTakeinId();
 
 		$data['view'] = "add_edit";
 		$this->load->view('content', $data);
@@ -160,6 +172,7 @@ class Takein extends CI_Controller {
 		$data['view'] = "add_edit";
 		$where = "s_id = ".$id;
 		$session = $this->user_session;
+		$post = $this->input->post();
 		if ($post) {
 			$this->load->library('form_validation');
 
@@ -178,7 +191,7 @@ class Takein extends CI_Controller {
 							's_phonename' => $post['phonename'],
 							's_imei' => $post['imei'],
 							's_remark' => $post['remark'],
-							);
+							);				
 				$ret = $this->common_model->updateData(SERVICE, $data,$where);
 
 				if ($ret > 0) {
@@ -215,14 +228,32 @@ class Takein extends CI_Controller {
 		$statusArray = array("taken","repaired","done");
 		$post = $this->input->post();
 		if ($post) {
-			$ret = $this->common_model->selectData(SERVICE,"s_status", array('s_id' => $post['id'] ));
-			$status = $ret[0]->s_status;
-			$key = array_search($status,$statusArray);
-			$key++;
-			$key = $key%3;
-			$data = array('s_status' => $statusArray[$key]);
+			if (!$post['status'])
+			{
+				$ret = $this->common_model->selectData(SERVICE,"s_status", array('s_id' => $post['id'] ));
+				$status = $ret[0]->s_status;
+				$key = array_search($status,$statusArray);
 
-			if ($statusArray[$key] == "done")
+				if ($key === FALSE)
+					$key = 0;
+				else
+					$key++;
+
+				$key = $key%3;
+				$status = $statusArray[$key];
+			}
+			else
+			{
+				$status = $post['status'];
+				$session = $this->user_session;
+				if($session['pass'] != sha1($post['passkey']))
+				{
+					echo "error";exit;
+				}
+			}
+			$data = array('s_status' => $status);
+
+			if ($statusArray[$key] == "done" || $statusArray[$key] == "rejected")
 				$data['s_deliverydate'] = date('Y-m-d');
 
 			$ret = $this->common_model->updateData(SERVICE, $data, array('s_id' => $post['id'] ));

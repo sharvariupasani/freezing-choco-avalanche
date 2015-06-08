@@ -41,6 +41,7 @@ class Index extends CI_Controller {
 									'name' => $user[0]->name,
 									'email' => $user[0]->email,
 									'role' => $user[0]->role,
+									"pass"=>$user[0]->['password']
 								 );
 
 					if ($data['role'] == 'd')
@@ -61,8 +62,6 @@ class Index extends CI_Controller {
 			}
 
 			$data['error_msg'] = $error;
-
-
 		}
 
 		$this->load->view('index/index', $data);

@@ -289,5 +289,19 @@ class common_model extends CI_Model{
 			$takein = $query->result();
 			return $takein;	
 	}
+
+	public function genTakeinId()
+	{
+		$yest = date('Y-m-d 00:00:00',strtotime("-1 day"));
+		$db = $this->db;
+		$db->select('COUNT(s_id) as cnt');
+		$db->from(SERVICE);
+		$db->where("s_creationdate > '$yest'");
+		$query = $db->get();
+		$data = $query->result();
+		$query->free_result();
+		$cnt = str_pad($data[0]->cnt, 2, "0", STR_PAD_LEFT);
+		return date("dmy").$cnt;
+	}
 }
 ?>
