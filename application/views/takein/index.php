@@ -93,4 +93,11 @@
             </div>
         </div>
     </div>
+	<div id="detail-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    
+            </div>
+        </div>
+    </div>
 </div>

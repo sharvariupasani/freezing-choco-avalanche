@@ -28,7 +28,12 @@ class Takein extends CI_Controller {
 			array( 'db' => 'c_phone',  'dt' => 1 ),
 			array( 'db' => 's_imei',  'dt' => 2 ),
 			array( 'db' => 's_phonename',  'dt' => 3 ),
-			array( 'db' => 's_remark',  'dt' => 4 ),
+			array( 'db' => 's_remark', 
+						'dt' => 4,
+						'formatter' => function( $d, $row ) {
+							return str_replace("||",", ",$d);
+						}
+			),
 			array(
 				'db'        => 's_creationdate',
 				'dt'        => 5,
@@ -58,14 +63,17 @@ class Takein extends CI_Controller {
 					return $op;
 				}
 			),
-			array( 'db' => 'CONCAT(s_id,"|",s_custid,"|",IFNULL(s_invoiceid, ""))',
+			array( 'db' => 'CONCAT(s_id,"|",s_custid,"|",IFNULL(s_invoiceid, ""),"|",IFNULL(s_confirm_est, ""),"|",c_type)',
 					'dt' => 8,
 					'formatter' => function( $d, $row ) {
 						
-						list($id,$cust_id,$invoice_id) = explode("|",$d);
+						list($id,$cust_id,$invoice_id,$call,$c_type) = explode("|",$d);
 						$status = $row['s_status'];
 						//print_r($row);exit;
 						$op = array();
+
+						if ($call)
+							$op[] = '<a href="javascript:void(0);" class="fa fa-phone red"></a>' ;
 						
 						if (hasAccess("takein","edit"))
 						{
@@ -75,7 +83,7 @@ class Takein extends CI_Controller {
 						if (hasAccess("takein","delete"))
 							$op[] = '<a href="javascript:void(0);" onclick="delete_takein('.$id.')" class="fa fa-trash-o" title="Remove Takein"></a>';
 						
-						if ($status != "rejected")
+						if ($status != "rejected" && $c_type != "dealer")
 						{
 							if ($invoice_id == "")
 							{
@@ -94,6 +102,8 @@ class Takein extends CI_Controller {
 					
 						if (hasAccess("takein","updateStatus") && $status =='taken')
 							$op[] = '<a href="javascript:void(0);" onclick="update_status_popup('.$id.',\'rejected\')" class="fa fa-times-circle"></a>' ;
+
+						$op[] = '<a href="javascript:void(0);" onclick="detail_popup('.$id.')" class="fa fa-list-alt"></a>' ;
 
 						return implode(" / ",$op);				
 					}
@@ -135,6 +145,8 @@ class Takein extends CI_Controller {
 							's_remark' => $post['remark'],
 							's_status' => "taken",
 							's_takeinid' => $post['takein_id'],
+							's_confirm_est' => $post['confirm_est'],
+							's_estimated_amt' => $post['estimate_amt'],
 							);
 				$ret = $this->common_model->insertData(SERVICE, $data);
 
@@ -191,6 +203,8 @@ class Takein extends CI_Controller {
 							's_phonename' => $post['phonename'],
 							's_imei' => $post['imei'],
 							's_remark' => $post['remark'],
+							's_confirm_est' => $post['confirm_est'],
+							's_estimated_amt' => $post['estimate_amt'],
 							);				
 				$ret = $this->common_model->updateData(SERVICE, $data,$where);
 
@@ -222,6 +236,29 @@ class Takein extends CI_Controller {
 
 		$this->load->view('content', $data);
 	}
+	
+	public function view()
+	{
+		$post = $this->input->post();
+		if ($post) {
+			$where =  array("s_id"=>$post['id']);
+			$session = $this->user_session;
+			$post = $this->input->post();
+
+			$data['is_dealer'] = false;
+			if ($session['role'] == 'd')
+			{
+				$data['is_dealer'] =  true;
+				$where["s_custid"] = $session['cust_id'];
+			}
+
+			$data['takein'] = $takein = $this->common_model->selectData(SERVICE, '*',$where);
+			$data['customer'] = $this->common_model->customerTitleById($takein[0]->s_custid);
+			
+			$data['view'] = "view_detail";
+			$this->load->view('ajax-content', $data);
+		}
+	}
 
 	public function updateStatus()
 	{
@@ -246,16 +283,19 @@ class Takein extends CI_Controller {
 			{
 				$status = $post['status'];
 				$session = $this->user_session;
-				if($session['pass'] != sha1($post['passkey']))
+				if($session['pass'] != sha1($post['pass']))
 				{
 					echo "error";exit;
 				}
 			}
 			$data = array('s_status' => $status);
 
-			if ($statusArray[$key] == "done" || $statusArray[$key] == "rejected")
+			if ($status == "done" || $status == "rejected")
 				$data['s_deliverydate'] = date('Y-m-d');
 
+			if ($status == "rejected")
+				$data['s_reason'] = $post['reason'];
+			
 			$ret = $this->common_model->updateData(SERVICE, $data, array('s_id' => $post['id'] ));
 
 			if ($ret > 0) {

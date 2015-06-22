@@ -111,3 +111,13 @@ function mergeTakein(obj)
 		}
 	}
 }
+
+function detail_popup(id)
+{
+	var url = admin_path()+'takein/view';
+	var param = {id:id};
+	$.post(url,param,function(data){
+			$('#detail-modal .modal-content').html(data);
+	});
+	$('#detail-modal').modal('toggle');
+}

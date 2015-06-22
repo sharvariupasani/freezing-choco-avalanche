@@ -34,7 +34,8 @@
 	
 					<div class="form-group">
                         <label>Takein id:</label>
-                        <input type="text" class="form-control" name="takein_id" id="takein_id" value="<?=(@$takein[0]->s_takeinid)?@$takein[0]->s_takeinid:@$takeinid ?>" disabled>
+                        <input type="text" class="form-control" value="<?=(@$takein[0]->s_takeinid)?@$takein[0]->s_takeinid:@$takeinid ?>" disabled>
+                        <input type="hidden" name="takein_id" id="takein_id" value="<?=(@$takein[0]->s_takeinid)?@$takein[0]->s_takeinid:@$takeinid ?>">
                     </div>
 
 					<div class="form-group">
@@ -75,6 +76,16 @@
 						<?php }?>
 						</div>
                          <textarea type="text" placeholder="Eg.,Damage note" class="form-control" name="remark[]" id="remark"><?=implode(",",$s_remarks)?></textarea>
+                    </div>
+					<div class="form-group">
+                        <label>Estimated amt:</label>
+                        <input type="text" placeholder="" class="form-control" name="estimate_amt" id="estimate_amt" value="<?=@$takein[0]->s_estimated_amt?>" >
+                    </div>
+					<div class="form-group">
+							<div class='col-md-5' style='margin:5px;'>
+								<input type="checkbox" <?=(@$takein[0]->s_confirm_est)?"checked":"" ?> value="1" name="confirm_est">
+								<span style='margin-left:5px;'>Call for confirmation</span>
+							</div>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>
