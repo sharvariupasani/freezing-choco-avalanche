@@ -55,5 +55,6 @@
 	<?php }?>
 </div>
 <div class="modal-footer">
-	<button id="rejectbtn" class="btn btn-primary btn-flat" onclick="">Close</button>
+	<button id="printbtn" data-invid='<?=@$takein[0]->s_imei?>' class="btn btn-primary btn-flat" onclick="">Print</button>
+	<button  data-dismiss="modal" class="btn btn-primary btn-flat" onclick="">Close</button>
 </div>
